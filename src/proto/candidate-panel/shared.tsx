@@ -1,7 +1,7 @@
+import { Fragment } from "react";
 import { toast } from "sonner";
 import {
   BriefcaseBusinessIcon,
-  EyeIcon,
   Icon,
   IndianRupeeIcon,
   LinkedinIcon,
@@ -77,11 +77,18 @@ export function CandidateOverviewHeader({
     detail.currentCtc,
     detail.expectedCtc
   );
-  const noticeText = detail.noticePeriod
+  const noticeText = detail.noticePeriod?.trim()
     ? detail.noticePeriod.toLowerCase().includes("notice")
-      ? detail.noticePeriod
-      : `${detail.noticePeriod} notice`
+      ? detail.noticePeriod.trim()
+      : `${detail.noticePeriod.trim()} notice`
     : "";
+
+  const metaItems = [
+    ctcText ? { key: "ctc", icon: IndianRupeeIcon, text: ctcText } : null,
+    detail.experience?.trim() ? { key: "exp", icon: BriefcaseBusinessIcon, text: detail.experience.trim() } : null,
+    noticeText ? { key: "notice", text: noticeText } : null,
+    detail.location?.trim() ? { key: "loc", icon: MapPinIcon, text: detail.location.trim() } : null,
+  ].filter(Boolean) as { key: string; icon?: typeof IndianRupeeIcon; text: string }[];
 
   return (
     <header className={s.header}>
@@ -123,84 +130,40 @@ export function CandidateOverviewHeader({
           </div>
         </div>
 
-        {/* Subtitle: Role at Company & Meta row */}
+        {/* Subtitle: for Role at Company & Meta row matching CandidateCard */}
         <div className={s.headTitle}>
           {showJobInline && (
             <p
               className={s.roleAndCompany}
               title={`Applied for ${detail.jobTitle} at ${detail.company}`}
             >
-              <span className={s.conjunction}>Applied for </span>
+              <span className={s.conjunction}>for </span>
               <span className={s.entityText}>{detail.jobTitle}</span>
               <span className={s.conjunction}> at </span>
               <span className={s.entityText}>{detail.company}</span>
             </p>
           )}
 
-          {/* Meta row: CTC · Experience · Notice · Location · Resume matching JobDetail */}
-          <div className={s.meta}>
-            {ctcText && (
-              <span className={s.metaItem} title={`CTC: ₹${ctcText}`}>
-                <IndianRupeeIcon size="sm" className={s.iconSm} />
-                <span className={s.metaText}>{ctcText}</span>
-              </span>
-            )}
-            {detail.experience && (
-              <>
-                {ctcText && (
-                  <span className={s.metaSeparator} aria-hidden="true">
-                    ·
-                  </span>
-                )}
-                <span
-                  className={s.metaItem}
-                  title={`Experience: ${detail.experience}`}
-                >
-                  <BriefcaseBusinessIcon size="sm" className={s.iconSm} />
-                  <span className={s.metaText}>{detail.experience}</span>
-                </span>
-              </>
-            )}
-            {noticeText && (
-              <>
-                <span className={s.metaSeparator} aria-hidden="true">
-                  ·
-                </span>
-                <span className={s.metaItem} title={`Notice: ${noticeText}`}>
-                  <span className={s.metaText}>{noticeText}</span>
-                </span>
-              </>
-            )}
-            {detail.location && (
-              <>
-                <span className={s.metaSeparator} aria-hidden="true">
-                  ·
-                </span>
-                <span
-                  className={s.metaItem}
-                  title={`Location: ${detail.location}`}
-                >
-                  <MapPinIcon size="sm" className={s.iconSm} />
-                  <span className={s.metaText}>{detail.location}</span>
-                </span>
-              </>
-            )}
-            <span className={s.metaSeparator} aria-hidden="true">
-              ·
-            </span>
-            <button
-              type="button"
-              className={s.headerResumeBtn}
-              onClick={() =>
-                toast("Opening resume", {
-                  description: `${detail.resumeName} (${detail.resumeSize})`,
-                })
-              }
+          {metaItems.length > 0 && (
+            <div
+              className={s.meta}
+              title={metaItems.map((m) => m.text).join(" · ")}
             >
-              <EyeIcon size="sm" />
-              <span>Resume</span>
-            </button>
-          </div>
+              {metaItems.map((m, i) => (
+                <Fragment key={m.key}>
+                  {i > 0 && (
+                    <span className={s.metaSeparator} aria-hidden="true">
+                      ·
+                    </span>
+                  )}
+                  <span className={s.metaItem}>
+                    {m.icon && <m.icon size="sm" className={s.iconSm} />}
+                    <span className={s.metaText}>{m.text}</span>
+                  </span>
+                </Fragment>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </header>
