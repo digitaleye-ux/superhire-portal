@@ -292,6 +292,12 @@ export function useProfileScrollSpy() {
    Shared Candidate Profile Section Content Stream
    -------------------------------------------------------------------------- */
 
+function formatCtc(val: string): string {
+  if (!val) return "";
+  const cleaned = val.replace(/₹/g, "").replace(/LPA/gi, "").trim();
+  return `₹${cleaned} LPA`;
+}
+
 export function CandidateProfileSections({
   profile,
   registerSection,
@@ -328,12 +334,6 @@ export function CandidateProfileSections({
       >
         <div className={s.sectionHeader}>
           <h3 className={s.sectionTitle}>Personal info</h3>
-          {profile.linkedinVerified && (
-            <span className={s.verifiedPill}>
-              <VerifiedCheckMiniIcon />
-              <span>LinkedIn verified</span>
-            </span>
-          )}
         </div>
 
         {variant === "form-readonly" ? (
@@ -430,7 +430,7 @@ export function CandidateProfileSections({
             <div className={s.kvItem}>
               <span className={s.kvLabel}>Current / Expected CTC</span>
               <span className={s.kvValue}>
-                ₹{profile.currentCtc} → ₹{profile.expectedCtc}
+                {formatCtc(profile.currentCtc)} / {formatCtc(profile.expectedCtc)}
               </span>
             </div>
             <div className={s.kvItem}>
@@ -559,7 +559,6 @@ export function CandidateProfileSections({
                 </div>
                 <div className={s.expDurationRight}>
                   <span className={s.entryDate}>{exp.duration}</span>
-                  <span className={s.expTenure}>{exp.tenure}</span>
                 </div>
               </div>
               <ul className={s.bulletList}>
@@ -567,15 +566,6 @@ export function CandidateProfileSections({
                   <li key={idx}>{h}</li>
                 ))}
               </ul>
-              {exp.skills.length > 0 && (
-                <div className={s.inlineTagRow}>
-                  {exp.skills.map((sk) => (
-                    <span key={sk} className={s.miniTag}>
-                      {sk}
-                    </span>
-                  ))}
-                </div>
-              )}
             </div>
           ))}
         </div>
@@ -595,7 +585,7 @@ export function CandidateProfileSections({
         </div>
         <div className={s.entryList}>
           {profile.projects.map((proj) => (
-            <div key={proj.id} className={s.projectCard}>
+            <div key={proj.id} className={s.projectItem}>
               <div className={s.entryTopRow}>
                 <h4 className={s.entryTitle}>{proj.title}</h4>
                 <span className={s.entryDate}>{proj.subtitle}</span>
@@ -683,22 +673,12 @@ export function CandidateProfileSections({
       >
         <div className={s.sectionHeader}>
           <h3 className={s.sectionTitle}>Skills</h3>
-          <span className={s.sectionCountBadge}>
-            {profile.skills.length} skills
-          </span>
         </div>
-        <div className={s.skillGroupsStack}>
-          {profile.skillGroups.map((group) => (
-            <div key={group.category} className={s.skillGroupRow}>
-              <span className={s.skillGroupTitle}>{group.category}</span>
-              <div className={s.skillChipsWrap}>
-                {group.items.map((skill) => (
-                  <span key={skill} className={s.skillChip}>
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
+        <div className={s.skillChipsWrap}>
+          {profile.skills.map((skill) => (
+            <span key={skill} className={s.skillChip}>
+              {skill}
+            </span>
           ))}
         </div>
       </section>

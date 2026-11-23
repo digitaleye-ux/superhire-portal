@@ -184,9 +184,10 @@
 
 .kvLabel {
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-12);
-  line-height: var(--line-height-12);
-  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
   color: var(--semantics-text-tertiary);
 }
 
@@ -329,15 +330,21 @@
 
 /* ---- Entry Lists (Education, Work Experience, Projects, Certifications) ---- */
 
-.entryList,
-.experienceList {
+.entryList {
   display: flex;
   flex-direction: column;
   gap: var(--space-4x);
 }
 
+.experienceList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6x);
+}
+
 .entryBlock,
-.experienceItem {
+.experienceItem,
+.projectItem {
   display: flex;
   flex-direction: column;
   gap: var(--space-2x);
