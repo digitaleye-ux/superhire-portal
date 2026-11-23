@@ -3,7 +3,7 @@ import type { CandidateDetail } from "./data";
 import { CandidateOverviewHeader, type CandidatePanelTab } from "./shared";
 import { HiringProgressTracker } from "@/proto/hiring-progress/HiringProgressTracker";
 import { NotesPrivateScratchpad } from "@/proto/recruiter-notes/NotesPrivateScratchpad";
-import { CandidateProfilePrototypeHarness } from "@/proto/candidate-profile/CandidateProfilePrototypeHarness";
+import { ProfileHorizontalPills } from "@/proto/candidate-profile/ProfileHorizontalPills";
 import s from "./panel.module.css";
 
 /**
@@ -11,7 +11,7 @@ import s from "./panel.module.css";
  *
  * Tabs:
  *   1. "Candidate status": 6-Milestone Hiring progress (Seamless Spine) + Private Recruiter notes
- *   2. "Candidate profile": Candidate Resume & Profile with TOC navigation (/emil-prototype exploration)
+ *   2. "Candidate profile": Full Candidate Resume & Profile with Option 1: Horizontal Pill TOC
  */
 export default function VariantIntegratedSpine({
   detail,
@@ -52,8 +52,8 @@ export default function VariantIntegratedSpine({
           role="tabpanel"
           aria-label="Candidate profile"
         >
-          {/* [EMIL-PROTOTYPE: candidate-profile-toc] */}
-          <CandidateProfilePrototypeHarness detail={detail} />
+          {/* Option 1: Space-Saving Horizontal Pill TOC */}
+          <ProfileHorizontalPills detail={detail} />
         </div>
       )}
     </aside>

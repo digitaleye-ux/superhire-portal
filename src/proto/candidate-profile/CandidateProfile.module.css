@@ -1,8 +1,10 @@
 /* ==========================================================================
-   Candidate Profile + Table of Contents (TOC) Prototype (/emil-prototype)
-   Adheres strictly to Bolt Design System tokens & Emil Kowalski UI craft:
-   - 16px section headings, 14px body text, 12px tabular-nums metadata
-   - Smooth scroll-spy navigation, tactile active:scale(0.97)
+   Candidate Profile — Option 1: Horizontal Pill TOC
+   Strictly adheres to Bolt Design System tokens (Figma: Bolt | Design System):
+   - Typescale: Figma node 32:2825 (font-size/line-height: 16/24, 14/20, 12/16, 10/12)
+   - Colors: Semantics layer (--semantics-surface-*, --semantics-text-*, --semantics-border-*)
+   - Spatial scale: Figma node 57:267 (--space-1x through --space-8x)
+   - Radii: --radius-4 (4px), --radius-md (8px), --radius-pill (100px)
    ========================================================================== */
 
 .profileRoot {
@@ -16,15 +18,15 @@
 }
 
 /* ==========================================================================
-   VARIANT 1: Sticky Horizontal Pill Bar (Space-Saving Top Rail)
+   STICKY TOP TOC RAIL (Option 1: Horizontal Pill TOC)
    ========================================================================== */
 
 .horizontalTocBar {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 10px var(--space-6x);
+  gap: var(--space-2x);
+  padding: var(--space-2x) var(--space-6x);
   background: var(--semantics-background-primary);
   border-bottom: 1px solid var(--semantics-border-default);
   overflow-x: auto;
@@ -39,25 +41,25 @@
 .tocPill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  height: 30px;
-  padding: 0 11px;
-  border-radius: var(--radius-8, 8px);
+  gap: var(--space-1x);
+  height: var(--control-height-sm);
+  padding: 0 var(--space-3x);
+  border-radius: var(--radius-md);
   border: 1px solid transparent;
   background: transparent;
   color: var(--semantics-text-secondary);
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-13, 13px);
-  line-height: 18px;
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
   font-weight: var(--font-weight-medium);
   white-space: nowrap;
   cursor: pointer;
   flex-shrink: 0;
   touch-action: manipulation;
   transition:
-    background-color 150ms ease-out,
-    color 150ms ease-out,
-    border-color 150ms ease-out,
+    background-color 140ms ease-out,
+    color 140ms ease-out,
+    border-color 140ms ease-out,
     transform 120ms ease-out;
 }
 
@@ -79,7 +81,8 @@
 
 .tocPillActive,
 .tocPillActive:hover {
-  background: var(--semantics-surface-brand-subtle, #eef0ff);
+  background: var(--semantics-surface-brand-subtle);
+  border-color: var(--semantics-interactive-subtle-border);
   color: var(--semantics-interactive-primary);
   font-weight: var(--font-weight-semibold);
 }
@@ -97,320 +100,21 @@
 }
 
 /* ==========================================================================
-   VARIANT 2: Vertical Left Sidebar TOC (Matches Reference Screenshot)
-   ========================================================================== */
-
-.splitRoot {
-  display: flex;
-  flex: 1;
-  min-height: 0;
-  width: 100%;
-  overflow: hidden;
-  background: var(--semantics-background-primary);
-}
-
-.verticalSidebar {
-  width: 172px;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  padding: var(--space-5x) var(--space-3x);
-  border-right: 1px solid var(--semantics-border-default);
-  background: var(--semantics-background-primary);
-  overflow-y: auto;
-  scrollbar-width: none;
-}
-
-.verticalSidebar::-webkit-scrollbar {
-  display: none;
-}
-
-.sidebarHeader {
-  padding: 0 10px var(--space-3x);
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.sidebarTitle {
-  margin: 0;
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-14);
-  line-height: 20px;
-  font-weight: var(--font-weight-semibold);
-  color: var(--semantics-text-primary);
-}
-
-.sidebarSubtitle {
-  margin: 0;
-  font-family: var(--font-family-sans);
-  font-size: 11px;
-  line-height: 15px;
-  color: var(--semantics-text-tertiary);
-}
-
-.sidebarNav {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.sidebarItem {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 7px 10px;
-  border: 0;
-  border-radius: var(--radius-8, 8px);
-  background: transparent;
-  color: var(--semantics-text-secondary);
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-13, 13px);
-  line-height: 18px;
-  font-weight: var(--font-weight-medium);
-  text-align: left;
-  cursor: pointer;
-  touch-action: manipulation;
-  transition:
-    background-color 140ms ease-out,
-    color 140ms ease-out,
-    transform 120ms ease-out;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .sidebarItem:hover {
-    background: var(--semantics-surface-secondary);
-    color: var(--semantics-text-primary);
-  }
-}
-
-.sidebarItem:active {
-  transform: scale(0.97);
-}
-
-.sidebarItem:focus-visible {
-  outline: 2px solid var(--semantics-border-focus);
-  outline-offset: 1px;
-}
-
-.sidebarItemActive,
-.sidebarItemActive:hover {
-  background: var(--semantics-surface-brand-subtle, #eef0ff);
-  color: var(--semantics-interactive-primary);
-  font-weight: var(--font-weight-semibold);
-}
-
-.splitContentScroll {
-  flex: 1;
-  min-width: 0;
-  min-height: 0;
-  overflow-y: auto;
-  padding: var(--space-5x) var(--space-5x) var(--space-8x);
-  scrollbar-width: none;
-}
-
-.splitContentScroll::-webkit-scrollbar {
-  display: none;
-}
-
-/* ==========================================================================
-   VARIANT 3: Compact Scroll-Spy Spine (Underline Anchor Bar + Progress Line)
-   ========================================================================== */
-
-.spineBarWrap {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  background: var(--semantics-background-primary);
-  border-bottom: 1px solid var(--semantics-border-default);
-  flex-shrink: 0;
-}
-
-.spineBar {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  padding: 0 var(--space-6x);
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.spineBar::-webkit-scrollbar {
-  display: none;
-}
-
-.spineTab {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  height: 38px;
-  padding: 0 10px;
-  border: 0;
-  background: transparent;
-  color: var(--semantics-text-tertiary);
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-12);
-  line-height: 16px;
-  font-weight: var(--font-weight-medium);
-  white-space: nowrap;
-  cursor: pointer;
-  flex-shrink: 0;
-  touch-action: manipulation;
-  transition: color 140ms ease-out;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .spineTab:hover {
-    color: var(--semantics-text-primary);
-  }
-}
-
-.spineTabActive {
-  color: var(--semantics-interactive-primary);
-  font-weight: var(--font-weight-semibold);
-}
-
-.spineTabActive::after {
-  content: "";
-  position: absolute;
-  left: 8px;
-  right: 8px;
-  bottom: 0;
-  height: 2px;
-  border-radius: var(--radius-pill);
-  background: var(--semantics-interactive-primary);
-}
-
-.spineProgressTrack {
-  width: 100%;
-  height: 2px;
-  background: transparent;
-  overflow: hidden;
-}
-
-.spineProgressFill {
-  height: 100%;
-  background: var(--semantics-interactive-primary);
-  opacity: 0.25;
-  transform-origin: left center;
-  transition: transform 80ms linear;
-}
-
-/* ==========================================================================
-   VARIANT 4: Segmented Chip Bar + Contained Dossier Cards
-   ========================================================================== */
-
-.segmentedBarWrap {
-  padding: 10px var(--space-6x);
-  background: var(--semantics-surface-secondary);
-  border-bottom: 1px solid var(--semantics-border-default);
-  flex-shrink: 0;
-}
-
-.segmentedTrack {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.segmentedTrack::-webkit-scrollbar {
-  display: none;
-}
-
-.segmentChip {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  height: 28px;
-  padding: 0 10px;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--semantics-border-default);
-  background: var(--semantics-background-primary);
-  color: var(--semantics-text-secondary);
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-12);
-  font-weight: var(--font-weight-medium);
-  white-space: nowrap;
-  cursor: pointer;
-  flex-shrink: 0;
-  touch-action: manipulation;
-  transition:
-    background-color 140ms ease-out,
-    color 140ms ease-out,
-    border-color 140ms ease-out,
-    transform 120ms ease-out;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .segmentChip:hover {
-    border-color: var(--semantics-border-strong);
-    color: var(--semantics-text-primary);
-  }
-}
-
-.segmentChip:active {
-  transform: scale(0.96);
-}
-
-.segmentChipActive,
-.segmentChipActive:hover {
-  background: var(--semantics-interactive-primary);
-  border-color: var(--semantics-interactive-primary);
-  color: var(--semantics-text-on-brand, #ffffff);
-}
-
-.cardsScrollArea {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  padding: var(--space-5x) var(--space-6x) var(--space-8x);
-  background: var(--semantics-surface-secondary);
-  scrollbar-width: none;
-}
-
-.cardsScrollArea::-webkit-scrollbar {
-  display: none;
-}
-
-/* ==========================================================================
-   SHARED SECTION CONTENT STYLES
+   SHARED PROFILE SECTION CONTENT (Strict Bolt Design System Tokens)
    ========================================================================== */
 
 .sectionsStream {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5x);
+  gap: var(--space-6x);
   padding-bottom: var(--space-8x);
 }
 
-.sectionsStreamCards {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4x);
-  padding-bottom: var(--space-8x);
-}
-
-.sectionEditorial,
-.sectionFormBlock {
+.sectionEditorial {
   display: flex;
   flex-direction: column;
   gap: var(--space-3x);
-  scroll-margin-top: 16px;
-}
-
-.sectionCard {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3x);
-  padding: var(--space-4x);
-  border-radius: var(--radius-8, 8px);
-  border: 1px solid var(--semantics-border-default);
-  background: var(--semantics-background-primary);
-  scroll-margin-top: 16px;
+  scroll-margin-top: var(--space-4x);
 }
 
 .sectionDivider {
@@ -428,6 +132,7 @@
   gap: var(--space-2x);
 }
 
+/* Section Title: Heading-4 (16px / 24px, Semibold, -0.5% tracking) */
 .sectionTitle {
   margin: 0;
   font-family: var(--font-family-sans);
@@ -450,109 +155,45 @@
 .verifiedPill {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 2px 8px;
-  border-radius: var(--radius-6, 6px);
-  background: var(--semantics-badge-success-bg, #ecfdf5);
-  border: 1px solid var(--semantics-badge-success-border, #a7f3d0);
-  color: var(--semantics-badge-success-text, #047857);
+  gap: var(--space-1x);
+  padding: var(--space-x-2) var(--space-2x);
+  border-radius: var(--radius-pill);
+  background: var(--semantics-badge-success-bg);
+  border: 1px solid var(--semantics-badge-success-border);
+  color: var(--semantics-badge-success-text);
   font-family: var(--font-family-sans);
   font-size: var(--font-size-12);
-  line-height: 16px;
+  line-height: var(--line-height-12);
   font-weight: var(--font-weight-medium);
 }
 
-/* ---- Read-only Form Grid (Matches Reference Screenshot) ---- */
-
-.readonlyFormGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.readonlyFieldFull {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.readonlyField {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-}
-
-.readonlyLabel {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-12);
-  line-height: 16px;
-  font-weight: var(--font-weight-medium);
-  color: var(--semantics-text-secondary);
-}
-
-.readonlyInputBox {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 6px;
-  min-height: 34px;
-  padding: 0 10px;
-  border-radius: var(--radius-6, 6px);
-  border: 1px solid var(--semantics-border-default);
-  background: var(--semantics-surface-secondary);
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-13, 13px);
-  line-height: 18px;
-  color: var(--semantics-text-primary);
-  min-width: 0;
-}
-
-.inlineCopyBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px;
-  border: 0;
-  border-radius: 4px;
-  background: transparent;
-  color: var(--semantics-text-tertiary);
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.inlineCopyBtn:hover {
-  color: var(--semantics-text-primary);
-  background: var(--semantics-background-primary);
-}
-
-/* ---- Editorial Key-Value Grid ---- */
+/* ---- Key-Value Grid (Personal info) ---- */
 
 .kvGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px 16px;
+  gap: var(--space-3x) var(--space-4x);
 }
 
 .kvItem {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--space-x-2);
   min-width: 0;
 }
 
 .kvLabel {
   font-family: var(--font-family-sans);
   font-size: var(--font-size-12);
-  line-height: 16px;
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-regular);
   color: var(--semantics-text-tertiary);
 }
 
 .kvValue {
   font-family: var(--font-family-sans);
   font-size: var(--font-size-14);
-  line-height: 20px;
+  line-height: var(--line-height-14);
   font-weight: var(--font-weight-medium);
   color: var(--semantics-text-primary);
   font-variant-numeric: tabular-nums;
@@ -561,18 +202,20 @@
 .kvCopyValue {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--space-1x);
   padding: 0;
   border: 0;
   background: transparent;
   font-family: var(--font-family-sans);
   font-size: var(--font-size-14);
-  line-height: 20px;
+  line-height: var(--line-height-14);
   font-weight: var(--font-weight-medium);
   color: var(--semantics-text-primary);
   cursor: pointer;
   text-align: left;
   min-width: 0;
+  touch-action: manipulation;
+  transition: color 120ms ease;
 }
 
 .kvCopyValue svg {
@@ -595,24 +238,24 @@
   min-width: 0;
 }
 
-/* ---- Resume Card (Matches Reference Screenshot Dashed Card) ---- */
+/* ---- Resume Card ---- */
 
 .resumeDropCard {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  border-radius: var(--radius-8, 8px);
+  gap: var(--space-3x);
+  padding: var(--space-4x);
+  border-radius: var(--radius-md);
   border: 1px dashed var(--semantics-border-strong);
   background: var(--semantics-surface-secondary);
 }
 
 .resumeFileBadge {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+  width: var(--control-height-md);
+  height: var(--control-height-md);
+  border-radius: var(--radius-pill);
   background: var(--semantics-interactive-primary);
-  color: var(--semantics-text-on-brand, #ffffff);
+  color: var(--semantics-text-on-brand);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -622,7 +265,7 @@
 .resumeFileMeta {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--space-x-2);
   flex: 1;
   min-width: 0;
 }
@@ -630,7 +273,7 @@
 .resumeFileName {
   font-family: var(--font-family-sans);
   font-size: var(--font-size-14);
-  line-height: 20px;
+  line-height: var(--line-height-14);
   font-weight: var(--font-weight-semibold);
   color: var(--semantics-interactive-primary);
   overflow: hidden;
@@ -641,7 +284,7 @@
 .resumeSubMeta {
   font-family: var(--font-family-sans);
   font-size: var(--font-size-12);
-  line-height: 16px;
+  line-height: var(--line-height-12);
   color: var(--semantics-text-tertiary);
   font-variant-numeric: tabular-nums;
 }
@@ -649,22 +292,23 @@
 .resumeActions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2x);
   flex-shrink: 0;
 }
 
 .resumeBtnSecondary {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  height: 30px;
-  padding: 0 10px;
-  border-radius: var(--radius-6, 6px);
+  gap: var(--space-1x);
+  height: var(--control-height-sm);
+  padding: 0 var(--space-3x);
+  border-radius: var(--radius-4);
   border: 1px solid var(--semantics-border-default);
   background: var(--semantics-background-primary);
   color: var(--semantics-text-primary);
   font-family: var(--font-family-sans);
   font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
   touch-action: manipulation;
@@ -683,7 +327,7 @@
   transform: scale(0.96);
 }
 
-/* ---- Entries: Education, Work Experience, Projects, Certifications ---- */
+/* ---- Entry Lists (Education, Work Experience, Projects, Certifications) ---- */
 
 .entryList,
 .experienceList {
@@ -696,15 +340,15 @@
 .experienceItem {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--space-2x);
 }
 
 .projectCard {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 12px 14px;
-  border-radius: var(--radius-8, 8px);
+  gap: var(--space-2x);
+  padding: var(--space-3x);
+  border-radius: var(--radius-md);
   border: 1px solid var(--semantics-border-default);
   background: var(--semantics-surface-secondary);
 }
@@ -713,21 +357,22 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--space-3x);
 }
 
 .expRoleGroup {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--space-x-2);
   min-width: 0;
 }
 
+/* Entry Title: Label-1 / Body-1 Semibold (14px / 20px) */
 .entryTitle {
   margin: 0;
   font-family: var(--font-family-sans);
   font-size: var(--font-size-14);
-  line-height: 20px;
+  line-height: var(--line-height-14);
   font-weight: var(--font-weight-semibold);
   color: var(--semantics-text-primary);
 }
@@ -736,8 +381,9 @@
 .entrySub {
   margin: 0;
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-13, 13px);
-  line-height: 18px;
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-regular);
   color: var(--semantics-text-secondary);
 }
 
@@ -745,14 +391,14 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 2px;
+  gap: var(--space-x-2);
   flex-shrink: 0;
 }
 
 .entryDate {
   font-family: var(--font-family-sans);
   font-size: var(--font-size-12);
-  line-height: 16px;
+  line-height: var(--line-height-12);
   font-weight: var(--font-weight-medium);
   color: var(--semantics-text-tertiary);
   font-variant-numeric: tabular-nums;
@@ -761,8 +407,9 @@
 
 .expTenure {
   font-family: var(--font-family-sans);
-  font-size: 11px;
-  line-height: 14px;
+  font-size: var(--font-size-10);
+  line-height: var(--line-height-10);
+  font-weight: var(--font-weight-medium);
   color: var(--semantics-text-tertiary);
   font-variant-numeric: tabular-nums;
 }
@@ -771,54 +418,54 @@
   align-self: flex-start;
   display: inline-flex;
   align-items: center;
-  padding: 2px 8px;
-  border-radius: var(--radius-6, 6px);
+  padding: var(--space-x-2) var(--space-2x);
+  border-radius: var(--radius-4);
   background: var(--semantics-surface-secondary);
   color: var(--semantics-text-secondary);
   font-family: var(--font-family-sans);
   font-size: var(--font-size-12);
-  line-height: 16px;
+  line-height: var(--line-height-12);
   font-weight: var(--font-weight-medium);
 }
 
 .bulletList {
-  margin: 4px 0 0;
-  padding-inline-start: 18px;
+  margin: var(--space-1x) 0 0;
+  padding-inline-start: var(--space-5x);
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--space-1x);
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-13, 13px);
-  line-height: 19px;
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
   color: var(--semantics-text-secondary);
 }
 
 .projectDesc {
   margin: 0;
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-13, 13px);
-  line-height: 19px;
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
   color: var(--semantics-text-secondary);
 }
 
 .inlineTagRow {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 2px;
+  gap: var(--space-2x);
+  margin-top: var(--space-x-2);
 }
 
 .miniTag {
   display: inline-flex;
   align-items: center;
-  padding: 2px 8px;
-  border-radius: var(--radius-6, 6px);
+  padding: var(--space-x-2) var(--space-2x);
+  border-radius: var(--radius-4);
   background: var(--semantics-background-primary);
   border: 1px solid var(--semantics-border-default);
   color: var(--semantics-text-secondary);
   font-family: var(--font-family-sans);
-  font-size: 11px;
-  line-height: 16px;
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
   font-weight: var(--font-weight-medium);
 }
 
@@ -826,13 +473,13 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--space-3x);
 }
 
 .certMain {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--space-x-2);
   min-width: 0;
 }
 
@@ -840,17 +487,17 @@
 
 .linksGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-3x);
 }
 
 .linkCard {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  padding: 10px 12px;
-  border-radius: var(--radius-8, 8px);
+  gap: var(--space-2x);
+  padding: var(--space-3x);
+  border-radius: var(--radius-md);
   border: 1px solid var(--semantics-border-default);
   background: var(--semantics-background-primary);
   color: var(--semantics-text-secondary);
@@ -876,14 +523,14 @@
 .linkCardLeft {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--space-x-2);
   min-width: 0;
 }
 
 .linkLabel {
   font-family: var(--font-family-sans);
   font-size: var(--font-size-12);
-  line-height: 16px;
+  line-height: var(--line-height-12);
   font-weight: var(--font-weight-semibold);
   color: var(--semantics-text-primary);
 }
@@ -891,7 +538,7 @@
 .linkHandle {
   font-family: var(--font-family-sans);
   font-size: var(--font-size-12);
-  line-height: 16px;
+  line-height: var(--line-height-12);
   color: var(--semantics-interactive-primary);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -903,19 +550,19 @@
 .skillGroupsStack {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-3x);
 }
 
 .skillGroupRow {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--space-2x);
 }
 
 .skillGroupTitle {
   font-family: var(--font-family-sans);
   font-size: var(--font-size-12);
-  line-height: 16px;
+  line-height: var(--line-height-12);
   font-weight: var(--font-weight-medium);
   color: var(--semantics-text-tertiary);
 }
@@ -923,19 +570,19 @@
 .skillChipsWrap {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: var(--space-2x);
 }
 
 .skillChip {
   display: inline-flex;
   align-items: center;
-  padding: 4px 10px;
-  border-radius: var(--radius-6, 6px);
+  padding: var(--space-1x) var(--space-3x);
+  border-radius: var(--radius-4);
   background: var(--semantics-surface-secondary);
   border: 1px solid var(--semantics-border-default);
   color: var(--semantics-text-primary);
   font-family: var(--font-family-sans);
   font-size: var(--font-size-12);
-  line-height: 16px;
+  line-height: var(--line-height-12);
   font-weight: var(--font-weight-medium);
 }
