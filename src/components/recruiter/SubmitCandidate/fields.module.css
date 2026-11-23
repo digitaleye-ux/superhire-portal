@@ -1,0 +1,622 @@
+/* Form fields — exact styling from Figma node 438:5522 (Bolt | Design System). */
+.field,
+.fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2x);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.label {
+  padding: 0;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-tertiary);
+}
+.optional {
+  color: var(--semantics-text-tertiary);
+  font-weight: var(--font-weight-regular);
+}
+
+.hint,
+.error {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2x);
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  color: var(--semantics-text-tertiary);
+}
+.error {
+  color: var(--semantics-text-danger);
+}
+.count {
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
+}
+
+/* ---- Control wrapper: decorations overlay the input ---- */
+.control {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--control-height-lg);
+  padding: 0 var(--space-3x);
+  border: 1px solid var(--semantics-control-border);
+  border-radius: var(--radius-md);
+  background: var(--semantics-control-bg);
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-16);
+  color: var(--semantics-text-primary);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.input::placeholder {
+  color: var(--semantics-text-placeholder);
+  font-weight: var(--font-weight-regular);
+}
+.input:hover {
+  border-color: var(--semantics-control-border-hover);
+}
+.input:focus-visible,
+.input:focus {
+  outline: none;
+  border-color: var(--semantics-control-border-focus);
+  box-shadow: var(--semantics-focus-ring);
+}
+.control[data-invalid] .input,
+.control[data-invalid] .input:focus {
+  border-color: var(--semantics-control-border-error);
+}
+.control[data-invalid] .input:focus {
+  box-shadow: var(--semantics-focus-ring-danger);
+}
+
+.prefix,
+.suffix,
+.chevron {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  pointer-events: none; /* clicks fall through to the input */
+  color: var(--semantics-text-tertiary);
+}
+.prefix {
+  left: var(--space-3x);
+}
+.suffix {
+  right: var(--space-3x);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-medium);
+}
+.chevron {
+  right: var(--space-3x);
+}
+
+.select {
+  padding-right: calc(var(--space-3x) + var(--size-icon-sm) + var(--space-2x));
+  cursor: pointer;
+  text-overflow: ellipsis;
+}
+.select[data-empty] {
+  color: var(--semantics-text-placeholder);
+  font-weight: var(--font-weight-regular);
+}
+.select option {
+  color: var(--semantics-text-primary);
+}
+
+.textarea {
+  height: auto;
+  min-height: 104px;
+  padding: var(--space-2x) var(--space-3x);
+  resize: vertical;
+}
+
+/* ---- Phone field with Dropdown component ---- */
+.phoneControl {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: var(--control-height-lg);
+  border: 1px solid var(--semantics-control-border);
+  border-radius: var(--radius-md);
+  background: var(--semantics-control-bg);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+  position: relative;
+}
+
+.phoneControl:focus-within {
+  border-color: var(--semantics-border-focus);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.phoneControl[data-invalid] {
+  border-color: var(--semantics-text-danger);
+}
+
+.phoneControl[data-invalid]:focus-within {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+.phoneDropdownRoot {
+  flex-shrink: 0;
+  height: 100%;
+  display: flex;
+}
+
+.phoneDropdownTrigger {
+  box-sizing: border-box !important;
+  height: 100% !important;
+  border: 0 !important;
+  border-right: 1px solid var(--semantics-control-border) !important;
+  border-radius: var(--radius-md) 0 0 var(--radius-md) !important;
+  background: transparent !important;
+  padding: 0 var(--space-3x) !important;
+  gap: var(--space-2x) !important;
+  color: var(--semantics-text-primary) !important;
+  font-family: var(--font-family-sans) !important;
+  font-size: var(--font-size-16) !important;
+  font-weight: var(--font-weight-medium) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.phoneDropdownTrigger:hover {
+  background: var(--semantics-surface-secondary, #f8fafc) !important;
+}
+
+.phoneDropdownTrigger:focus-visible {
+  outline: none !important;
+}
+
+.phoneDropdownMenu {
+  min-width: unset !important;
+  width: max-content !important;
+  box-sizing: border-box !important;
+  z-index: 100 !important;
+}
+
+.phoneInput {
+  box-sizing: border-box;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0 !important;
+  outline: none !important;
+  background: transparent !important;
+  padding: 0 var(--space-3x) !important;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-16);
+  color: var(--semantics-text-primary);
+}
+
+.phoneInput::placeholder {
+  color: var(--semantics-text-placeholder);
+}
+
+/* ---- SelectField (Notice Period) with Dropdown component ---- */
+.selectDropdownWrap {
+  width: 100%;
+}
+
+.fullWidthDropdown {
+  width: 100%;
+  display: flex !important;
+}
+
+.selectDropdownTrigger {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  height: var(--control-height-lg) !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 0 var(--space-3x) !important;
+  border: 1px solid var(--semantics-control-border) !important;
+  border-radius: var(--radius-md) !important;
+  background: var(--semantics-control-bg) !important;
+  font-family: var(--font-family-sans) !important;
+  font-size: var(--font-size-16) !important;
+  font-weight: var(--font-weight-regular) !important;
+  color: var(--semantics-text-primary) !important;
+  cursor: pointer;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.selectDropdownTrigger:hover {
+  border-color: var(--semantics-border-strong) !important;
+}
+
+.selectDropdownTrigger:focus-visible {
+  border-color: var(--semantics-border-focus) !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
+  outline: none !important;
+}
+
+.selectDropdownWrap[data-invalid] .selectDropdownTrigger {
+  border-color: var(--semantics-text-danger) !important;
+}
+
+.selectDropdownWrap[data-invalid] .selectDropdownTrigger:focus-visible {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+}
+
+.selectDropdownTrigger[data-empty] > span:first-child {
+  color: var(--semantics-text-placeholder) !important;
+}
+
+.selectDropdownMenu {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-width: 100% !important;
+  max-height: 260px !important;
+  overflow-y: auto !important;
+  z-index: 100 !important;
+}
+
+/* ---- Segmented Yes/No ---- */
+.segmented {
+  display: flex;
+  height: var(--control-height-lg);
+  padding: var(--space-x-2);
+  gap: var(--space-x-2);
+  box-sizing: border-box;
+  border: 1px solid var(--semantics-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--semantics-surface-secondary);
+}
+.segmented[data-invalid] {
+  border-color: var(--semantics-control-border-error);
+}
+.segment {
+  position: relative;
+  flex: 1;
+  display: flex;
+  cursor: pointer;
+}
+.segmentFace {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-4);
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-14);
+  color: var(--semantics-text-tertiary);
+  transition: background-color 150ms ease-out, color 150ms ease-out, box-shadow 150ms ease-out;
+  touch-action: manipulation;
+}
+.segment:hover .segmentFace {
+  color: var(--semantics-text-secondary);
+}
+.segment input:checked + .segmentFace {
+  background: var(--semantics-surface-primary);
+  color: var(--semantics-text-link);
+  box-shadow: 0 0 0 1px var(--semantics-border-strong), 0 1px 2px rgba(16, 24, 40, 0.08);
+}
+.segment input:focus-visible + .segmentFace {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 1px;
+}
+.segment:active .segmentFace {
+  transform: scale(0.97);
+}
+
+/* ---- Chips ---- */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2x);
+}
+.chip {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+}
+.chipFace {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  min-height: var(--control-height-sm);
+  padding: 0 var(--space-3x);
+  border: 1px solid var(--semantics-border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--semantics-surface-primary);
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-secondary);
+  transition: background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out,
+    padding 150ms ease-out, gap 150ms ease-out;
+  touch-action: manipulation;
+}
+.chipCheck {
+  display: inline-flex;
+  width: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: width 150ms ease-out, opacity 150ms ease-out;
+}
+.chip:hover .chipFace {
+  border-color: var(--semantics-control-border-hover);
+}
+.chipFace[data-on] {
+  background: var(--semantics-surface-brand-subtle);
+  border-color: var(--semantics-border-interactive);
+  color: var(--semantics-text-link);
+  gap: var(--space-1x);
+}
+.chipFace[data-on] .chipCheck {
+  width: var(--size-icon-xs);
+  opacity: 1;
+}
+.chip input:focus-visible + .chipFace {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 2px;
+}
+.chip:active .chipFace {
+  transform: scale(0.97);
+}
+
+
+/* ---- Verification checklist rows ---- */
+.legendRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2x);
+}
+.legendCount {
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  color: var(--semantics-text-tertiary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2x);
+}
+
+.checkRow {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3x);
+  padding: var(--space-3x) var(--space-4x);
+  margin: 0;
+  box-sizing: border-box;
+  border: 1px solid var(--semantics-border-default);
+  border-radius: var(--radius-md);
+  background: var(--semantics-surface-primary, #ffffff);
+  cursor: pointer;
+  transition: border-color 140ms ease, background-color 140ms ease, box-shadow 140ms ease;
+  touch-action: manipulation;
+}
+
+.checkRow:hover {
+  border-color: var(--semantics-border-strong);
+  background: var(--semantics-surface-secondary, #f8fafc);
+}
+
+.checkRow[data-on] {
+  border-color: var(--semantics-border-interactive, #4f46e5);
+  background: var(--semantics-surface-brand-subtle, #f5f7ff);
+}
+
+.checklist[data-invalid] .checkRow:not([data-on]) {
+  border-color: var(--semantics-control-border-error, #ef4444);
+}
+
+.checkRow:has(input:focus-visible) {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 2px;
+}
+
+.checkBox {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  border: 1.5px solid var(--semantics-control-border);
+  border-radius: var(--radius-4, 4px);
+  background: var(--semantics-control-bg, #ffffff);
+  color: var(--semantics-text-inverse, #ffffff);
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+.checkRow:hover .checkBox:not([data-on]) {
+  border-color: var(--semantics-border-interactive);
+}
+
+.checkBox[data-on] {
+  background: var(--semantics-control-indicator-checked, #4f46e5);
+  border-color: var(--semantics-control-indicator-checked, #4f46e5);
+}
+
+.checkText {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-14);
+  line-height: 1.5;
+  color: var(--semantics-text-secondary);
+  overflow-wrap: anywhere;
+  user-select: none;
+  transition: color 140ms ease;
+}
+
+.checkRow[data-on] .checkText {
+  color: var(--semantics-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ---- File drop ---- */
+.drop {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3x);
+  padding: var(--space-3x);
+  border: 1px dashed var(--semantics-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--semantics-surface-primary);
+  cursor: pointer;
+  transition: border-color 120ms ease, background-color 120ms ease;
+}
+.drop:hover,
+.drop[data-drag] {
+  border-color: var(--semantics-border-interactive);
+  background: var(--semantics-surface-brand-subtle);
+}
+.drop:focus-within {
+  border-color: var(--semantics-border-focus);
+  box-shadow: var(--semantics-focus-ring);
+}
+.drop[data-invalid] {
+  border-color: var(--semantics-control-border-error);
+}
+.dropHero {
+  padding: var(--space-4x);
+  background: var(--semantics-surface-brand-subtle);
+  border-color: var(--semantics-interactive-subtle-border);
+}
+.dropIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--control-height-md);
+  height: var(--control-height-md);
+  border-radius: var(--radius-md);
+  background: var(--semantics-interactive-subtle-hover);
+  color: var(--semantics-text-link);
+}
+.dropText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.dropTitle {
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-primary);
+}
+.dropHelp {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  color: var(--semantics-text-tertiary);
+}
+.fileRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3x);
+  padding: var(--space-2x) var(--space-3x);
+  border: 1px solid var(--semantics-border-strong);
+  border-radius: var(--radius-md);
+}
+.fileRow[data-invalid] {
+  border-color: var(--semantics-control-border-error);
+}
+.fileIcon {
+  display: inline-flex;
+  color: var(--semantics-text-link);
+}
+.fileMeta {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+.fileName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-primary);
+}
+.fileSize {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  color: var(--semantics-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+.iconBtn {
+  position: relative;
+  display: inline-flex;
+  padding: var(--space-1x);
+  border: 0;
+  border-radius: var(--radius-4);
+  background: transparent;
+  color: var(--semantics-text-secondary);
+  cursor: pointer;
+}
+.iconBtn::before {
+  content: "";
+  position: absolute;
+  inset: -8px; /* 40px hit area */
+}
+.iconBtn:hover {
+  background: var(--semantics-surface-brand-subtle);
+}
+.iconBtn:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 2px;
+}
+
+.srOnly {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .input, .segmentFace, .chipFace, .chipCheck, .drop { transition: none; }
+  .segment:active .segmentFace, .chip:active .chipFace, .checkRow:active { transform: none; }
+  .checkRow, .checkBox { transition: none; }
+}

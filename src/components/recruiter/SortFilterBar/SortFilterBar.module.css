@@ -1,0 +1,24 @@
+/* Sort & filter bar — Figma node 438:5270.
+   White bg, 16px top / 8px bottom / 32px side padding, filters left, sort right. */
+
+.bar {
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4x);
+  width: 100%;
+  padding: var(--space-4x) var(--space-8x);
+  background: var(--semantics-background-primary);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-2x);
+}
+
+.sort {
+  flex-shrink: 0;
+}

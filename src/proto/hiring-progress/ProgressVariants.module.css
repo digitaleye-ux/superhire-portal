@@ -1,0 +1,1190 @@
+/* ==========================================================================
+   Hiring Progress Prototype Variants Styles
+   Follows Emil Kowalski design engineering principles & Bolt Design Tokens
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Variant 1: Seamless Spine (Axis: Direct Editorial Vertical Flow)
+   - No duplicate titles
+   - No awkward nested indentation card
+   - High visual rhythm with direct inline narrative
+   -------------------------------------------------------------------------- */
+.spineTimeline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.spineStep {
+  display: flex;
+  gap: var(--space-3x);
+  min-width: 0;
+  position: relative;
+}
+
+.spineRail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 20px;
+}
+
+.spineDot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--semantics-border-strong);
+  background: var(--semantics-background-primary);
+  color: #ffffff;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.spineStepDone .spineDot {
+  background: var(--semantics-interactive-primary);
+  border-color: var(--semantics-interactive-primary);
+}
+
+.spineStepCurrent .spineDot {
+  border-color: var(--semantics-interactive-primary);
+  background: var(--semantics-surface-brand-subtle);
+}
+
+.spineStepCurrent .spineDot::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--semantics-interactive-primary);
+  animation: pulse-ring 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); opacity: 0.9; }
+  50% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.9; }
+}
+
+.spineStepUpcoming .spineDot {
+  border-color: var(--semantics-border-default);
+  background: transparent;
+}
+
+.spineLine {
+  flex: 1;
+  width: 1.5px;
+  min-height: 16px;
+  background: var(--semantics-border-default);
+  margin: 3px 0;
+}
+
+.spineStepDone .spineLine {
+  background: var(--semantics-interactive-primary);
+}
+
+.spineContent {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1x);
+  padding-bottom: var(--space-4x);
+}
+
+.spineStepUpcoming .spineContent {
+  padding-bottom: var(--space-2x);
+}
+
+.spineStepLast .spineContent {
+  padding-bottom: 0;
+}
+
+.spineHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2x);
+  min-height: 20px;
+}
+
+.spineLabelRow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2x);
+  min-width: 0;
+}
+
+.spineLabel {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-primary);
+}
+
+.spineStepCurrent .spineLabel {
+  font-weight: var(--font-weight-semibold);
+  color: var(--semantics-text-brand);
+}
+
+.spineStepUpcoming .spineLabel {
+  color: var(--semantics-text-tertiary);
+  font-weight: var(--font-weight-normal);
+}
+
+.spineActiveBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  border-radius: var(--radius-full);
+  background: var(--semantics-surface-brand-subtle);
+  color: var(--semantics-text-brand);
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  line-height: 14px;
+}
+
+.spineDate {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  color: var(--semantics-text-tertiary);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.spineDesc {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13, 13px);
+  line-height: 1.5;
+  color: var(--semantics-text-secondary);
+}
+
+.spineNextCallout {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2x);
+  margin-top: var(--space-1x);
+  padding: var(--space-2x) var(--space-3x);
+  background: var(--semantics-surface-secondary);
+  border-radius: var(--radius-md);
+  border-left: 2.5px solid var(--semantics-interactive-primary);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.nextPill {
+  font-weight: var(--font-weight-semibold);
+  color: var(--semantics-text-primary);
+  flex-shrink: 0;
+}
+
+.nextDetail {
+  color: var(--semantics-text-secondary);
+}
+
+/* --------------------------------------------------------------------------
+   Variant 2: Action Dossier (Axis: Triage & Ownership First)
+   - Top active SLA card with who has the ball
+   - Compact horizontal milestone rail
+   - Collapsible historical stages
+   -------------------------------------------------------------------------- */
+.dossierContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3x);
+  width: 100%;
+}
+
+/* Active Command Card */
+.commandCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2x);
+  padding: var(--space-3x) var(--space-4x);
+  border-radius: var(--radius-md);
+  background: var(--semantics-background-primary);
+  border: 1px solid var(--semantics-border-default);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  border-left: 3.5px solid var(--semantics-interactive-primary);
+}
+
+.commandHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2x);
+  flex-wrap: wrap;
+}
+
+.commandTitleGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2x);
+}
+
+.commandTitle {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-semibold);
+  color: var(--semantics-text-primary);
+}
+
+.commandDurationChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: var(--semantics-surface-secondary);
+  color: var(--semantics-text-secondary);
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+
+.ownerBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: var(--semantics-surface-brand-subtle);
+  color: var(--semantics-text-brand);
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+}
+
+.commandBody {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--semantics-text-secondary);
+}
+
+.commandNextRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2x);
+  padding-top: var(--space-2x);
+  border-top: 1px dashed var(--semantics-border-default);
+  font-size: 12px;
+}
+
+.commandNextLeft {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+}
+
+.commandNextLabel {
+  font-weight: var(--font-weight-semibold);
+  color: var(--semantics-text-primary);
+  flex-shrink: 0;
+}
+
+.commandNextText {
+  color: var(--semantics-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.commandSlaTag {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-warning, #d97706);
+  background: var(--semantics-surface-warning-subtle, #fef3c7);
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+}
+
+/* Horizontal Milestone Stepper Bar */
+.stepperBar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 4px;
+  padding: var(--space-2x) 0;
+}
+
+.stepperItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  position: relative;
+}
+
+.stepperTrack {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--semantics-border-default);
+  width: 100%;
+  transition: background-color 200ms ease;
+}
+
+.stepperItemDone .stepperTrack {
+  background: var(--semantics-interactive-primary);
+}
+
+.stepperItemCurrent .stepperTrack {
+  background: var(--semantics-interactive-primary);
+  box-shadow: 0 0 0 1px var(--semantics-surface-brand-subtle);
+}
+
+.stepperLabel {
+  font-family: var(--font-family-sans);
+  font-size: 11px;
+  line-height: 14px;
+  color: var(--semantics-text-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: var(--font-weight-normal);
+}
+
+.stepperItemDone .stepperLabel {
+  color: var(--semantics-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.stepperItemCurrent .stepperLabel {
+  color: var(--semantics-text-brand);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Collapsible Milestone Log */
+.historyToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1x);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--semantics-text-tertiary);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  align-self: flex-start;
+  transition: color 150ms ease;
+}
+
+.historyToggle:hover {
+  color: var(--semantics-text-primary);
+}
+
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2x);
+  padding-left: var(--space-3x);
+  border-left: 1.5px solid var(--semantics-border-default);
+  margin-top: var(--space-1x);
+}
+
+.historyItem {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2x);
+  font-size: 12px;
+}
+
+.historyItemName {
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-secondary);
+}
+
+.historyItemDate {
+  color: var(--semantics-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------------------------
+   Variant 3: Milestone Rail & Cards (Axis: Structured Milestone Cards)
+   - Segmented distinct milestone cards
+   - Active stage spotlight
+   - Explicit step progression numbers
+   -------------------------------------------------------------------------- */
+.cardsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2x);
+  width: 100%;
+}
+
+.milestoneCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2x);
+  padding: var(--space-3x);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--semantics-border-default);
+  background: var(--semantics-background-primary);
+  transition: all 150ms ease;
+}
+
+.milestoneCardDone {
+  padding: var(--space-2x) var(--space-3x);
+  background: var(--semantics-background-primary);
+}
+
+.milestoneCardCurrent {
+  border-color: var(--semantics-interactive-primary);
+  background: var(--semantics-surface-brand-subtle);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.milestoneCardUpcoming {
+  padding: var(--space-2x) var(--space-3x);
+  background: transparent;
+  border-color: var(--semantics-border-default);
+  opacity: 0.65;
+}
+
+.milestoneCardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2x);
+}
+
+.milestoneLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2x);
+}
+
+.milestoneStepNum {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  background: var(--semantics-surface-secondary);
+  color: var(--semantics-text-secondary);
+}
+
+.milestoneCardDone .milestoneStepNum {
+  background: var(--semantics-interactive-primary);
+  color: #ffffff;
+}
+
+.milestoneCardCurrent .milestoneStepNum {
+  background: var(--semantics-interactive-primary);
+  color: #ffffff;
+}
+
+.milestoneTitle {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13, 13px);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-primary);
+}
+
+.milestoneCardCurrent .milestoneTitle {
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-semibold);
+  color: var(--semantics-text-brand);
+}
+
+.milestoneCardUpcoming .milestoneTitle {
+  color: var(--semantics-text-tertiary);
+}
+
+.milestoneMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2x);
+}
+
+.milestoneDuration {
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-brand);
+  background: #ffffff;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+}
+
+.milestoneDate {
+  font-size: 12px;
+  color: var(--semantics-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.milestoneBody {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--semantics-text-secondary);
+  padding-left: 28px;
+}
+
+.milestoneNextFooter {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1x);
+  padding: var(--space-1x) var(--space-2x);
+  margin-left: 28px;
+  border-radius: var(--radius-4, 4px);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  font-size: 12px;
+  color: var(--semantics-text-secondary);
+}
+
+.milestoneNextArrow {
+  color: var(--semantics-text-brand);
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Direction 2: Phase Split (Double Vetting Delivery -> Employer Direct)
+   ========================================================================== */
+
+.phaseSplitTracker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4x);
+  width: 100%;
+}
+
+.phaseOverallHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2x);
+}
+
+.phaseOverallTitle {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-semibold);
+  color: var(--semantics-text-primary);
+}
+
+.phaseOverallBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-medium);
+  background: var(--semantics-badge-neutral-bg);
+  color: var(--semantics-badge-neutral-text);
+  border: 1px solid var(--semantics-badge-neutral-border);
+}
+
+.phaseCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3x);
+  padding: var(--space-3x) var(--space-3x);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--semantics-border-default);
+  background: var(--semantics-surface-primary);
+  box-sizing: border-box;
+}
+
+.phaseCardDone {
+  border-color: var(--semantics-border-subtle);
+  background: var(--semantics-surface-secondary);
+}
+
+.phaseCardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2x);
+  padding-bottom: var(--space-2x);
+  border-bottom: 1px solid var(--semantics-border-subtle);
+}
+
+.phaseMetaGroup {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2x);
+}
+
+.phasePill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--semantics-surface-secondary);
+  border: 1px solid var(--semantics-border-default);
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--semantics-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.phaseTitles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.phaseHeading {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13, 13px);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-semibold);
+  color: var(--semantics-text-primary);
+}
+
+.phaseSubtitle {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--semantics-text-tertiary);
+}
+
+.phaseStatusSuccess {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-badge-success-text);
+  background: var(--semantics-badge-success-bg);
+  border: 1px solid var(--semantics-badge-success-border);
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  flex-shrink: 0;
+}
+
+.phaseStatusBrand {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-badge-spotlight-text);
+  background: var(--semantics-badge-spotlight-bg);
+  border: 1px solid var(--semantics-badge-spotlight-border);
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  flex-shrink: 0;
+}
+
+.phaseStatusNeutral {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-tertiary);
+  flex-shrink: 0;
+}
+
+.phaseList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3x);
+}
+
+.phaseItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2x);
+  position: relative;
+}
+
+.phaseSpineRail {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 18px;
+  padding-top: 2px;
+}
+
+.phaseNode {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--semantics-surface-primary);
+  border: 1.5px solid var(--semantics-border-default);
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+.phaseNodeDone {
+  background: var(--semantics-interactive-primary);
+  border-color: var(--semantics-interactive-primary);
+  color: #ffffff;
+}
+
+.phaseNodeCurrent {
+  border-color: var(--semantics-interactive-primary);
+  background: var(--semantics-surface-primary);
+  box-shadow: 0 0 0 2.5px var(--primitives-primary-100);
+}
+
+.phaseNodeDot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--semantics-interactive-primary);
+}
+
+.phaseNodeWarning {
+  background: var(--semantics-surface-warning-subtle);
+  border-color: var(--semantics-border-warning);
+  color: var(--semantics-text-warning);
+}
+
+.phaseNodeDanger {
+  background: var(--semantics-surface-danger-subtle);
+  border-color: var(--semantics-border-danger);
+  color: var(--semantics-text-danger);
+}
+
+.phaseNodeUpcoming {
+  border-color: var(--semantics-border-subtle);
+}
+
+.phaseLine {
+  position: absolute;
+  top: 18px;
+  bottom: -14px;
+  left: 7.5px;
+  width: 1.5px;
+  background: var(--semantics-border-subtle);
+  z-index: 0;
+}
+
+.phaseLineDone {
+  background: var(--semantics-interactive-primary);
+}
+
+.phaseContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.phaseHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2x);
+  min-height: 18px;
+}
+
+.phaseTitle {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13, 13px);
+  line-height: 18px;
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-primary);
+}
+
+.phaseTitleCurrent {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13, 13px);
+  line-height: 18px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--semantics-text-primary);
+}
+
+.phaseTitleUpcoming {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13, 13px);
+  line-height: 18px;
+  font-weight: var(--font-weight-regular);
+  color: var(--semantics-text-placeholder);
+}
+
+.phaseBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  background: var(--semantics-badge-spotlight-bg);
+  color: var(--semantics-badge-spotlight-text);
+  border: 1px solid var(--semantics-badge-spotlight-border);
+}
+
+.phaseDate {
+  font-size: 11px;
+  color: var(--semantics-text-tertiary);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.phaseUpcomingTag {
+  font-size: 11px;
+  color: var(--semantics-text-placeholder);
+  flex-shrink: 0;
+}
+
+.phaseOutcome,
+.phaseDescription {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: 12px;
+  line-height: 17px;
+  color: var(--semantics-text-secondary);
+}
+
+/* ==========================================================================
+   Direction 3: Focus Stepper (Segmented Bar + Active Spotlight)
+   ========================================================================== */
+
+.stepperTracker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3x);
+  width: 100%;
+}
+
+.stepperHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3x);
+}
+
+.stepperHeaderTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2x);
+}
+
+.stepperTitle {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-semibold);
+  color: var(--semantics-text-primary);
+}
+
+.stepperBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-medium);
+  background: var(--semantics-badge-neutral-bg);
+  color: var(--semantics-badge-neutral-text);
+  border: 1px solid var(--semantics-badge-neutral-border);
+}
+
+/* 6-segment horizontal progress bar */
+.stepperSegments {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.segmentItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.segmentBar {
+  width: 100%;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--semantics-border-default);
+  transition: all 150ms ease;
+}
+
+.segmentDone .segmentBar {
+  background: var(--semantics-interactive-primary);
+}
+
+.segmentCurrent .segmentBar {
+  background: var(--semantics-interactive-primary);
+  height: 5px;
+  box-shadow: 0 0 0 2px var(--primitives-primary-100);
+}
+
+.segmentAlert .segmentBar {
+  background: var(--semantics-border-danger);
+}
+
+.segmentUpcoming .segmentBar {
+  background: var(--semantics-border-subtle);
+}
+
+.segmentLabel {
+  font-size: 10px;
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-placeholder);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.segmentDone .segmentLabel {
+  color: var(--semantics-interactive-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.segmentCurrent .segmentLabel {
+  color: var(--semantics-text-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Spotlight Card */
+.spotlightCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2x);
+  padding: var(--space-3x) var(--space-4x);
+  border-radius: var(--radius-md);
+  background: var(--semantics-surface-primary);
+  border: 1px solid var(--semantics-border-default);
+  border-left: 3.5px solid var(--semantics-interactive-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.spotlightCardAlert {
+  border-left-color: var(--semantics-border-danger);
+}
+
+.spotlightHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2x);
+}
+
+.spotlightStageInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.spotlightStageEyebrow {
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--semantics-interactive-primary);
+}
+
+.spotlightTitle {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-semibold);
+  color: var(--semantics-text-primary);
+}
+
+.spotlightMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2x);
+  flex-shrink: 0;
+}
+
+.spotlightBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  background: var(--semantics-badge-spotlight-bg);
+  color: var(--semantics-badge-spotlight-text);
+  border: 1px solid var(--semantics-badge-spotlight-border);
+}
+
+.spotlightDate {
+  font-size: 11px;
+  color: var(--semantics-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.spotlightDescription {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: 13px;
+  line-height: 19px;
+  color: var(--semantics-text-secondary);
+}
+
+/* History Collapsible */
+.historySection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2x);
+  padding-top: var(--space-1x);
+}
+
+.historyToggleBtn {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1x);
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-family-sans);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-link);
+  cursor: pointer;
+}
+
+.historyToggleBtn:hover {
+  color: var(--semantics-text-link-hover);
+  text-decoration: underline;
+}
+
+.historyTimeline {
+  list-style: none;
+  margin: var(--space-2x) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2x);
+}
+
+.historyItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2x);
+  position: relative;
+}
+
+.historyRail {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 16px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.historyNode {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: var(--font-weight-medium);
+  background: var(--semantics-surface-primary);
+  border: 1px solid var(--semantics-border-default);
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+.historyNodeDone {
+  background: var(--semantics-interactive-primary);
+  border-color: var(--semantics-interactive-primary);
+  color: #ffffff;
+}
+
+.historyNodeCurrent {
+  border-color: var(--semantics-interactive-primary);
+  color: var(--semantics-interactive-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+.historyNodeAlert {
+  border-color: var(--semantics-border-danger);
+  color: var(--semantics-text-danger);
+}
+
+.historyNodeUpcoming {
+  border-color: var(--semantics-border-subtle);
+  color: var(--semantics-text-placeholder);
+}
+
+.historyLine {
+  position: absolute;
+  top: 16px;
+  bottom: -10px;
+  left: 6.5px;
+  width: 1px;
+  background: var(--semantics-border-subtle);
+  z-index: 0;
+}
+
+.historyContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.historyHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2x);
+}
+
+.historyStepTitle {
+  font-family: var(--font-family-sans);
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-primary);
+}
+
+.historyDate {
+  font-size: 11px;
+  color: var(--semantics-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.historyNote {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--semantics-text-secondary);
+}
+

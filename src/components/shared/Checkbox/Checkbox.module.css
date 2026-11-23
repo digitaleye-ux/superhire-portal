@@ -1,0 +1,64 @@
+/* Checkbox — Figma node 426:3084. 16px, 4px radius, primary fill + check when on. */
+
+.root {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2x);
+  cursor: pointer;
+}
+
+.input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--control-size-sm);
+  height: var(--control-size-sm);
+  border-radius: var(--radius-4);
+  border: 1px solid var(--semantics-control-border);
+  background: var(--semantics-control-bg);
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.check {
+  color: var(--semantics-text-inverse);
+  opacity: 0;
+}
+
+.input:checked + .control {
+  background: var(--semantics-control-indicator-checked);
+  border-color: var(--semantics-control-indicator-checked);
+}
+
+.input:checked + .control .check {
+  opacity: 1;
+}
+
+.input:focus-visible + .control {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 2px;
+}
+
+.label {
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-secondary);
+  white-space: nowrap;
+}

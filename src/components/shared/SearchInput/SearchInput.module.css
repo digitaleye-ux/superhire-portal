@@ -1,0 +1,56 @@
+/* Search input — Figma node 443:5544 (438:4962).
+   32px tall, strong border, 8px radius, 12px horizontal padding, 8px gap. */
+
+.field {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2x);
+  height: var(--control-height-sm);
+  padding: 0 var(--space-3x);
+  background: var(--semantics-control-bg);
+  border: 1px solid var(--semantics-control-border);
+  border-radius: var(--radius-md);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.field:hover {
+  border-color: var(--semantics-control-border-hover);
+}
+
+.field:focus-within {
+  border-color: var(--semantics-control-border-focus);
+  box-shadow: var(--semantics-focus-ring);
+}
+
+.icon {
+  flex-shrink: 0;
+  color: var(--semantics-text-placeholder);
+}
+
+.input {
+  flex: 1 0 0;
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  outline: none;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  color: var(--semantics-text-primary);
+}
+
+.input::placeholder {
+  color: var(--semantics-text-placeholder);
+  /* Keep placeholder weight/size identical to the Figma spec. */
+  opacity: 1;
+}
+
+/* Hide the native clear button so the field matches the design. */
+.input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}

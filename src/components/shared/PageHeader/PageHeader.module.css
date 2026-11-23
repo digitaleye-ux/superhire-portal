@@ -1,0 +1,43 @@
+/* Page header — Figma node 444:5556.
+   White bg; 32px top / 16px bottom / 32px side padding; title left, search right. */
+
+.header {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6x);
+  width: 100%;
+  padding: var(--space-8x) var(--space-8x) var(--space-4x);
+  background: var(--semantics-background-primary);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4x);
+  width: 100%;
+}
+
+.title {
+  flex: 1 0 0;
+  min-width: 0;
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-24);
+  line-height: var(--line-height-24);
+  letter-spacing: var(--letter-spacing-heading-2);
+  color: var(--semantics-text-primary);
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2x);
+  flex-shrink: 0;
+}
+
+/* Search field — fixed 320px per the design. */
+.search {
+  width: 320px;
+}

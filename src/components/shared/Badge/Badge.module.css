@@ -1,0 +1,40 @@
+/* Badge — Figma node 374:1871. Pill, 8px/2px padding, 12px/16 medium text.
+   Each variant pairs a 50 background with a 600 text color. */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-x-2) var(--space-2x);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  white-space: nowrap;
+}
+
+.trending {
+  background: var(--semantics-badge-trending-bg);
+  color: var(--semantics-badge-trending-text);
+}
+
+.priority {
+  background: var(--semantics-badge-urgent-bg);
+  color: var(--semantics-badge-urgent-text);
+}
+
+.spotlight {
+  background: var(--semantics-badge-spotlight-bg);
+  color: var(--semantics-badge-spotlight-text);
+}
+
+.justIn {
+  background: var(--semantics-badge-info-bg);
+  color: var(--semantics-badge-info-text);
+}
+
+.closed {
+  background: var(--semantics-badge-neutral-bg);
+  color: var(--semantics-badge-neutral-text);
+}

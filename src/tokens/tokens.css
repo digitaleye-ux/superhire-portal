@@ -1,0 +1,560 @@
+/**
+ * Design tokens — sourced from Figma variables (Bolt | Design System).
+ * Figma is the source of truth. Values mirror the Figma variable definitions.
+ *
+ * Layering:
+ *  - Primitives: raw values (colors, sizes). Do not reference these directly in components.
+ *  - Semantics:  intent-based aliases that components consume. A future per-portal
+ *                theme can override the --semantics-* / spacing layer without touching
+ *                component CSS.
+ *
+ * Only the tokens needed by the current components (Job Card) are included so far.
+ * This file grows as more Figma variables are pulled in.
+ */
+
+:root {
+  /* ---- Primitives: color (Figma: Bolt | Design System node 5:526) ---- */
+  /* Primary */
+  --primitives-primary-50: #FAFAFF;
+  --primitives-primary-100: #EBE9FE;
+  --primitives-primary-200: #D9D6FE;
+  --primitives-primary-300: #BDB4FE;
+  --primitives-primary-400: #9B8AFB;
+  --primitives-primary-500: #7A5AF8;
+  --primitives-primary-600: #6938EF;
+  --primitives-primary-700: #5925DC;
+  --primitives-primary-800: #4A1FB8;
+  --primitives-primary-900: #3E1C96;
+
+  /* Neutral */
+  --primitives-neutral-50: #F8FAFC;
+  --primitives-neutral-100: #F1F5F9;
+  --primitives-neutral-200: #E2E8F0;
+  --primitives-neutral-300: #CBD5E1;
+  --primitives-neutral-400: #94A3B8;
+  --primitives-neutral-500: #64748B;
+  --primitives-neutral-600: #475569;
+  --primitives-neutral-700: #334155;
+  --primitives-neutral-800: #1E293B;
+  --primitives-neutral-900: #0F172A;
+
+  /* Success */
+  --primitives-success-50: #ECFDF5;
+  --primitives-success-100: #D1FAE5;
+  --primitives-success-200: #A7F3D0;
+  --primitives-success-300: #6EE7B7;
+  --primitives-success-400: #34D399;
+  --primitives-success-500: #10B981;
+  --primitives-success-600: #059669;
+  --primitives-success-700: #047857;
+  --primitives-success-800: #065F46;
+  --primitives-success-900: #064E3B;
+
+  /* Warning */
+  --primitives-warning-50: #FFFBEB;
+  --primitives-warning-100: #FEF3C7;
+  --primitives-warning-200: #FDE68A;
+  --primitives-warning-300: #FCD34D;
+  --primitives-warning-400: #FBBF24;
+  --primitives-warning-500: #F59E0B;
+  --primitives-warning-600: #D97706;
+  --primitives-warning-700: #B45309;
+  --primitives-warning-800: #92400E;
+  --primitives-warning-900: #78350F;
+
+  /* Error */
+  --primitives-error-50: #FEF2F2;
+  --primitives-error-100: #FEE2E2;
+  --primitives-error-200: #FECACA;
+  --primitives-error-300: #FCA5A5;
+  --primitives-error-400: #F87171;
+  --primitives-error-500: #EF4444;
+  --primitives-error-600: #DC2626;
+  --primitives-error-700: #B91C1C;
+  --primitives-error-800: #991B1B;
+  --primitives-error-900: #7F1D1D;
+
+  /* Info */
+  --primitives-info-50: #EFF6FF;
+  --primitives-info-100: #DBEAFE;
+  --primitives-info-200: #BFDBFE;
+  --primitives-info-300: #93C5FD;
+  --primitives-info-400: #60A5FA;
+  --primitives-info-500: #3B82F6;
+  --primitives-info-600: #2563EB;
+  --primitives-info-700: #1D4ED8;
+  --primitives-info-800: #1E40AF;
+  --primitives-info-900: #1E3A8A;
+
+  /* ---- Primitives: typography (Figma: Bolt | Design System Typescale node 32:2825) ---- */
+  --font-family-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  --font-weight-regular: 400;
+  /* Figma: font-weight/regular */
+  --font-weight-medium: 500;
+  /* Figma: font-weight/medium */
+  --font-weight-semibold: 600;
+  /* Figma: font-weight/semibold */
+
+  --font-size-10: 10px;
+  /* Figma: font-size/10 */
+  --font-size-12: 12px;
+  /* Figma: font-size/12 */
+  --font-size-14: 14px;
+  /* Figma: font-size/14 */
+  --font-size-16: 16px;
+  /* Figma: font-size/16 */
+  --font-size-20: 20px;
+  /* Figma: font-size/20 */
+  --font-size-24: 24px;
+  /* Figma: font-size/24 */
+  --font-size-32: 32px;
+  /* Figma: font-size/32 */
+  --font-size-40: 40px;
+  /* Figma: font-size/40 */
+
+  --line-height-10: 12px;
+  /* Figma: line-height/10 */
+  --line-height-12: 16px;
+  /* Figma: line-height/12 */
+  --line-height-14: 20px;
+  /* Figma: line-height/14 */
+  --line-height-16: 24px;
+  /* Figma: line-height/16 */
+  --line-height-20: 28px;
+  /* Figma: line-height/20 */
+  --line-height-24: 32px;
+  /* Figma: line-height/24 */
+  --line-height-32: 40px;
+  /* Figma: line-height/32 */
+  --line-height-40: 48px;
+  /* Figma: line-height/40 */
+
+  --letter-spacing-none: 0;
+  --letter-spacing-display: -0.4px;
+  /* Figma: -1% */
+  --letter-spacing-heading: -0.5%;
+  /* Figma: -0.5% */
+  --letter-spacing-overline: 0.48px;
+  /* Figma: 4% */
+
+  /* ---- Primitives: spatial tokens (Figma: Bolt | Design System node 57:267) ---- */
+  --spacing-0x: 0px;
+  /* Figma: spacing-0x */
+  --spacing-1x: 4px;
+  /* Figma: spacing-1x */
+  --spacing-2x: 8px;
+  /* Figma: spacing-2x */
+  --spacing-3x: 12px;
+  /* Figma: spacing-3x */
+  --spacing-4x: 16px;
+  /* Figma: spacing-4x */
+  --spacing-5x: 20px;
+  /* Figma: spacing-5x */
+  --spacing-6x: 24px;
+  /* Figma: spacing-6x */
+  --spacing-8x: 32px;
+  /* Figma: spacing-8x */
+  --spacing-10x: 40px;
+  /* Figma: spacing-10x */
+  --spacing-12x: 48px;
+  /* Figma: spacing-12x */
+  --spacing-16x: 64px;
+  /* Figma: spacing-16x */
+  --spacing-20x: 80px;
+  /* Figma: spacing-20x */
+
+  /* Backwards-compatible aliases */
+  --space-x-2: 2px;
+  /* Half unit (2px) */
+  --space-0x: var(--spacing-0x);
+  --space-1x: var(--spacing-1x);
+  --space-2x: var(--spacing-2x);
+  --space-3x: var(--spacing-3x);
+  --space-4x: var(--spacing-4x);
+  --space-5x: var(--spacing-5x);
+  --space-6x: var(--spacing-6x);
+  --space-8x: var(--spacing-8x);
+  --space-10x: var(--spacing-10x);
+  --space-12x: var(--spacing-12x);
+  --space-16x: var(--spacing-16x);
+  --space-20x: var(--spacing-20x);
+
+  /* ---- Primitives: radius ----
+     NOTE: Figma reports `sm` as 16px in some nodes and 4px in others (form
+     controls). Treated as two tokens here until the Figma file is reconciled:
+     --radius-sm = 16px (as first seen), --radius-4 = 4px (checkbox/menu items). */
+  --radius-xs: 12px;
+  /* Figma: xs */
+  --radius-4: 4px;
+  /* Figma: sm (form controls) */
+  --radius-md: 8px;
+  /* Figma: md */
+  --radius-sm: 16px;
+  /* Figma: sm (first seen) */
+  --radius-pill: 100px;
+
+  /* ---- Primitives: icon sizes ---- */
+  --size-icon-xs: 12px;
+  --size-icon-sm: 16px;
+  --size-icon-md: 20px;
+}
+
+/**
+ * Semantic layer (default / base theme).
+ * Nomenclature: --semantics-{domain}-{role}[-{state}]
+ * Domains: surface | background | text | border | interactive | control | badge
+ * Components reference only these semantic tokens rather than raw primitives.
+ */
+:root {
+  /* ---- Surfaces & Backgrounds ---- */
+  --semantics-surface-primary: #ffffff;
+  --semantics-surface-secondary: var(--primitives-neutral-50);
+  --semantics-surface-tertiary: var(--primitives-neutral-100);
+  --semantics-surface-page: var(--primitives-neutral-50);
+  --semantics-surface-disabled: var(--primitives-neutral-100);
+  --semantics-surface-brand: var(--primitives-primary-600);
+  --semantics-surface-brand-subtle: var(--primitives-primary-50);
+  --semantics-surface-success-subtle: var(--primitives-success-50);
+  --semantics-surface-warning-subtle: var(--primitives-warning-50);
+  --semantics-surface-danger-subtle: var(--primitives-error-50);
+  --semantics-surface-info-subtle: var(--primitives-info-50);
+
+  /* Legacy aliases for surface */
+  --semantics-background-primary: var(--semantics-surface-primary);
+  --semantics-background-secondary: var(--primitives-neutral-100);
+  --semantics-background-page: var(--semantics-surface-page);
+
+  /* ---- Text & Typography ---- */
+  --semantics-text-primary: var(--primitives-neutral-900);
+  /* #0F172A: Headings, high-contrast labels */
+  --semantics-text-secondary: var(--primitives-neutral-700);
+  /* #334155: Body copy, standard content */
+  --semantics-text-tertiary: var(--primitives-neutral-500);
+  /* #64748B: Captions, timestamps, hints */
+  --semantics-text-placeholder: var(--primitives-neutral-400);
+  /* #94A3B8: Field placeholders */
+  --semantics-text-disabled: var(--primitives-neutral-400);
+  --semantics-text-link: var(--primitives-primary-700);
+  /* #5925DC: Hyperlinks & active nav */
+  --semantics-text-link-hover: var(--primitives-primary-800);
+  --semantics-text-brand: var(--primitives-primary-600);
+  --semantics-text-inverse: #ffffff;
+  --semantics-text-on-brand: #ffffff;
+  --semantics-text-success: var(--primitives-success-700);
+  --semantics-text-warning: var(--primitives-warning-700);
+  --semantics-text-danger: var(--primitives-error-600);
+  --semantics-text-info: var(--primitives-info-700);
+
+  /* ---- Borders & Separators ---- */
+  --semantics-border-subtle: var(--primitives-neutral-100);
+  /* Hairline dividers, card separators */
+  --semantics-border-default: var(--primitives-neutral-200);
+  /* Standard card borders, container outlines */
+  --semantics-border-strong: var(--primitives-neutral-300);
+  /* Inputs, prominent borders */
+  --semantics-border-interactive: var(--primitives-primary-600);
+  /* Active tabs, selected cards */
+  --semantics-border-focus: var(--primitives-primary-600);
+  /* Focus rings */
+  --semantics-border-disabled: var(--primitives-neutral-200);
+  --semantics-border-success: var(--primitives-success-500);
+  --semantics-border-warning: var(--primitives-warning-500);
+  --semantics-border-danger: var(--primitives-error-500);
+  --semantics-border-info: var(--primitives-info-500);
+
+  /* ---- Interactive & Action Elements ---- */
+  --semantics-interactive-primary: var(--primitives-primary-600);
+  --semantics-interactive-primary-hover: var(--primitives-primary-700);
+  --semantics-interactive-primary-active: var(--primitives-primary-800);
+  --semantics-interactive-subtle: var(--primitives-primary-50);
+  --semantics-interactive-subtle-hover: var(--primitives-primary-100);
+  --semantics-interactive-subtle-border: var(--primitives-primary-200);
+
+  /* ---- Form Controls ---- */
+  --semantics-control-bg: var(--semantics-surface-primary);
+  --semantics-control-bg-hover: var(--semantics-surface-secondary);
+  --semantics-control-bg-disabled: var(--semantics-surface-disabled);
+  --semantics-control-border: var(--semantics-border-strong);
+  --semantics-control-border-hover: var(--primitives-neutral-400);
+  --semantics-control-border-focus: var(--semantics-border-focus);
+  --semantics-control-border-error: var(--semantics-border-danger);
+  --semantics-control-indicator-checked: var(--semantics-interactive-primary);
+  --semantics-focus-ring: 0 0 0 3px var(--primitives-primary-100);
+  --semantics-focus-ring-danger: 0 0 0 3px var(--primitives-error-50);
+
+  /* ---- Badges & Status Tags ---- */
+  --semantics-badge-trending-bg: var(--primitives-error-50);
+  --semantics-badge-trending-text: var(--primitives-error-700);
+  --semantics-badge-trending-border: var(--primitives-error-200);
+
+  --semantics-badge-urgent-bg: var(--primitives-warning-50);
+  --semantics-badge-urgent-text: var(--primitives-warning-700);
+  --semantics-badge-urgent-border: var(--primitives-warning-200);
+
+  --semantics-badge-spotlight-bg: var(--primitives-primary-50);
+  --semantics-badge-spotlight-text: var(--primitives-primary-700);
+  --semantics-badge-spotlight-border: var(--primitives-primary-200);
+
+  --semantics-badge-info-bg: var(--primitives-info-50);
+  --semantics-badge-info-text: var(--primitives-info-700);
+  --semantics-badge-info-border: var(--primitives-info-200);
+
+  --semantics-badge-neutral-bg: var(--primitives-neutral-100);
+  --semantics-badge-neutral-text: var(--primitives-neutral-600);
+  --semantics-badge-neutral-border: var(--primitives-neutral-200);
+
+  --semantics-badge-success-bg: var(--primitives-success-50);
+  --semantics-badge-success-text: var(--primitives-success-700);
+  --semantics-badge-success-border: var(--primitives-success-200);
+
+  /* ---- Semantic Spacing & Layout ---- */
+  --semantics-spacing-gap-inline-xs: var(--spacing-1x);
+  /* 4px: micro inline gap */
+  --semantics-spacing-gap-inline-sm: var(--spacing-2x);
+  /* 8px: badge/button icon gap */
+  --semantics-spacing-gap-inline-md: var(--spacing-3x);
+  /* 12px: inline field gap */
+  --semantics-spacing-gap-inline-lg: var(--spacing-4x);
+  /* 16px: column gap */
+
+  --semantics-spacing-gap-stack-xs: var(--spacing-1x);
+  /* 4px: title to subtitle */
+  --semantics-spacing-gap-stack-sm: var(--spacing-2x);
+  /* 8px: label to field */
+  --semantics-spacing-gap-stack-md: var(--spacing-4x);
+  /* 16px: between fields in section */
+  --semantics-spacing-gap-stack-lg: var(--spacing-6x);
+  /* 24px: between content blocks */
+  --semantics-spacing-gap-stack-xl: var(--spacing-8x);
+  /* 32px: between form sections */
+
+  --semantics-spacing-padding-control-x: var(--spacing-3x);
+  /* 12px */
+  --semantics-spacing-padding-control-y: var(--spacing-2x);
+  /* 8px */
+  --semantics-spacing-padding-card: var(--spacing-4x);
+  /* 16px */
+  --semantics-spacing-padding-panel-x: var(--spacing-8x);
+  /* 32px */
+  --semantics-spacing-padding-panel-y: var(--spacing-6x);
+  /* 24px */
+
+  /* ---- Button tokens (Figma: Bolt | Design System node 97:563) ---- */
+  /* Primary */
+  --button-primary-background: var(--semantics-interactive-primary);
+  /* #6938EF */
+  --button-primary-background-hover: var(--semantics-interactive-primary-hover);
+  /* #5925DC */
+  --button-primary-text: var(--semantics-text-on-brand);
+  /* #FFFFFF */
+  --button-primary-background-disabled: var(--semantics-surface-disabled);
+  /* #F3F4F6 */
+  --button-primary-text-disabled: var(--primitives-neutral-300);
+  /* #D1D5DB */
+  --button-primary-focus-ring: var(--primitives-primary-200);
+  /* #D9D6FE */
+
+  /* Secondary */
+  --button-secondary-background: var(--semantics-surface-primary);
+  /* #FFFFFF */
+  --button-secondary-background-hover: var(--semantics-surface-secondary);
+  /* #F9FAFB */
+  --button-secondary-border: var(--semantics-border-strong);
+  /* #D1D5DB */
+  --button-secondary-border-hover: var(--primitives-neutral-400);
+  /* #9CA3AF */
+  --button-secondary-text: var(--semantics-text-primary);
+  /* #111827 */
+  --button-secondary-background-disabled: var(--semantics-surface-disabled);
+  /* #F3F4F6 */
+  --button-secondary-border-disabled: var(--semantics-border-disabled);
+  /* #E5E7EB */
+  --button-secondary-text-disabled: var(--primitives-neutral-300);
+  /* #D1D5DB */
+
+  /* Tertiary */
+  --button-tertiary-background: transparent;
+  --button-tertiary-background-hover: var(--semantics-surface-brand-subtle);
+  /* #FAFAFF */
+  --button-tertiary-text: var(--semantics-text-link);
+  /* #5925DC */
+  --button-tertiary-background-disabled: var(--semantics-surface-disabled);
+  /* #F3F4F6 */
+  --button-tertiary-text-disabled: var(--primitives-neutral-300);
+  /* #D1D5DB */
+
+  /* Focus ring */
+  --button-focus-ring-width: 2px;
+  /* Figma: thick */
+  --button-focus-ring-offset: 1px;
+  /* Figma: button/focus-ring/offset */
+  --button-focus-ring-corner-radius: var(--radius-md);
+  /* Figma: button/focus-ring/corner-radius */
+
+  /* Sizes: xs (28px), sm (32px), md (36px), lg (40px) */
+  --button-height-xs: 28px;
+  --button-padding-x-xs: var(--spacing-2x);
+  /* 8px */
+  --button-icon-gap-xs: var(--spacing-2x);
+  /* 8px */
+  --button-corner-radius-xs: var(--radius-md);
+  /* 8px */
+  --button-icon-size-xs: var(--size-icon-xs);
+  /* 12px */
+
+  --button-height-sm: var(--spacing-8x);
+  /* 32px */
+  --button-padding-x-sm: var(--spacing-3x);
+  /* 12px */
+  --button-icon-gap-sm: var(--spacing-2x);
+  /* 8px */
+  --button-corner-radius-sm: var(--radius-md);
+  /* 8px */
+  --button-icon-size-sm: var(--size-icon-xs);
+  /* 12px */
+
+  --button-height-md: 36px;
+  --button-padding-x-md: var(--spacing-3x);
+  /* 12px */
+  --button-icon-gap-md: var(--spacing-2x);
+  /* 8px */
+  --button-corner-radius-md: var(--radius-md);
+  /* 8px */
+  --button-icon-size-md: var(--size-icon-sm);
+  /* 16px */
+
+  --button-height-lg: var(--spacing-10x);
+  /* 40px */
+  --button-padding-x-lg: var(--spacing-4x);
+  /* 16px */
+  --button-icon-gap-lg: var(--spacing-2x);
+  /* 8px */
+  --button-corner-radius-lg: var(--radius-md);
+  /* 8px */
+  --button-icon-size-lg: var(--size-icon-md);
+  /* 20px */
+
+  /* Form control sizing */
+  --control-height-sm: var(--spacing-8x);
+  /* 32px */
+  --control-height-md: 36px;
+  --control-height-lg: var(--spacing-10x);
+  /* 40px */
+  --control-size-sm: var(--spacing-4x);
+  /* 16px */
+  --size-icon-lg: var(--spacing-6x);
+  /* 24px */
+
+  /* elevation-md — Figma drop shadow (offset 0,8 / blur 24 / #1118271f) */
+  --elevation-md: 0px 8px 24px 0px rgba(17, 24, 39, 0.12);
+}
+
+/**
+ * Typography text styles — exact mappings to Figma text styles (node 32:2825).
+ * Matches the official Bolt | Design System Typescale table.
+ */
+.text-style-display {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-40);
+  line-height: var(--line-height-40);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-display);
+}
+
+.text-style-heading-1 {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-32);
+  line-height: var(--line-height-32);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-heading);
+}
+
+.text-style-heading-2 {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-24);
+  line-height: var(--line-height-24);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-heading);
+}
+
+.text-style-heading-3 {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-20);
+  line-height: var(--line-height-20);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-heading);
+}
+
+.text-style-heading-4 {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-16);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-heading);
+}
+
+.text-style-body-1 {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-16);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-none);
+}
+
+.text-style-body-2 {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-none);
+}
+
+.text-style-caption {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-none);
+}
+
+.text-style-label-1 {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-16);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+}
+
+.text-style-label-2 {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+}
+
+.text-style-label-3 {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+}
+
+.text-style-label-4 {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-10);
+  line-height: var(--line-height-10);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+}
+
+.text-style-overline {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-overline);
+  text-transform: uppercase;
+}

@@ -1,0 +1,144 @@
+/* Dropdown — Figma 422:2570 (container) + 422:2468 (item). */
+
+.root {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* ---- Trigger ---- */
+.wrapper {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2x);
+  height: var(--control-height-sm);
+  padding: 0 var(--space-3x);
+  background: var(--button-secondary-background);
+  border: 1px solid var(--button-secondary-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 120ms ease;
+}
+
+.wrapper:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 2px;
+}
+
+.open {
+  border-color: var(--semantics-border-strong);
+}
+
+.selected {
+  border-color: var(--semantics-border-interactive);
+  background: var(--semantics-surface-brand-subtle);
+}
+
+.label {
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-secondary);
+}
+
+/* Counter badge shown on the selected state. */
+.counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--space-4x);
+  height: var(--space-4x);
+  padding: 0 var(--space-1x);
+  border-radius: var(--radius-pill);
+  background: var(--semantics-interactive-subtle-hover);
+  color: var(--semantics-interactive-primary);
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+}
+
+.chevron {
+  flex-shrink: 0;
+  color: var(--button-secondary-text);
+}
+
+/* Clear (×) button — 12px glyph, 44px hit area via pseudo-element. */
+.clear {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  color: var(--button-secondary-text);
+}
+
+.clear::before {
+  content: "";
+  position: absolute;
+  inset: -12px -10px;
+}
+
+.clear:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: var(--space-1x);
+  border-radius: var(--radius-4);
+}
+
+/* ---- Menu ---- */
+.menu {
+  position: absolute;
+  top: calc(100% + var(--space-1x));
+  left: 0;
+  z-index: 100;
+  box-sizing: border-box;
+  /* Size to the widest item (which hugs its label on one line), but never
+     narrower than the trigger. */
+  width: max-content;
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1x);
+  padding: var(--space-1x);
+  background: var(--semantics-background-primary);
+  border: 1px solid var(--semantics-border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--elevation-md);
+}
+
+/* Right origin: anchor the menu's right edge to the trigger (opens leftward). */
+.alignRight {
+  left: auto;
+  right: 0;
+}
+
+/* ---- Item ---- */
+.item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--space-1x) var(--space-2x);
+  border-radius: var(--radius-4);
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+
+
+.item:hover {
+  background: var(--button-secondary-background-hover);
+}
+
+/* Make the whole item row clickable area wrap the control label. */
+.item :global(label) {
+  width: 100%;
+}

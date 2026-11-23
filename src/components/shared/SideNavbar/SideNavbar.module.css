@@ -1,0 +1,89 @@
+/* Side navigation rail — Figma node 361:24862.
+   80px wide, full height, white bg with a right border.
+   Colors / spacing from tokens. */
+
+.navbar {
+  box-sizing: border-box;
+  width: var(--space-20x);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  background: var(--semantics-background-primary);
+  border-right: 1px solid var(--semantics-border-default);
+}
+
+.top {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* Logo tile — 80x80 square, centered logo (32x40). */
+.logoTile {
+  box-sizing: border-box;
+  width: var(--space-20x);
+  height: var(--space-20x);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.logoTile:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: -2px;
+}
+
+.logo {
+  width: var(--space-8x);
+  height: var(--space-10x);
+  display: block;
+}
+
+/* User tile — 80x80 square, centered 32x32 rounded avatar. */
+.userTile {
+  box-sizing: border-box;
+  width: var(--space-20x);
+  height: var(--space-20x);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.userTile:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: -2px;
+}
+
+.avatar {
+  width: var(--space-8x);
+  height: var(--space-8x);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--semantics-border-strong);
+  object-fit: cover;
+  pointer-events: none;
+}

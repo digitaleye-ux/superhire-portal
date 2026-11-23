@@ -1,0 +1,57 @@
+/* Sidebar nav item — Figma node 360:23986.
+   80x80 tile, centered icon + label. Colors/spacing from tokens. */
+
+.item {
+  box-sizing: border-box;
+  width: var(--space-20x);
+  height: var(--space-20x);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--space-4x);
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--semantics-text-tertiary);
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.item:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: -2px;
+}
+
+.item:hover {
+  background: var(--semantics-interactive-subtle);
+}
+
+.active,
+.active:hover {
+  background: var(--semantics-interactive-subtle-hover);
+  color: var(--semantics-text-link);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2x);
+  width: 100%;
+}
+
+/* Icon inherits color from the item (tertiary, or link when active). */
+.icon {
+  color: inherit;
+}
+
+.label {
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  color: inherit;
+  white-space: nowrap;
+}

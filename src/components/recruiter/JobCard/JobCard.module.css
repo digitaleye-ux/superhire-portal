@@ -1,0 +1,447 @@
+/* Job Card — recruiter portal.
+   Layout and values mirror Figma node 374:2067.
+   All colors / spacing / typography come from design tokens (src/tokens). */
+
+.card {
+  box-sizing: border-box;
+  /* Fill the grid cell (was a fixed 368px). Fixed width is now owned by the
+     layout/grid, so the card is fluid and fills available width. */
+  width: 100%;
+  /* Fixed height defined by the 2-line-title layout, so EVERY card is this
+     exact height regardless of its row or its own title length. Derived from
+     the tokens that make up the card:
+
+       header  = 12 (pt) + 24 (kebab button / header row) + 8 (pb) = 44
+       body    = 8 (pt) + 48 (title 2 lines) + 8 (main gap)
+                 + 20 (meta) + 24 (gap) + 1 (divider) + 12 (gap)
+                 + 20 (footer) + 12 (pb)                         = 153
+       borders = 1 + 1                                           = 2
+                                                           total ≈ 199px        */
+  height: calc(
+      /* header */
+      var(--space-3x) + var(--line-height-16) + var(--space-2x) +
+      /* body */
+      var(--space-2x) + (2 * var(--line-height-16)) + var(--space-2x) + var(--line-height-14) + var(--space-6x) + 1px + var(--space-3x) + var(--line-height-14) + var(--space-3x) +
+      /* borders */
+      2px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow: clip;
+  background: var(--semantics-background-primary);
+  border: 1px solid var(--semantics-border-strong);
+  border-radius: var(--radius-md);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+/* Interactive card (when onClaim is provided) gets focus-colored border
+   on hover / keyboard focus — the Figma "Hover" state. */
+.interactive {
+  cursor: pointer;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.interactive:hover,
+.interactive:focus-visible {
+  border-color: var(--semantics-border-focus);
+  outline: none;
+}
+
+.cardMenuOpen {
+  overflow: visible;
+  z-index: 20;
+}
+
+/* ---- Header ---- */
+.header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--space-3x) var(--space-3x) var(--space-2x);
+}
+
+.headerLeft {
+  display: flex;
+  flex: 1 0 0;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-2x);
+}
+
+.companyLogo {
+  flex-shrink: 0;
+  width: var(--size-icon-md);
+  height: var(--size-icon-md);
+  /* Don't force a circle — keep the logo's real shape (a square stays square).
+     A small radius just softens the corners. */
+  border-radius: var(--radius-4);
+  object-fit: contain;
+}
+
+.companyLogoFallback {
+  flex-shrink: 0;
+  width: var(--size-icon-md);
+  height: var(--size-icon-md);
+  border-radius: var(--radius-4);
+  background: var(--semantics-border-default);
+}
+
+.company {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-tertiary);
+}
+
+/* ---- Trending badge ---- */
+/* Badge sits beside the flexible company name — keep it from shrinking. */
+.badge {
+  flex-shrink: 0;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2x);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* ---- Kebab menu & dropdown ---- */
+.menuContainer {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.kebabBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: var(--radius-4, 4px);
+  color: var(--semantics-text-tertiary);
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.kebabBtn:hover,
+.kebabBtnActive {
+  background: var(--semantics-surface-secondary, #f4f4f5);
+  color: var(--semantics-text-primary);
+}
+
+.kebabBtn:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 1px;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + var(--space-1x));
+  right: 0;
+  z-index: 100;
+  box-sizing: border-box;
+  width: max-content;
+  background: var(--semantics-background-primary);
+  border: 1px solid var(--semantics-border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--elevation-md);
+  padding: var(--space-1x);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1x);
+  animation: dropdownIn 120ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes dropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Dropdown Item: matches Dropdown.module.css .item padding (var(--space-1x) var(--space-2x)) */
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2x);
+  width: 100%;
+  padding: var(--space-1x) var(--space-2x);
+  border: 0;
+  background: transparent;
+  border-radius: var(--radius-4);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-none);
+  color: var(--semantics-text-primary);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 120ms ease;
+  white-space: nowrap;
+}
+
+.dropdownItem:hover {
+  background: var(--button-secondary-background-hover);
+  color: var(--semantics-text-primary);
+}
+
+.dropdownItem svg {
+  flex-shrink: 0;
+  color: var(--semantics-text-secondary);
+  transition: color 100ms ease;
+}
+
+.dropdownItem:hover svg {
+  color: var(--semantics-text-primary);
+}
+
+.dropdownDivider {
+  margin: var(--space-1x) 0;
+  border: 0;
+  border-top: 1px solid var(--semantics-border-default);
+}
+
+.dropdownItemDanger {
+  color: var(--semantics-text-danger, #ef4444);
+}
+
+.dropdownItemDanger svg {
+  color: var(--semantics-text-danger, #ef4444);
+}
+
+.dropdownItemDanger:hover {
+  background: var(--semantics-surface-danger-subtle, #fef2f2);
+  color: var(--semantics-text-danger, #dc2626);
+}
+
+.dropdownItemDanger:hover svg {
+  color: var(--semantics-text-danger, #dc2626);
+}
+
+/* ---- Body ---- */
+.body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* Fill the card so the footer sits at the bottom. Title + meta stay tight at
+     the top; leftover height falls between the meta and the footer. */
+  flex: 1;
+  padding: var(--space-2x) var(--space-3x) var(--space-3x);
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2x);
+  width: 100%;
+  /* Resting gap after the meta is 24px (the minimum, hit by the tallest card
+     in a row). Shorter cards get more here as the footer is pushed to the
+     bottom for equal height. */
+  margin-bottom: var(--space-6x);
+}
+
+.roleTitle {
+  width: 100%;
+  margin: 0;
+  /* Always reserve two lines so a 1-line and a 2-line title occupy the same
+     height — keeps every card in a grid the same height. Clamp + ellipsis
+     past two lines. (2 × 24px line-height) */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-16);
+  color: var(--semantics-text-primary);
+}
+
+/* ---- Meta row (package · experience · location · job type) ---- */
+.meta {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--space-2x);
+  width: 100%;
+  /* Single line always — never wrap to a second row, so card height is
+     consistent. Overflow is clipped; the last item ellipsizes. */
+  overflow: hidden;
+}
+
+.metaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1x);
+  min-width: 0;
+}
+
+.metaItem .metaText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.metaText {
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-tertiary);
+  white-space: nowrap;
+}
+
+.metaSeparator {
+  flex-shrink: 0;
+  color: var(--semantics-text-tertiary);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+}
+
+/* ---- Icons ---- */
+.icon {
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.iconXs {
+  width: var(--size-icon-xs);
+  height: var(--size-icon-xs);
+  flex-shrink: 0;
+}
+
+.iconSm {
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+  flex-shrink: 0;
+}
+
+.metaItem svg,
+.metaItem .icon,
+.metaItem .iconSm,
+.metaItem .iconXs {
+  color: var(--semantics-text-tertiary);
+}
+
+/* ---- Divider ---- */
+.divider {
+  width: 100%;
+  height: 1px;
+  border: 0;
+  /* Push the divider + footer to the bottom. Combined with .main's 24px
+     margin-bottom, the meta→divider gap is 24px at minimum and grows on
+     shorter cards so footers align and all cards are equal height. */
+  margin: auto 0 0;
+  background: var(--semantics-border-default);
+}
+
+/* ---- Footer ---- */
+.footer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1x);
+  width: 100%;
+  /* 12px below the divider (matches Figma body spacing). */
+  margin-top: var(--space-3x);
+  /* Reserve the footer row height even when it has no commission, so a card
+     without commission stays the same height as one with it. (text line-height = 20px) */
+  min-height: var(--line-height-14);
+}
+
+.commission {
+  display: inline-flex;
+  flex: 1 0 0;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-1x);
+}
+
+.commission .icon {
+  color: var(--semantics-text-primary);
+}
+
+.commissionAmount {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-primary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.commissionUnit {
+  flex-shrink: 0;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-tertiary);
+  white-space: nowrap;
+}
+
+/* ---- Claim action (revealed on hover / focus of interactive card) ---- */
+.claim {
+  display: none;
+  align-items: center;
+  gap: var(--space-1x);
+  flex-shrink: 0;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  color: var(--semantics-text-link);
+}
+
+.interactive:hover .footer,
+.interactive:focus-visible .footer {
+  justify-content: space-between;
+}
+
+.interactive:hover .commission,
+.interactive:focus-visible .commission {
+  flex: 0 0 auto;
+}
+
+.interactive:hover .claim,
+.interactive:focus-visible .claim,
+.claim:focus-visible {
+  display: inline-flex;
+}
+
+.claimLabel {
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-link);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.claim .icon {
+  color: var(--semantics-text-link);
+}

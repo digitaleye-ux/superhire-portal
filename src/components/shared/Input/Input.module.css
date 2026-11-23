@@ -1,0 +1,112 @@
+/* Input component — Figma node 438:5522.
+   40px tall, var(--semantics-control-border), 8px radius, 12px padding, 8px gap with label. */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2x);
+  width: 100%;
+}
+
+.label {
+  display: block;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-tertiary);
+  cursor: pointer;
+}
+
+.control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input {
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--control-height-lg);
+  padding: 0 var(--space-3x);
+  background: var(--semantics-control-bg);
+  border: 1px solid var(--semantics-control-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-16);
+  color: var(--semantics-text-primary);
+  outline: none;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.input::placeholder {
+  color: var(--semantics-text-placeholder);
+  font-weight: var(--font-weight-regular);
+  opacity: 1;
+}
+
+.input:hover {
+  border-color: var(--semantics-control-border-hover);
+}
+
+.input:focus-visible,
+.input:focus {
+  border-color: var(--semantics-control-border-focus);
+  box-shadow: var(--semantics-focus-ring);
+}
+
+.control[data-invalid] .input,
+.control[data-invalid] .input:focus {
+  border-color: var(--semantics-control-border-error);
+}
+
+.control[data-invalid] .input:focus {
+  box-shadow: var(--semantics-focus-ring-danger);
+}
+
+.leadingIcon {
+  position: absolute;
+  left: var(--space-3x);
+  display: inline-flex;
+  align-items: center;
+  pointer-events: none;
+  color: var(--semantics-text-placeholder);
+}
+
+.trailingIcon {
+  position: absolute;
+  right: var(--space-3x);
+  display: inline-flex;
+  align-items: center;
+  pointer-events: none;
+  color: var(--semantics-text-placeholder);
+}
+
+.suffix {
+  position: absolute;
+  right: var(--space-3x);
+  display: inline-flex;
+  align-items: center;
+  pointer-events: none;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-14);
+  color: var(--semantics-text-tertiary);
+}
+
+.message {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  color: var(--semantics-text-tertiary);
+}
+
+.error {
+  color: var(--semantics-text-danger);
+}

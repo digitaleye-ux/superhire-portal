@@ -1,0 +1,65 @@
+/* Radio button — Figma node 424:3050. 16px control, filled dot when selected. */
+
+.root {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2x);
+  cursor: pointer;
+}
+
+/* Visually-hidden native input (keeps keyboard + a11y). */
+.input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.control {
+  position: relative;
+  flex-shrink: 0;
+  width: var(--control-size-sm);
+  height: var(--control-size-sm);
+  border-radius: 50%;
+  border: 1px solid var(--semantics-control-border);
+  background: var(--semantics-control-bg);
+  transition: border-color 120ms ease;
+}
+
+/* Selected: interactive ring + filled center dot. */
+.input:checked + .control {
+  border-color: var(--semantics-control-indicator-checked);
+}
+
+.input:checked + .control::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: var(--space-2x);
+  height: var(--space-2x);
+  border-radius: 50%;
+  background: var(--semantics-control-indicator-checked);
+}
+
+.input:focus-visible + .control {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 2px;
+}
+
+.label {
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-secondary);
+  white-space: nowrap;
+}

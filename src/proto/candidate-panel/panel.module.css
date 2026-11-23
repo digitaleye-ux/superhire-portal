@@ -1,0 +1,842 @@
+/* Candidate details side panel — Clean, minimal B2B SaaS drawer.
+   Strictly adheres to Bolt Design System tokens (spacing, typography, semantics). */
+
+.panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: var(--semantics-background-primary);
+  border: 1px solid var(--semantics-border-strong);
+  overflow: hidden;
+  outline: none;
+  animation: panel-in 200ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ---------- 1. Candidate Overview Header ---------- */
+.header {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: var(--space-4x) var(--space-6x) var(--space-4x);
+  border-bottom: 1px solid var(--semantics-border-default);
+  background: var(--semantics-background-primary);
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+/* Matches JobDetail & SubmitCandidate headMain spacing */
+.headMain {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2x);
+  width: 100%;
+}
+
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.topRowRight {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2x);
+}
+
+.headerLeft {
+  display: flex;
+  flex: 1 0 0;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-2x);
+}
+
+.headTitle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2x);
+  width: 100%;
+  min-width: 0;
+}
+
+.candidateRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2x);
+  width: 100%;
+}
+
+/* 20px semibold title matching JobDetail .role */
+.candidateTitle {
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-20);
+  line-height: var(--line-height-20);
+  letter-spacing: -0.1px;
+  color: var(--semantics-text-primary);
+}
+
+.headerActions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1x);
+  flex-shrink: 0;
+}
+
+.headerActionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: var(--radius-pill);
+  color: var(--semantics-text-tertiary);
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.headerActionBtn:hover {
+  background: var(--semantics-surface-secondary);
+  color: var(--semantics-text-primary);
+}
+
+.headerActionBtn:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 1px;
+}
+
+/* Matches JobDetail & SubmitCandidate close button */
+.close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--semantics-text-secondary);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.close:hover {
+  background: var(--semantics-surface-secondary);
+  color: var(--semantics-text-primary);
+}
+
+.close:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 1px;
+}
+
+.roleAndCompany {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  letter-spacing: var(--letter-spacing-none);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conjunction {
+  font-weight: var(--font-weight-normal);
+  color: var(--semantics-text-tertiary);
+}
+
+.entityText {
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-primary);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2x);
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.metaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1x);
+  min-width: 0;
+  color: var(--semantics-text-tertiary);
+}
+
+.metaText,
+.metaSeparator {
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-tertiary);
+  white-space: nowrap;
+}
+
+.metaText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.metaSeparator {
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.iconSm {
+  flex-shrink: 0;
+  display: inline-block;
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+  color: var(--semantics-text-tertiary);
+}
+
+.metaItem svg,
+.metaItem .iconSm {
+  color: var(--semantics-text-tertiary);
+}
+
+.headerResumeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1x);
+  padding: 2px var(--space-2x);
+  border: 1px solid var(--semantics-border-default);
+  border-radius: var(--radius-full);
+  background: var(--semantics-background-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all var(--duration-fast) var(--easing-standard);
+}
+
+.headerResumeBtn:hover {
+  background: var(--semantics-background-secondary);
+  color: var(--semantics-text-primary);
+  border-color: var(--semantics-border-strong);
+}
+
+.status {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-x-2) var(--space-2x);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  white-space: nowrap;
+}
+
+.statusNeutral {
+  background: var(--semantics-badge-neutral-bg);
+  color: var(--semantics-badge-neutral-text);
+}
+.statusInfo {
+  background: var(--semantics-badge-info-bg);
+  color: var(--semantics-badge-info-text);
+}
+.statusBrand {
+  background: var(--semantics-badge-spotlight-bg);
+  color: var(--semantics-badge-spotlight-text);
+}
+.statusWarning {
+  background: var(--semantics-badge-urgent-bg);
+  color: var(--semantics-badge-urgent-text);
+}
+.statusSuccess {
+  background: var(--semantics-badge-success-bg);
+  color: var(--semantics-badge-success-text);
+}
+.statusDanger {
+  background: var(--semantics-badge-trending-bg);
+  color: var(--semantics-badge-trending-text);
+}
+
+/* ---------- Scroll Body & Layout ---------- */
+.scroll {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--semantics-spacing-gap-stack-lg);
+  padding: var(--semantics-spacing-padding-panel-y) var(--semantics-spacing-padding-panel-x);
+  scrollbar-width: none;
+}
+.scroll::-webkit-scrollbar { display: none; }
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--semantics-spacing-gap-stack-sm);
+}
+
+.sectionHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--semantics-spacing-gap-inline-sm);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-primary);
+}
+
+.sectionHint {
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  color: var(--semantics-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.divider {
+  height: 1px;
+  border: 0;
+  margin: 0;
+  background: var(--semantics-border-default);
+}
+
+/* ---------- 2. Job Details ---------- */
+.jobDetailsRow {
+  display: grid;
+  grid-template-columns: minmax(100px, 1.1fr) minmax(140px, 2fr) auto;
+  gap: var(--semantics-spacing-gap-inline-lg);
+  align-items: start;
+}
+
+.jobCell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--semantics-spacing-gap-stack-xs);
+  min-width: 0;
+}
+
+.jobCellRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--semantics-spacing-gap-stack-xs);
+  flex-shrink: 0;
+}
+
+.metaLabel {
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-tertiary);
+}
+
+.metaValue {
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.commissionValue {
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-semibold);
+  color: var(--semantics-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.commissionNote {
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  color: var(--semantics-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 3. Hiring Progress (6-Stage Vertical Timeline) ---------- */
+.vTimeline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.vStep {
+  display: flex;
+  gap: var(--semantics-spacing-gap-inline-md);
+  min-width: 0;
+}
+
+.vRail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: var(--spacing-5x);
+}
+
+.vDot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--spacing-5x);
+  height: var(--spacing-5x);
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--semantics-border-strong);
+  background: var(--semantics-background-primary);
+  color: var(--semantics-text-on-brand);
+  flex-shrink: 0;
+}
+
+.vStepDone .vDot {
+  background: var(--semantics-interactive-primary);
+  border-color: var(--semantics-interactive-primary);
+}
+
+.vStepCurrent .vDot {
+  border-color: var(--semantics-interactive-primary);
+  background: var(--semantics-surface-brand-subtle);
+}
+.vStepCurrent .vDot::after {
+  content: "";
+  width: var(--spacing-2x);
+  height: var(--spacing-2x);
+  border-radius: var(--radius-pill);
+  background: var(--semantics-interactive-primary);
+}
+
+.vStepRejected .vDot {
+  background: var(--semantics-surface-danger-subtle);
+  border-color: var(--semantics-border-danger);
+  color: var(--semantics-text-danger);
+}
+
+.vStepHold .vDot {
+  background: var(--semantics-surface-warning-subtle);
+  border-color: var(--semantics-border-warning);
+  color: var(--semantics-text-warning);
+}
+
+.vStepUpcoming .vDot {
+  border-color: var(--semantics-border-default);
+}
+
+.vLine {
+  flex: 1;
+  width: 1.5px;
+  min-height: var(--spacing-4x);
+  background: var(--semantics-border-default);
+  margin: 2px 0;
+}
+
+.vStepDone .vLine {
+  background: var(--semantics-interactive-primary);
+}
+
+.vContent {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--semantics-spacing-gap-stack-xs);
+  padding-bottom: var(--semantics-spacing-gap-stack-md);
+}
+
+.vStepUpcoming .vContent {
+  padding-bottom: var(--semantics-spacing-gap-stack-sm);
+}
+
+.vStepLast .vContent {
+  padding-bottom: 0;
+}
+
+.vHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--semantics-spacing-gap-inline-sm);
+  min-height: var(--spacing-5x);
+}
+
+.vLabel {
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-primary);
+}
+
+.vStepCurrent .vLabel {
+  font-weight: var(--font-weight-semibold);
+  color: var(--semantics-text-brand);
+}
+
+.vStepRejected .vLabel {
+  font-weight: var(--font-weight-semibold);
+  color: var(--semantics-text-danger);
+}
+
+.vStepUpcoming .vLabel {
+  color: var(--semantics-text-disabled);
+}
+
+.vDate {
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  color: var(--semantics-text-tertiary);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.vUpdate {
+  margin: 0;
+  max-width: 65ch;
+  font-size: var(--font-size-12);
+  line-height: 1.5;
+  color: var(--semantics-text-secondary);
+  text-wrap: pretty;
+}
+
+.vStepCurrent .vUpdate {
+  color: var(--semantics-text-primary);
+}
+
+/* ---------- 4. Latest Update ---------- */
+.latestBox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--semantics-spacing-gap-stack-xs);
+  padding: var(--semantics-spacing-padding-control-x) var(--semantics-spacing-padding-card);
+  border-radius: var(--radius-md);
+  background: var(--semantics-surface-secondary);
+  border-inline-start: 3px solid var(--semantics-interactive-primary);
+}
+
+.latestBoxOverdue {
+  background: var(--semantics-surface-warning-subtle);
+  border-inline-start-color: var(--semantics-border-warning);
+}
+
+.latestHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--semantics-spacing-gap-inline-sm);
+}
+
+.latestStatus {
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-semibold);
+  color: var(--semantics-text-primary);
+}
+
+.durationText {
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.durationOverdue {
+  color: var(--semantics-text-warning);
+}
+
+.latestBody {
+  margin: 0;
+  max-width: 65ch;
+  font-size: var(--font-size-14);
+  line-height: 1.55;
+  color: var(--semantics-text-secondary);
+  text-wrap: pretty;
+}
+
+.latestNextRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--semantics-spacing-gap-inline-xs);
+  padding-top: var(--semantics-spacing-gap-stack-xs);
+  font-size: var(--font-size-12);
+  line-height: 1.5;
+}
+
+.nextPrefix {
+  font-weight: var(--font-weight-semibold);
+  color: var(--semantics-text-primary);
+}
+
+.nextText {
+  color: var(--semantics-text-secondary);
+}
+
+/* Variant 3 embedded latest update inside active timeline stage */
+.embeddedUpdateBox {
+  display: flex;
+  flex-direction: column;
+  gap: var(--semantics-spacing-gap-stack-xs);
+  margin-top: var(--semantics-spacing-gap-stack-xs);
+  padding: var(--semantics-spacing-padding-control-x);
+  border-radius: var(--radius-md);
+  background: var(--semantics-surface-secondary);
+}
+
+.embeddedUpdateHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--semantics-spacing-gap-inline-sm);
+}
+
+.embeddedStatus {
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-semibold);
+  color: var(--semantics-text-primary);
+}
+
+.embeddedBody {
+  margin: 0;
+  max-width: 65ch;
+  font-size: var(--font-size-12);
+  line-height: 1.55;
+  color: var(--semantics-text-secondary);
+  text-wrap: pretty;
+}
+
+.embeddedNext {
+  margin: 0;
+  font-size: var(--font-size-12);
+  line-height: 1.5;
+  color: var(--semantics-text-primary);
+}
+
+/* ---------- 5. Activity History ---------- */
+.activityList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--semantics-spacing-gap-stack-md);
+}
+
+.activityItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.activityTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--semantics-spacing-gap-inline-sm);
+}
+
+.activityTitle {
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-primary);
+}
+
+.activityDate {
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  color: var(--semantics-text-tertiary);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.activityDetail {
+  margin: 0;
+  max-width: 65ch;
+  font-size: var(--font-size-12);
+  line-height: 1.5;
+  color: var(--semantics-text-secondary);
+  text-wrap: pretty;
+}
+
+.icon {
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+/* ---------- 6. Recruiter & Employer Notes ---------- */
+
+.notesSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--semantics-spacing-gap-stack-sm);
+}
+
+.notesSectionHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--semantics-spacing-gap-inline-sm);
+}
+
+.notesSectionTitle {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-16);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-heading);
+  color: var(--semantics-text-primary);
+}
+
+.notesSectionHint {
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  color: var(--semantics-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.noteGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--semantics-spacing-gap-stack-xs);
+  padding: var(--semantics-spacing-gap-stack-sm) 0;
+  border-top: 1px solid var(--semantics-border-default);
+}
+
+.noteGroup:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.noteGroupEmpty {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--semantics-spacing-gap-inline-sm);
+  padding: var(--semantics-spacing-gap-stack-sm) 0;
+  border-top: 1px solid var(--semantics-border-default);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-tertiary);
+}
+
+.noteGroupLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--semantics-spacing-gap-inline-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-secondary);
+}
+
+.noteGroupHint {
+  font-size: var(--font-size-12);
+  color: var(--semantics-text-disabled);
+}
+
+.noteBadgeRecruiter,
+.noteBadgeEmployer {
+  width: var(--spacing-2x);
+  height: var(--spacing-2x);
+  border-radius: var(--radius-pill);
+  flex-shrink: 0;
+}
+
+.noteBadgeRecruiter {
+  background: var(--semantics-interactive-primary);
+}
+
+.noteBadgeEmployer {
+  background: var(--semantics-text-disabled);
+}
+
+.noteList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--semantics-spacing-gap-stack-md);
+}
+
+.noteItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.noteHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--semantics-spacing-gap-inline-sm);
+}
+
+.noteAuthor {
+  font-size: var(--font-size-13);
+  line-height: var(--line-height-13);
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-primary);
+}
+
+.noteDate {
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  color: var(--semantics-text-tertiary);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.noteBody {
+  margin: 0;
+  max-width: 65ch;
+  font-size: var(--font-size-13);
+  line-height: 1.55;
+  color: var(--semantics-text-secondary);
+  text-wrap: pretty;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel { animation: none; }
+  .close, .headerResumeBtn { transition: none; }
+  .close:active { scale: 1; }
+}

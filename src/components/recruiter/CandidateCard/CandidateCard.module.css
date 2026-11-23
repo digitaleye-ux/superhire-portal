@@ -1,0 +1,498 @@
+/* Candidate Card — Track page (Production Component).
+   Header: Candidate Initials Avatar + Name (text-style-label-1) | Status Tag (12px)
+   Body:
+     - Role and company details (text-style-label-2)
+     - Meta description: 8px gap with role/company
+   Footer: [hand-coins] Commission / shortlist + on hover "Add another role ->"
+   Total Height: Exactly 191px (matching JobCard). */
+
+.card {
+  box-sizing: border-box;
+  width: 100%;
+  height: calc(
+    var(--space-3x) + var(--line-height-16) + var(--space-2x) +
+      var(--space-2x) + (2 * var(--line-height-16)) +
+      var(--space-2x) + var(--line-height-14) + var(--space-6x) + 1px +
+      var(--space-3x) + var(--line-height-14) + var(--space-3x) +
+      2px
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow: clip;
+  background: var(--semantics-background-primary);
+  border: 1px solid var(--semantics-border-strong);
+  border-radius: var(--radius-md);
+  transition: border-color 120ms ease;
+  user-select: none;
+}
+
+.interactive {
+  cursor: pointer;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.interactive:hover,
+.interactive:focus-visible {
+  border-color: var(--semantics-border-focus);
+  outline: none;
+}
+
+.cardMenuOpen {
+  overflow: visible;
+  z-index: 20;
+}
+
+/* ---- Header: Candidate Initials Avatar + Name on left | Status Tag on right ---- */
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2x);
+  width: 100%;
+  padding: var(--space-3x) var(--space-3x) var(--space-2x);
+  box-sizing: border-box;
+}
+
+.headerLeft {
+  display: flex;
+  flex: 1 0 0;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-2x);
+}
+
+/* Candidate first and last name initials avatar component */
+.avatar {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-8x); /* 32px */
+  height: var(--space-8x); /* 32px */
+  padding: var(--space-1x); /* 4px internal padding */
+  border-radius: var(--radius-pill);
+  background: var(--semantics-surface-brand-subtle);
+  color: var(--semantics-text-brand);
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-12);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  box-sizing: border-box;
+}
+
+/* Candidate name: text-style-label-1 (16px / 24px line-height, Medium) */
+.candidateHeaderName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-16);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+  color: var(--semantics-text-primary);
+}
+
+/* Header action icon buttons: LinkedIn & View Resume */
+.headerActions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1x);
+  flex-shrink: 0;
+}
+
+.headerActionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: var(--radius-4, 4px);
+  color: var(--semantics-text-tertiary);
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.headerActionBtn:hover {
+  background: var(--semantics-surface-secondary, #f4f4f5);
+  color: var(--semantics-text-primary);
+}
+
+.headerActionBtn:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 1px;
+}
+
+.brandIcon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  object-fit: contain;
+}
+
+/* ---- Status tag pill ---- */
+.status {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-x-2) var(--space-2x);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  white-space: nowrap;
+}
+
+.statusNeutral {
+  background: var(--semantics-badge-neutral-bg);
+  color: var(--semantics-badge-neutral-text);
+}
+.statusInfo {
+  background: var(--semantics-badge-info-bg);
+  color: var(--semantics-badge-info-text);
+}
+.statusBrand {
+  background: var(--semantics-badge-spotlight-bg);
+  color: var(--semantics-badge-spotlight-text);
+}
+.statusWarning {
+  background: var(--semantics-badge-urgent-bg);
+  color: var(--semantics-badge-urgent-text);
+}
+.statusSuccess {
+  background: var(--semantics-badge-success-bg);
+  color: var(--semantics-badge-success-text);
+}
+.statusDanger {
+  background: var(--semantics-badge-trending-bg);
+  color: var(--semantics-badge-trending-text);
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2x);
+  flex-shrink: 0;
+}
+
+/* ---- Kebab menu & dropdown ---- */
+.menuContainer {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.kebabBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: var(--radius-4, 4px);
+  color: var(--semantics-text-tertiary);
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.kebabBtn:hover,
+.kebabBtnActive {
+  background: var(--semantics-surface-secondary, #f4f4f5);
+  color: var(--semantics-text-primary);
+}
+
+.kebabBtn:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 1px;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + var(--space-1x));
+  right: 0;
+  z-index: 100;
+  box-sizing: border-box;
+  width: max-content;
+  background: var(--semantics-background-primary);
+  border: 1px solid var(--semantics-border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--elevation-md);
+  padding: var(--space-1x);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1x);
+  animation: dropdownIn 120ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes dropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2x);
+  width: 100%;
+  padding: var(--space-1x) var(--space-2x);
+  border: 0;
+  background: transparent;
+  border-radius: var(--radius-4);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-none);
+  color: var(--semantics-text-primary);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 120ms ease;
+  white-space: nowrap;
+}
+
+.dropdownItem:hover {
+  background: var(--button-secondary-background-hover);
+  color: var(--semantics-text-primary);
+}
+
+.dropdownItem svg {
+  flex-shrink: 0;
+  color: var(--semantics-text-secondary);
+  transition: color 100ms ease;
+}
+
+.dropdownItem:hover svg {
+  color: var(--semantics-text-primary);
+}
+
+.dropdownItemDanger {
+  color: var(--semantics-text-danger);
+}
+
+.dropdownItemDanger svg {
+  color: var(--semantics-text-danger);
+}
+
+.dropdownItemDanger:hover {
+  background: var(--semantics-surface-danger-subtle, #fef2f2);
+  color: var(--semantics-text-danger);
+}
+
+.dropdownItemDanger:hover svg {
+  color: var(--semantics-text-danger);
+}
+
+.dropdownDivider {
+  margin: var(--space-1x) 0;
+  border: 0;
+  border-top: 1px solid var(--semantics-border-default);
+}
+
+/* ---- Body ---- */
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-2x) var(--space-3x) var(--space-3x);
+}
+
+/* .main stacks roleAndCompany and meta with an explicit 8px gap (var(--space-2x)) */
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2x); /* 8px gap */
+  width: 100%;
+  margin-bottom: var(--space-6x);
+}
+
+/* Role and company details: text-style-label-2 (14px / 20px line-height, Medium) */
+.roleAndCompany {
+  width: 100%;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+}
+
+/* Conjunctions ('for', 'at') in tertiary color */
+.conjunction {
+  color: var(--semantics-text-tertiary);
+  font-weight: var(--font-weight-normal);
+}
+
+/* Key entities ('role', 'company') in primary text color */
+.entityText {
+  color: var(--semantics-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Meta description: Expected CTC · Experience · Notice · Location */
+.meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2x);
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.metaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1x);
+  min-width: 0;
+  color: var(--semantics-text-tertiary);
+}
+
+.metaText,
+.metaSeparator {
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-tertiary);
+  white-space: nowrap;
+}
+
+.metaText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.metaSeparator {
+  flex-shrink: 0;
+}
+
+.icon {
+  flex-shrink: 0;
+  display: inline-block;
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+}
+
+.metaItem svg,
+.metaItem .icon {
+  color: var(--semantics-text-tertiary);
+}
+
+/* ---- Divider + footer ---- */
+.divider {
+  width: 100%;
+  height: 1px;
+  border: 0;
+  margin: auto 0 0;
+  background: var(--semantics-border-default);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1x);
+  width: 100%;
+  margin-top: var(--space-3x);
+  min-height: var(--line-height-14);
+}
+
+.commission {
+  display: inline-flex;
+  flex: 1 0 0;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-1x);
+}
+
+.commission .icon {
+  color: var(--semantics-text-primary);
+}
+
+.commissionAmount {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-primary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.commissionUnit {
+  flex-shrink: 0;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-tertiary);
+  white-space: nowrap;
+}
+
+/* Action revealed on hover / focus, as on the Job Card */
+.action {
+  display: none;
+  align-items: center;
+  gap: var(--space-1x);
+  flex-shrink: 0;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  color: var(--semantics-text-link);
+}
+
+.interactive:hover .footer,
+.interactive:focus-visible .footer {
+  justify-content: space-between;
+}
+
+.interactive:hover .commission,
+.interactive:focus-visible .commission {
+  flex: 0 0 auto;
+}
+
+.interactive:hover .action,
+.interactive:focus-visible .action,
+.action:focus-visible {
+  display: inline-flex;
+}
+
+.actionLabel {
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-link);
+  white-space: nowrap;
+}
+
+.action .icon {
+  color: var(--semantics-text-link);
+}

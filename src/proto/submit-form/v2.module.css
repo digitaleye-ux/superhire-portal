@@ -1,0 +1,174 @@
+/* Round 2 — shared rhythm: 32 between sections, 16 between fields, 8 label→control.
+   Every variant below is built from this scale; nothing else. */
+
+.stack { display: flex; flex-direction: column; gap: var(--space-8x); }
+.section { display: flex; flex-direction: column; gap: var(--space-4x); min-width: 0; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4x); align-items: start; }
+.full { grid-column: 1 / -1; min-width: 0; }
+@container (max-width: 479px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+
+.title {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-primary);
+}
+.eyebrow {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--semantics-text-tertiary);
+}
+.sub { margin: 0; font-size: var(--font-size-12); line-height: var(--line-height-12); color: var(--semantics-text-tertiary); }
+.label {
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-tertiary);
+}
+.field { display: flex; flex-direction: column; gap: var(--space-2x); min-width: 0; }
+.checks { display: flex; flex-direction: column; gap: var(--space-3x); }
+
+/* ---------- 2. Guided: surface cards + progress ---------- */
+.progress { display: flex; flex-direction: column; gap: var(--space-2x); }
+.progressTop { display: flex; justify-content: space-between; align-items: baseline; }
+.progressText { font-size: var(--font-size-12); line-height: var(--line-height-12); color: var(--semantics-text-tertiary); font-variant-numeric: tabular-nums; }
+.bar { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; }
+.seg { height: 4px; border-radius: var(--radius-pill); background: var(--semantics-border-default); transition: background-color 200ms ease-out; }
+.seg[data-on] { background: var(--semantics-border-interactive); }
+
+.card {
+  display: flex; flex-direction: column; gap: var(--space-4x);
+  padding: var(--space-4x);
+  border: 1px solid var(--semantics-border-default);
+  border-radius: var(--radius-xs);
+  background: var(--semantics-background-primary);
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  transition: border-color 200ms ease-out;
+}
+.card[data-done] { border-color: var(--primitives-primary-100); }
+.cardHead { display: flex; align-items: center; gap: var(--space-3x); }
+.step {
+  flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--semantics-border-default); color: var(--semantics-text-tertiary);
+  font-size: var(--font-size-12); line-height: 1; font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  transition: background-color 200ms ease-out, color 200ms ease-out;
+}
+.step[data-done] { background: var(--semantics-border-interactive); color: #fff; }
+.cardTitle { flex: 1; margin: 0; font-size: var(--font-size-14); line-height: var(--line-height-14); font-weight: var(--font-weight-semibold); color: var(--semantics-text-primary); }
+.cardMeta { font-size: var(--font-size-12); line-height: var(--line-height-12); color: var(--semantics-text-tertiary); font-variant-numeric: tabular-nums; }
+
+/* ---------- 3. Spec sheet: label column + ghost inputs ---------- */
+.sheet { display: flex; flex-direction: column; gap: var(--space-2x); }
+.row {
+  display: grid; grid-template-columns: 148px minmax(0, 1fr); gap: var(--space-4x);
+  align-items: start; padding: var(--space-1x) 0;
+  min-height: 48px;
+}
+.rowLabel { padding-top: 10px; font-size: var(--font-size-14); line-height: var(--line-height-14); font-weight: var(--font-weight-medium); color: var(--semantics-text-tertiary); }
+.rowLabel em { font-style: normal; font-weight: var(--font-weight-regular); color: var(--semantics-text-placeholder); }
+.cell { min-width: 0; display: flex; flex-direction: column; gap: var(--space-2x); justify-content: center; min-height: 40px; }
+/* The designed controls bring their own label; the row label replaces it. */
+.cell > div > label:first-child,
+.cell > div > span:first-child,
+.cell > fieldset > legend {
+  position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+}
+/* Ghost inputs: no border until hover / focus. */
+.ghost input, .ghost select, .ghost textarea { border-color: transparent; background: var(--primitives-neutral-50); }
+.ghost input:hover, .ghost select:hover, .ghost textarea:hover { border-color: var(--semantics-border-strong); background: var(--semantics-background-primary); }
+.ghost input:focus, .ghost textarea:focus { border-color: var(--semantics-border-focus); background: var(--semantics-background-primary); }
+.ghost input::placeholder { color: var(--semantics-text-placeholder); }
+.ghost [data-invalid] input, .ghost input[aria-invalid="true"] { border-color: var(--primitives-error-600); background: var(--semantics-background-primary); }
+
+/* ---------- 4. Purpose-built controls ---------- */
+.stepper {
+  display: inline-flex; align-items: center; height: 40px; width: 100%;
+  border: 1px solid var(--semantics-border-strong); border-radius: var(--radius-md);
+  background: var(--semantics-background-primary); overflow: hidden;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+.stepper:focus-within { border-color: var(--semantics-border-focus); box-shadow: 0 0 0 3px var(--primitives-primary-100); }
+.stepper[data-invalid] { border-color: var(--primitives-error-600); }
+.stepBtn {
+  position: relative; flex-shrink: 0; width: 40px; height: 100%; border: 0; background: transparent;
+  color: var(--semantics-text-secondary); font-size: 18px; line-height: 1; cursor: pointer;
+  transition: background-color 120ms ease, scale 120ms ease-out; touch-action: manipulation;
+}
+.stepBtn:hover { background: var(--primitives-neutral-50); }
+.stepBtn:active { scale: 0.96; }
+.stepBtn:disabled { color: var(--semantics-text-placeholder); cursor: not-allowed; }
+.stepBtn:focus-visible { outline: 2px solid var(--semantics-border-focus); outline-offset: -2px; }
+.stepVal {
+  flex: 1; min-width: 0; height: 100%; border: 0; outline: 0; background: transparent; text-align: center;
+  font-family: var(--font-family-sans); font-weight: var(--font-weight-medium); font-size: var(--font-size-16);
+  color: var(--semantics-text-primary); font-variant-numeric: tabular-nums;
+}
+.stepUnit { margin-left: 4px; font-weight: var(--font-weight-regular); color: var(--semantics-text-tertiary); }
+
+.chipGroup { display: flex; flex-wrap: wrap; gap: var(--space-2x); }
+.chip {
+  position: relative; display: inline-flex; align-items: center; justify-content: center;
+  height: 40px; padding: 0 var(--space-4x);
+  border: 1px solid var(--semantics-border-strong); border-radius: var(--radius-md);
+  background: var(--semantics-background-primary);
+  font-family: var(--font-family-sans); font-weight: var(--font-weight-medium); font-size: var(--font-size-14);
+  color: var(--semantics-text-secondary); cursor: pointer; touch-action: manipulation;
+  transition: border-color 120ms ease, background-color 120ms ease, color 120ms ease, scale 120ms ease-out;
+}
+.chip:hover { border-color: #9ca3af; }
+.chip:active { scale: 0.96; }
+.chip[aria-checked="true"] { border-color: var(--semantics-border-interactive); background: var(--primitives-primary-50); color: var(--semantics-text-link); }
+.chip:focus-visible { outline: 2px solid var(--semantics-border-focus); outline-offset: 2px; }
+.chipGroup[data-invalid] .chip { border-color: var(--primitives-error-600); }
+
+.payPair { display: grid; grid-template-columns: minmax(0, 1fr) 20px minmax(0, 1fr); gap: var(--space-2x); align-items: end; }
+.payArrow { height: 40px; display: inline-flex; align-items: center; justify-content: center; color: var(--semantics-text-placeholder); }
+.verdict {
+  display: inline-flex; align-items: center; gap: var(--space-2x); align-self: flex-start;
+  padding: var(--space-1x) var(--space-3x); border-radius: var(--radius-pill);
+  font-size: var(--font-size-12); line-height: var(--line-height-12); font-weight: var(--font-weight-medium);
+  background: var(--primitives-primary-50); color: var(--semantics-text-link);
+}
+.verdict[data-tone="warn"] { background: var(--primitives-warning-50); color: var(--primitives-warning-600); }
+
+.addRow { display: flex; flex-wrap: wrap; gap: var(--space-2x); }
+.addBtn {
+  display: inline-flex; align-items: center; gap: var(--space-1x); height: 32px; padding: 0 var(--space-3x);
+  border: 1px dashed var(--semantics-border-strong); border-radius: var(--radius-pill); background: transparent;
+  font-family: var(--font-family-sans); font-weight: var(--font-weight-medium); font-size: var(--font-size-12);
+  color: var(--semantics-text-tertiary); cursor: pointer; touch-action: manipulation;
+  transition: border-color 120ms ease, color 120ms ease, scale 120ms ease-out;
+}
+.addBtn:hover { border-color: var(--semantics-border-interactive); color: var(--semantics-text-link); }
+.addBtn:active { scale: 0.96; }
+.addBtn:focus-visible { outline: 2px solid var(--semantics-border-focus); outline-offset: 2px; }
+
+.consent {
+  display: flex; align-items: flex-start; padding: var(--space-3x) var(--space-4x);
+  border-radius: var(--radius-md); background: var(--primitives-neutral-50);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seg, .step, .card, .chip, .stepBtn, .addBtn { transition: none; }
+  .chip:active, .stepBtn:active, .addBtn:active { scale: 1; }
+}
+
+.consent > label { align-items: flex-start; }
+.consent > label > span:last-child { white-space: normal; line-height: var(--line-height-14); }
+.stepMid { flex: 1; min-width: 0; height: 100%; display: flex; align-items: center; justify-content: center; gap: 4px; }
+.stepMid .stepVal { flex: none; text-align: right; }
+.hintRow { display: flex; justify-content: space-between; gap: var(--space-2x); }
+
+.ghost .cell [role="button"] { border-color: transparent; background: var(--primitives-neutral-50); }
+.ghost .cell [role="button"]:hover { border-color: var(--semantics-border-strong); background: var(--semantics-background-primary); }
+.ghost .cell [role="button"][aria-expanded="true"] { border-color: var(--semantics-border-focus); background: var(--semantics-background-primary); }

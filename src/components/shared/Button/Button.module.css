@@ -1,0 +1,180 @@
+/* Button component set — Figma node 97:563 (Bolt | Design System).
+   Variants: primary | secondary | tertiary
+   Sizes:    xs (28px) | sm (32px) | md (36px) | lg (40px)
+   States:   default | hover | focus | disabled */
+
+.button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+/* ---- Sizes ---- */
+/* xs: 28px height, 8px padding-x, 8px gap, 8px radius, text-style-label-3 (12/16), 12px icon */
+.xs {
+  height: var(--button-height-xs);
+  padding: 0 var(--button-padding-x-xs);
+  gap: var(--button-icon-gap-xs);
+  border-radius: var(--button-corner-radius-xs);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+}
+
+/* sm: 32px height, 12px padding-x, 8px gap, 8px radius, text-style-label-3 (12/16), 12px icon */
+.sm {
+  height: var(--button-height-sm);
+  padding: 0 var(--button-padding-x-sm);
+  gap: var(--button-icon-gap-sm);
+  border-radius: var(--button-corner-radius-sm);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+}
+
+/* md: 36px height, 12px padding-x, 8px gap, 8px radius, text-style-label-2 (14/20), 16px icon */
+.md {
+  height: var(--button-height-md);
+  padding: 0 var(--button-padding-x-md);
+  gap: var(--button-icon-gap-md);
+  border-radius: var(--button-corner-radius-md);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+}
+
+/* lg: 40px height, 16px padding-x, 8px gap, 8px radius, text-style-label-1 (16/24), 20px icon */
+.lg {
+  height: var(--button-height-lg);
+  padding: 0 var(--button-padding-x-lg);
+  gap: var(--button-icon-gap-lg);
+  border-radius: var(--button-corner-radius-lg);
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-16);
+}
+
+/* ---- Primary Variant ---- */
+.primary {
+  background: var(--button-primary-background);
+  color: var(--button-primary-text);
+  border-color: transparent;
+}
+
+.primary:hover:not(:disabled):not([data-state="default"]),
+.primary[data-state="hover"] {
+  background: var(--button-primary-background-hover);
+}
+
+.primary:focus-visible:not(:disabled),
+.primary[data-state="focus"] {
+  background: var(--button-primary-background-hover);
+  outline: var(--button-focus-ring-width) solid var(--button-primary-focus-ring);
+  outline-offset: var(--button-focus-ring-offset);
+}
+
+.primary:disabled,
+.primary[data-state="disabled"] {
+  background: var(--button-primary-background-disabled);
+  color: var(--button-primary-text-disabled);
+  border-color: transparent;
+  cursor: not-allowed;
+}
+
+/* ---- Secondary Variant ---- */
+.secondary {
+  background: var(--button-secondary-background);
+  color: var(--button-secondary-text);
+  border-color: var(--button-secondary-border);
+}
+
+.secondary:hover:not(:disabled):not([data-state="default"]):not([data-state="focus"]),
+.secondary[data-state="hover"] {
+  background: var(--button-secondary-background-hover);
+  border-color: var(--button-secondary-border-hover);
+}
+
+.secondary:focus-visible:not(:disabled),
+.secondary[data-state="focus"] {
+  background: var(--button-secondary-background);
+  border-color: var(--button-secondary-border);
+  outline: var(--button-focus-ring-width) solid var(--button-primary-focus-ring);
+  outline-offset: var(--button-focus-ring-offset);
+}
+
+.secondary:disabled,
+.secondary[data-state="disabled"] {
+  background: var(--button-secondary-background-disabled);
+  color: var(--button-secondary-text-disabled);
+  border-color: var(--button-secondary-border-disabled);
+  cursor: not-allowed;
+}
+
+/* ---- Tertiary Variant ---- */
+.tertiary {
+  background: var(--button-tertiary-background);
+  color: var(--button-tertiary-text);
+  border-color: transparent;
+}
+
+.tertiary:hover:not(:disabled):not([data-state="default"]):not([data-state="focus"]),
+.tertiary[data-state="hover"] {
+  background: var(--button-tertiary-background-hover);
+}
+
+.tertiary:focus-visible:not(:disabled),
+.tertiary[data-state="focus"] {
+  background: var(--button-tertiary-background);
+  outline: var(--button-focus-ring-width) solid var(--button-primary-focus-ring);
+  outline-offset: var(--button-focus-ring-offset);
+}
+
+.tertiary:disabled,
+.tertiary[data-state="disabled"] {
+  background: var(--button-tertiary-background-disabled);
+  color: var(--button-tertiary-text-disabled);
+  border-color: transparent;
+  cursor: not-allowed;
+}
+
+/* ---- Inner slots ---- */
+.iconSlot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: currentColor;
+}
+
+.xs .iconSlot,
+.sm .iconSlot {
+  width: var(--button-icon-size-sm);
+  height: var(--button-icon-size-sm);
+}
+
+.md .iconSlot {
+  width: var(--button-icon-size-md);
+  height: var(--button-icon-size-md);
+}
+
+.lg .iconSlot {
+  width: var(--button-icon-size-lg);
+  height: var(--button-icon-size-lg);
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
