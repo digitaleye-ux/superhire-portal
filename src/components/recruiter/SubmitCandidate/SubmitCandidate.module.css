@@ -726,3 +726,310 @@
     animation: none;
   }
 }
+
+/* ==========================================================================
+   STICKY TOP TOC RAIL (Horizontal Pill TOC matching Candidate Track Panel)
+   ========================================================================== */
+
+.horizontalTocBar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2x);
+  padding: var(--space-2x) var(--space-8x);
+  background: var(--semantics-background-primary);
+  border-bottom: 1px solid var(--semantics-border-default);
+  overflow-x: auto;
+  flex-shrink: 0;
+  scrollbar-width: none;
+}
+
+.horizontalTocBar::-webkit-scrollbar {
+  display: none;
+}
+
+.tocPill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1x);
+  height: var(--control-height-sm);
+  padding: 0 var(--space-3x);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--semantics-text-tertiary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+  touch-action: manipulation;
+  transition:
+    background-color 140ms ease-out,
+    color 140ms ease-out,
+    transform 120ms ease-out;
+}
+
+.tocPill svg {
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+  flex-shrink: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tocPill:hover {
+    background: var(--semantics-surface-secondary);
+    color: var(--semantics-text-primary);
+  }
+}
+
+.tocPill:active {
+  transform: scale(0.96);
+}
+
+.tocPill:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 1px;
+}
+
+.tocPillActive,
+.tocPillActive:hover {
+  background: var(--semantics-primary-50, var(--semantics-surface-brand-subtle, var(--primitives-primary-50, #FAFAFF)));
+  border: 1px solid transparent;
+  color: var(--semantics-text-link);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ==========================================================================
+   REPEATABLE SECTIONS (Education, Work Experience, Projects, Certifications)
+   ========================================================================== */
+
+.addSectionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1x);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+  color: var(--semantics-text-link);
+  cursor: pointer;
+  white-space: nowrap;
+  touch-action: manipulation;
+  transition: color 120ms ease, transform 120ms ease;
+}
+
+.addSectionBtn:hover {
+  color: var(--semantics-text-link-hover, var(--primitives-primary-800));
+}
+
+.addSectionBtn:active {
+  transform: scale(0.97);
+}
+
+.addSectionBtn svg {
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+  flex-shrink: 0;
+}
+
+.repeatableStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6x);
+}
+
+.repeatableItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4x);
+}
+
+.repeatableItem + .repeatableItem {
+  padding-top: var(--space-6x);
+  border-top: 1px dashed var(--semantics-border-default);
+}
+
+.entryHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3x);
+}
+
+/* Entry Title: text-style-label-2 in primary (14px / 20px Medium) */
+.entryHeading {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+  color: var(--semantics-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.removeEntryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1x);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+  color: var(--semantics-text-tertiary);
+  cursor: pointer;
+  flex-shrink: 0;
+  touch-action: manipulation;
+  transition: color 120ms ease;
+}
+
+.removeEntryBtn:hover {
+  color: var(--semantics-text-danger, #dc2626);
+}
+
+.removeEntryBtn svg {
+  width: var(--size-icon-xs, 12px);
+  height: var(--size-icon-xs, 12px);
+}
+
+/* ==========================================================================
+   SKILLS TAG EDITOR (Rounded Unfilled Pills matching Track & Job Details)
+   ========================================================================== */
+
+.skillsEditor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4x);
+}
+
+.skillChipsWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2x);
+}
+
+.skillTagPill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1x);
+  padding: 4px var(--space-3x);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--semantics-border-default);
+  background: transparent;
+  color: var(--semantics-text-secondary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+  white-space: nowrap;
+  transition: border-color 120ms ease, background-color 120ms ease, color 120ms ease;
+}
+
+.skillTagPill:hover {
+  border-color: var(--semantics-border-strong);
+  background: var(--semantics-surface-secondary);
+  color: var(--semantics-text-primary);
+}
+
+.skillRemoveBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--semantics-text-tertiary);
+  cursor: pointer;
+  transition: color 120ms ease;
+}
+
+.skillRemoveBtn:hover {
+  color: var(--semantics-text-danger, #dc2626);
+}
+
+.skillInputRow {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2x);
+}
+
+.skillInputFieldWrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.skillAddBtn {
+  height: var(--control-height-lg, 40px);
+  padding: 0 var(--space-4x);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--semantics-border-default);
+  background: var(--semantics-background-primary);
+  color: var(--semantics-text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.skillAddBtn:hover {
+  background: var(--semantics-surface-secondary);
+  border-color: var(--semantics-border-strong);
+}
+
+.suggestedSkillsBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2x);
+}
+
+.suggestedSkillsLabel {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-tertiary);
+}
+
+.suggestedSkillChip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1x);
+  padding: 4px var(--space-3x);
+  border-radius: var(--radius-pill);
+  border: 1px dashed var(--semantics-border-default);
+  background: transparent;
+  color: var(--semantics-text-tertiary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 120ms ease;
+}
+
+.suggestedSkillChip:hover {
+  border-style: solid;
+  border-color: var(--semantics-border-interactive);
+  color: var(--semantics-text-link);
+  background: var(--semantics-primary-50, var(--semantics-surface-brand-subtle, #FAFAFF));
+}

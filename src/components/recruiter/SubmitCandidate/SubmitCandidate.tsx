@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import type { ComponentType, FormEvent, ReactNode } from "react";
 import { Badge } from "@/components/shared/Badge";
 import { Checkbox } from "@/components/shared/Checkbox";
@@ -11,6 +11,8 @@ import {
   XIcon,
 } from "@/components/shared/Icon";
 import type { IconBaseProps } from "@/components/shared/Icon";
+import { TocSectionIcon } from "@/proto/candidate-profile/ProfileShared";
+import type { ProfileSectionId } from "@/proto/candidate-profile/profileData";
 import {
   ChecklistGroup,
   FileField,
@@ -22,14 +24,95 @@ import {
 import { CheckIcon, MailIcon, SparklesIcon, XIcon as XCloseIcon } from "./icons";
 import {
   NOTICE_OPTIONS,
+  WORK_MODE_OPTIONS,
+  YEAR_OPTIONS,
   buildParsedSample,
+  createEmptyCertification,
+  createEmptyEducation,
+  createEmptyProject,
+  createEmptyWorkExperience,
   focusFirstInvalid,
   useCandidateForm,
 } from "./useCandidateForm";
-import type { SubmitCandidateProps } from "./SubmitCandidate.types";
+import type {
+  FormCertificationEntry,
+  FormEducationEntry,
+  FormProjectEntry,
+  FormWorkExperienceEntry,
+  SubmitCandidateProps,
+} from "./SubmitCandidate.types";
 import styles from "./SubmitCandidate.module.css";
 
 type PanelTab = "submit" | "details";
+
+export type SubmitTocSectionId =
+  | "resume"
+  | "personal-info"
+  | "education"
+  | "work-experience"
+  | "projects"
+  | "certifications"
+  | "links"
+  | "skills"
+  | "requirements";
+
+interface SubmitTocItem {
+  id: SubmitTocSectionId;
+  label: string;
+}
+
+const SUBMIT_TOC_SECTIONS: SubmitTocItem[] = [
+  { id: "resume", label: "Resume" },
+  { id: "personal-info", label: "Personal info" },
+  { id: "education", label: "Education" },
+  { id: "work-experience", label: "Work experience" },
+  { id: "projects", label: "Projects" },
+  { id: "certifications", label: "Certifications" },
+  { id: "links", label: "Links" },
+  { id: "skills", label: "Skills" },
+  { id: "requirements", label: "Must-have requirements" },
+];
+
+function SubmitTocIcon({ id }: { id: SubmitTocSectionId }) {
+  if (id === "requirements") {
+    return (
+      <svg
+        width={16}
+        height={16}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M9 11l3 3L22 4" />
+        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+      </svg>
+    );
+  }
+  return <TocSectionIcon id={id as ProfileSectionId} />;
+}
+
+function PlusSmIcon() {
+  return (
+    <svg
+      width={16}
+      height={16}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <line x1="12" y1="5" x2="12" y2="19" />
+      <line x1="5" y1="12" x2="19" y2="12" />
+    </svg>
+  );
+}
 
 interface MetaEntry {
   key: string;
@@ -39,8 +122,9 @@ interface MetaEntry {
 }
 
 /**
- * Submit Candidate side panel — One scroll layout with Resume-first prefill
- * and a "Job details" reference tab. Matches JobDetail's spacing and tabbed chrome.
+ * Submit Candidate side panel — Horizontal Pill TOC navigation + Full Profile Sections
+ * matching the Candidate Track Panel (Personal info, Resume, Education, Work experience,
+ * Projects, Certifications, Links, Skills) + Must-have requirements verification.
  */
 export function SubmitCandidate({
   job,
@@ -69,7 +153,97 @@ export function SubmitCandidate({
   const [prefilledCount, setPrefilledCount] = useState(0);
   const [showGithub, setShowGithub] = useState(() => Boolean(form.values.github));
   const [showPortfolio, setShowPortfolio] = useState(() => Boolean(form.values.portfolio));
+  const [skillDraft, setSkillDraft] = useState("");
+
+  // Scroll-spy & TOC state
+  const [activeSection, setActiveSection] = useState<SubmitTocSectionId>("resume");
   const scrollRef = useRef<HTMLDivElement>(null);
+  const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
+  const pillRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const isProgrammaticScroll = useRef(false);
+  const scrollTimeoutRef = useRef<number | null>(null);
+
+  const registerSection = useCallback(
+    (id: SubmitTocSectionId) => (el: HTMLElement | null) => {
+      sectionRefs.current[id] = el;
+    },
+    []
+  );
+
+  const scrollToSection = useCallback((id: SubmitTocSectionId) => {
+    const container = scrollRef.current;
+    const target = sectionRefs.current[id];
+    if (!container || !target) return;
+
+    setActiveSection(id);
+    isProgrammaticScroll.current = true;
+
+    if (scrollTimeoutRef.current) {
+      window.clearTimeout(scrollTimeoutRef.current);
+    }
+
+    const containerRect = container.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    const offset = targetRect.top - containerRect.top + container.scrollTop - 16;
+
+    container.scrollTo({
+      top: Math.max(0, offset),
+      behavior: "smooth",
+    });
+
+    scrollTimeoutRef.current = window.setTimeout(() => {
+      isProgrammaticScroll.current = false;
+    }, 520);
+  }, []);
+
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container || tab !== "submit") return;
+
+    const handleScroll = () => {
+      if (isProgrammaticScroll.current) return;
+      const { scrollTop, scrollHeight, clientHeight } = container;
+
+      if (scrollTop + clientHeight >= scrollHeight - 16) {
+        setActiveSection(SUBMIT_TOC_SECTIONS[SUBMIT_TOC_SECTIONS.length - 1].id);
+        return;
+      }
+
+      const containerTop = container.getBoundingClientRect().top;
+      let currentId: SubmitTocSectionId = SUBMIT_TOC_SECTIONS[0].id;
+
+      for (const sec of SUBMIT_TOC_SECTIONS) {
+        const el = sectionRefs.current[sec.id];
+        if (!el) continue;
+        const relTop = el.getBoundingClientRect().top - containerTop;
+        if (relTop <= 84) {
+          currentId = sec.id;
+        }
+      }
+      setActiveSection(currentId);
+    };
+
+    container.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+      if (scrollTimeoutRef.current) {
+        window.clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, [tab]);
+
+  // Keep active pill visible inside horizontal TOC bar
+  useEffect(() => {
+    if (tab !== "submit") return;
+    const activeBtn = pillRefs.current[activeSection];
+    if (activeBtn) {
+      activeBtn.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
+      });
+    }
+  }, [activeSection, tab]);
 
   // Exact same meta row as JobCard and JobDetail: package · experience · location · mode
   const locationText = job.location?.trim() ?? "";
@@ -81,7 +255,6 @@ export function SubmitCandidate({
     {
       key: "package",
       icon: IndianRupeeIcon,
-      // Drop the leading ₹ — the rupee icon conveys it, avoiding a double ₹.
       text: (job.packageLabel?.trim() ?? "").replace(/^₹\s*/, ""),
     },
     { key: "experience", icon: BriefcaseBusinessIcon, text: job.experience?.trim() ?? "" },
@@ -89,7 +262,6 @@ export function SubmitCandidate({
       key: "location",
       icon: MapPinIcon,
       text: locationText,
-      // Full location list on hover tooltip
       title: job.locationFull?.trim() || locationText,
     },
     { key: "mode", text: modeDuplicatesLocation ? "" : modeText },
@@ -120,8 +292,144 @@ export function SubmitCandidate({
       if (sample.portfolio) setShowPortfolio(true);
       setPrefilledCount(count);
       setParsing(false);
-    }, 750);
+    }, 650);
   };
+
+  // Repeatable Education handlers
+  const updateEducation = (idx: number, field: keyof FormEducationEntry, val: string) => {
+    const next = values.educationList.map((item, i) =>
+      i === idx ? { ...item, [field]: val } : item
+    );
+    set("educationList", next);
+  };
+
+  const addEducation = () => {
+    set("educationList", [
+      ...values.educationList,
+      createEmptyEducation(`edu-${Date.now()}`),
+    ]);
+  };
+
+  const removeEducation = (idx: number) => {
+    if (values.educationList.length <= 1) {
+      set("educationList", [createEmptyEducation("edu-1")]);
+      return;
+    }
+    set(
+      "educationList",
+      values.educationList.filter((_, i) => i !== idx)
+    );
+  };
+
+  // Repeatable Work Experience handlers
+  const updateWorkExperience = (
+    idx: number,
+    field: keyof FormWorkExperienceEntry,
+    val: string
+  ) => {
+    const next = values.workExperienceList.map((item, i) =>
+      i === idx ? { ...item, [field]: val } : item
+    );
+    set("workExperienceList", next);
+    if (idx === 0 && field === "company") {
+      set("company", val);
+    }
+  };
+
+  const addWorkExperience = () => {
+    set("workExperienceList", [
+      ...values.workExperienceList,
+      createEmptyWorkExperience(`exp-${Date.now()}`),
+    ]);
+  };
+
+  const removeWorkExperience = (idx: number) => {
+    if (values.workExperienceList.length <= 1) {
+      set("workExperienceList", [createEmptyWorkExperience("exp-1")]);
+      return;
+    }
+    set(
+      "workExperienceList",
+      values.workExperienceList.filter((_, i) => i !== idx)
+    );
+  };
+
+  // Repeatable Projects handlers
+  const updateProject = (idx: number, field: keyof FormProjectEntry, val: string) => {
+    const next = values.projectsList.map((item, i) =>
+      i === idx ? { ...item, [field]: val } : item
+    );
+    set("projectsList", next);
+  };
+
+  const addProject = () => {
+    set("projectsList", [
+      ...values.projectsList,
+      createEmptyProject(`proj-${Date.now()}`),
+    ]);
+  };
+
+  const removeProject = (idx: number) => {
+    if (values.projectsList.length <= 1) {
+      set("projectsList", [createEmptyProject("proj-1")]);
+      return;
+    }
+    set(
+      "projectsList",
+      values.projectsList.filter((_, i) => i !== idx)
+    );
+  };
+
+  // Repeatable Certifications handlers
+  const updateCertification = (
+    idx: number,
+    field: keyof FormCertificationEntry,
+    val: string
+  ) => {
+    const next = values.certificationsList.map((item, i) =>
+      i === idx ? { ...item, [field]: val } : item
+    );
+    set("certificationsList", next);
+  };
+
+  const addCertification = () => {
+    set("certificationsList", [
+      ...values.certificationsList,
+      createEmptyCertification(`cert-${Date.now()}`),
+    ]);
+  };
+
+  const removeCertification = (idx: number) => {
+    if (values.certificationsList.length <= 1) {
+      set("certificationsList", [createEmptyCertification("cert-1")]);
+      return;
+    }
+    set(
+      "certificationsList",
+      values.certificationsList.filter((_, i) => i !== idx)
+    );
+  };
+
+  // Skills handlers
+  const addSkill = (rawSkill?: string) => {
+    const clean = (rawSkill ?? skillDraft).trim();
+    if (!clean) return;
+    if (!values.skillsList.some((s) => s.toLowerCase() === clean.toLowerCase())) {
+      set("skillsList", [...values.skillsList, clean]);
+    }
+    if (rawSkill === undefined) setSkillDraft("");
+  };
+
+  const removeSkill = (skillToRemove: string) => {
+    set(
+      "skillsList",
+      values.skillsList.filter((s) => s !== skillToRemove)
+    );
+  };
+
+  const suggestedSkills = skills.filter(
+    (sk) => !values.skillsList.some((existing) => existing.toLowerCase() === sk.toLowerCase())
+  );
 
   const handleSubmit = async (e?: FormEvent) => {
     e?.preventDefault();
@@ -138,6 +446,7 @@ export function SubmitCandidate({
     form.reset();
     setPrefilledCount(0);
     setTab("submit");
+    setActiveSection("resume");
   };
 
   return (
@@ -223,6 +532,33 @@ export function SubmitCandidate({
         )}
       </header>
 
+      {/* Sticky Horizontal Pill Table of Contents (TOC) matching Candidate Track Panel */}
+      {form.status !== "done" && tab === "submit" && (
+        <nav
+          className={styles.horizontalTocBar}
+          aria-label="Candidate submission sections"
+        >
+          {SUBMIT_TOC_SECTIONS.map((sec) => {
+            const isActive = activeSection === sec.id;
+            return (
+              <button
+                key={sec.id}
+                ref={(el) => {
+                  pillRefs.current[sec.id] = el;
+                }}
+                type="button"
+                className={`${styles.tocPill} ${isActive ? styles.tocPillActive : ""}`}
+                aria-current={isActive ? "location" : undefined}
+                onClick={() => scrollToSection(sec.id)}
+              >
+                <SubmitTocIcon id={sec.id} />
+                <span>{sec.label}</span>
+              </button>
+            );
+          })}
+        </nav>
+      )}
+
       {form.status === "done" ? (
         <div className={styles.success} role="status">
           <span className={styles.successBadge}>
@@ -253,51 +589,71 @@ export function SubmitCandidate({
         <>
           <div className={styles.scroll} ref={scrollRef} role="tabpanel">
             <div className={styles.pane} hidden={tab !== "submit"}>
-              <div className={styles.resumeBlock}>
-                <FileField
-                  id="cf-resume"
-                  hero
-                  label="Resume"
-                  title="Start with the resume"
-                  help="We'll prefill what we can. PDF or Word · up to 5 MB"
-                  value={values.resume}
-                  busy={parsing}
-                  onChange={handleResumeChange}
-                  onBlur={() => touch("resume")}
-                  error={shown("resume")}
-                />
-                {(prefillSourceLabel || (prefilledCount > 0 && !parsing)) && (
-                  <p className={styles.banner} role="status">
-                    <SparklesIcon />
-                    {prefillSourceLabel || `Prefilled ${prefilledCount} fields from the resume — review before submitting.`}
-                  </p>
-                )}
-              </div>
+              {/* 1. RESUME (Prefills all profile sections below) */}
+              <section
+                ref={registerSection("resume")}
+                id="sc-sec-resume"
+                className={styles.section}
+                aria-labelledby="sc-heading-resume"
+              >
+                <div className={styles.sectionHead}>
+                  <h3 id="sc-heading-resume" className={`${styles.sectionTitle} text-style-heading-4`}>
+                    Resume
+                  </h3>
+                </div>
+                <div className={styles.resumeBlock}>
+                  <FileField
+                    id="cf-resume"
+                    hero
+                    label="Resume"
+                    title="Start with the resume"
+                    help="We'll prefill Personal info, Education, Work experience, Projects, Certifications, Links & Skills. PDF or Word · up to 5 MB"
+                    value={values.resume}
+                    busy={parsing}
+                    onChange={handleResumeChange}
+                    onBlur={() => touch("resume")}
+                    error={shown("resume")}
+                  />
+                  {(prefillSourceLabel || (prefilledCount > 0 && !parsing)) && (
+                    <p className={styles.banner} role="status">
+                      <SparklesIcon />
+                      {prefillSourceLabel ||
+                        "Prefilled candidate profile, education, work experience, projects, and skills from resume — review before submitting."}
+                    </p>
+                  )}
+                </div>
+              </section>
 
               <hr className={styles.divider} />
 
               <form id="submit-candidate-form" className={styles.form} noValidate onSubmit={handleSubmit}>
-                <section className={styles.section} aria-labelledby="sc-basic">
-                  <h3 id="sc-basic" className={`${styles.sectionTitle} text-style-heading-4`}>
-                    Basic information
+                {/* 2. PERSONAL INFO (Matches Track Candidate Panel Personal info + Employment details) */}
+                <section
+                  ref={registerSection("personal-info")}
+                  id="sc-sec-personal-info"
+                  className={styles.section}
+                  aria-labelledby="sc-heading-personal"
+                >
+                  <h3 id="sc-heading-personal" className={`${styles.sectionTitle} text-style-heading-4`}>
+                    Personal info
                   </h3>
                   <div className={styles.grid}>
                     <div className={styles.full}>
                       <TextField
                         {...bind("name")}
-                        label="Name"
+                        label="Full legal name"
                         autoComplete="name"
-                        placeholder="Sam Smith"
+                        placeholder="Rohan Mehta"
                         autoFocus
                       />
                     </div>
                     <TextField
                       {...bind("email")}
-                      label="Email"
+                      label="Email address"
                       type="email"
                       inputMode="email"
                       autoComplete="email"
-                      placeholder="name@company.com"
+                      placeholder="rohan.mehta@gmail.com"
                       prefix={<MailIcon />}
                     />
                     <PhoneField
@@ -306,22 +662,23 @@ export function SubmitCandidate({
                       code={values.phoneCode}
                       onCode={(c) => set("phoneCode", c)}
                     />
-                  </div>
-                </section>
-
-                <hr className={styles.divider} />
-
-                <section className={styles.section} aria-labelledby="sc-employment">
-                  <h3 id="sc-employment" className={`${styles.sectionTitle} text-style-heading-4`}>
-                    Employment details
-                  </h3>
-                  <div className={styles.grid}>
+                    <TextField
+                      {...bind("location")}
+                      label="Location"
+                      placeholder="Bengaluru, India"
+                    />
+                    <SelectField
+                      {...bind("workModePreference")}
+                      label="Work mode preference"
+                      options={WORK_MODE_OPTIONS}
+                      placeholder="Select work mode"
+                    />
                     <TextField
                       {...bind("experience")}
                       label="Total experience"
                       numeric
                       suffix="Years"
-                      placeholder="4"
+                      placeholder="6"
                     />
                     <SelectField
                       {...bind("notice")}
@@ -345,16 +702,6 @@ export function SubmitCandidate({
                       />
                     </div>
                     {working && (
-                      <div className={styles.full}>
-                        <TextField
-                          {...bind("company")}
-                          label="Current company"
-                          autoComplete="organization"
-                          placeholder="Amazon"
-                        />
-                      </div>
-                    )}
-                    {working && (
                       <TextField
                         {...bind("currentCtc")}
                         label="Current CTC"
@@ -368,16 +715,380 @@ export function SubmitCandidate({
                       label="Expected CTC"
                       numeric
                       suffix="Lakhs"
-                      placeholder="40"
+                      placeholder="45"
                     />
                   </div>
                 </section>
 
                 <hr className={styles.divider} />
 
-                <section className={styles.section} aria-labelledby="sc-links">
-                  <h3 id="sc-links" className={`${styles.sectionTitle} text-style-heading-4`}>
-                    Web links
+                {/* 3. EDUCATION */}
+                <section
+                  ref={registerSection("education")}
+                  id="sc-sec-education"
+                  className={styles.section}
+                  aria-labelledby="sc-heading-education"
+                >
+                  <div className={styles.sectionHead}>
+                    <h3 id="sc-heading-education" className={`${styles.sectionTitle} text-style-heading-4`}>
+                      Education
+                    </h3>
+                    <button
+                      type="button"
+                      className={styles.addSectionBtn}
+                      onClick={addEducation}
+                    >
+                      <PlusSmIcon />
+                      <span>Add education</span>
+                    </button>
+                  </div>
+
+                  <div className={styles.repeatableStack}>
+                    {values.educationList.map((edu, idx) => {
+                      const headingText =
+                        edu.degree.trim() && edu.institution.trim()
+                          ? `${edu.degree.trim()} from ${edu.institution.trim()}`
+                          : edu.degree.trim() || edu.institution.trim() || `Education #${idx + 1}`;
+
+                      return (
+                        <div key={edu.id} className={styles.repeatableItem}>
+                          <div className={styles.entryHeaderRow}>
+                            <h4 className={styles.entryHeading} title={headingText}>
+                              {headingText}
+                            </h4>
+                            <button
+                              type="button"
+                              className={styles.removeEntryBtn}
+                              onClick={() => removeEducation(idx)}
+                              aria-label={`Remove ${headingText}`}
+                            >
+                              <XCloseIcon size={12} />
+                              <span>Remove</span>
+                            </button>
+                          </div>
+
+                          <div className={styles.grid}>
+                            <TextField
+                              id={`cf-edu-school-${edu.id}`}
+                              label="School / College"
+                              value={edu.institution}
+                              onChange={(v) => updateEducation(idx, "institution", v)}
+                              placeholder="National Institute of Technology Karnataka (NITK)"
+                            />
+                            <TextField
+                              id={`cf-edu-degree-${edu.id}`}
+                              label="Degree"
+                              value={edu.degree}
+                              onChange={(v) => updateEducation(idx, "degree", v)}
+                              placeholder="B.Tech in Computer Science & Engineering"
+                            />
+                            <SelectField
+                              id={`cf-edu-start-${edu.id}`}
+                              label="Start year"
+                              value={edu.startYear}
+                              options={YEAR_OPTIONS}
+                              onChange={(v) => updateEducation(idx, "startYear", v)}
+                              placeholder="Select start year"
+                            />
+                            <SelectField
+                              id={`cf-edu-end-${edu.id}`}
+                              label="End year"
+                              value={edu.endYear}
+                              options={YEAR_OPTIONS}
+                              onChange={(v) => updateEducation(idx, "endYear", v)}
+                              placeholder="Select end year"
+                            />
+                            <TextField
+                              id={`cf-edu-loc-${edu.id}`}
+                              label="Location"
+                              value={edu.location}
+                              onChange={(v) => updateEducation(idx, "location", v)}
+                              placeholder="Mangaluru"
+                            />
+                            <TextField
+                              id={`cf-edu-grade-${edu.id}`}
+                              label="CGPA / Grade"
+                              optional
+                              value={edu.grade}
+                              onChange={(v) => updateEducation(idx, "grade", v)}
+                              placeholder="8.9 CGPA · First Class with Distinction"
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </section>
+
+                <hr className={styles.divider} />
+
+                {/* 4. WORK EXPERIENCE */}
+                <section
+                  ref={registerSection("work-experience")}
+                  id="sc-sec-work-experience"
+                  className={styles.section}
+                  aria-labelledby="sc-heading-experience"
+                >
+                  <div className={styles.sectionHead}>
+                    <h3 id="sc-heading-experience" className={`${styles.sectionTitle} text-style-heading-4`}>
+                      Work experience
+                    </h3>
+                    <button
+                      type="button"
+                      className={styles.addSectionBtn}
+                      onClick={addWorkExperience}
+                    >
+                      <PlusSmIcon />
+                      <span>Add work experience</span>
+                    </button>
+                  </div>
+
+                  <div className={styles.repeatableStack}>
+                    {values.workExperienceList.map((exp, idx) => {
+                      const headingText =
+                        exp.role.trim() && exp.company.trim()
+                          ? `${exp.role.trim()} at ${exp.company.trim()}`
+                          : exp.role.trim() || exp.company.trim() || `Role #${idx + 1}`;
+
+                      return (
+                        <div key={exp.id} className={styles.repeatableItem}>
+                          <div className={styles.entryHeaderRow}>
+                            <h4 className={styles.entryHeading} title={headingText}>
+                              {headingText}
+                            </h4>
+                            <button
+                              type="button"
+                              className={styles.removeEntryBtn}
+                              onClick={() => removeWorkExperience(idx)}
+                              aria-label={`Remove ${headingText}`}
+                            >
+                              <XCloseIcon size={12} />
+                              <span>Remove</span>
+                            </button>
+                          </div>
+
+                          <div className={styles.grid}>
+                            <TextField
+                              id={`cf-exp-company-${exp.id}`}
+                              label="Company"
+                              value={exp.company}
+                              onChange={(v) => updateWorkExperience(idx, "company", v)}
+                              placeholder="Zeta"
+                            />
+                            <TextField
+                              id={`cf-exp-role-${exp.id}`}
+                              label="Role"
+                              value={exp.role}
+                              onChange={(v) => updateWorkExperience(idx, "role", v)}
+                              placeholder="Senior Frontend Engineer"
+                            />
+                            <TextField
+                              id={`cf-exp-start-${exp.id}`}
+                              label="Start date"
+                              value={exp.startDate}
+                              onChange={(v) => updateWorkExperience(idx, "startDate", v)}
+                              placeholder="Apr 2023"
+                            />
+                            <TextField
+                              id={`cf-exp-end-${exp.id}`}
+                              label="End date"
+                              value={exp.endDate}
+                              onChange={(v) => updateWorkExperience(idx, "endDate", v)}
+                              placeholder="Present"
+                            />
+                            <div className={styles.full}>
+                              <TextField
+                                id={`cf-exp-loc-${exp.id}`}
+                                label="Location & work mode"
+                                value={exp.location}
+                                onChange={(v) => updateWorkExperience(idx, "location", v)}
+                                placeholder="Bengaluru · Hybrid"
+                              />
+                            </div>
+                            <div className={styles.full}>
+                              <TextAreaField
+                                id={`cf-exp-highlights-${exp.id}`}
+                                label="Key highlights & achievements (one bullet per line)"
+                                optional
+                                value={exp.highlightsText}
+                                onChange={(v) => updateWorkExperience(idx, "highlightsText", v)}
+                                placeholder="Architected the core card-issuing console in React 18 & TypeScript...&#10;Led migration to a token-driven design system..."
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </section>
+
+                <hr className={styles.divider} />
+
+                {/* 5. PROJECTS */}
+                <section
+                  ref={registerSection("projects")}
+                  id="sc-sec-projects"
+                  className={styles.section}
+                  aria-labelledby="sc-heading-projects"
+                >
+                  <div className={styles.sectionHead}>
+                    <h3 id="sc-heading-projects" className={`${styles.sectionTitle} text-style-heading-4`}>
+                      Projects
+                    </h3>
+                    <button
+                      type="button"
+                      className={styles.addSectionBtn}
+                      onClick={addProject}
+                    >
+                      <PlusSmIcon />
+                      <span>Add project</span>
+                    </button>
+                  </div>
+
+                  <div className={styles.repeatableStack}>
+                    {values.projectsList.map((proj, idx) => {
+                      const headingText = proj.title.trim() || `Project #${idx + 1}`;
+                      return (
+                        <div key={proj.id} className={styles.repeatableItem}>
+                          <div className={styles.entryHeaderRow}>
+                            <h4 className={styles.entryHeading} title={headingText}>
+                              {headingText}
+                            </h4>
+                            <button
+                              type="button"
+                              className={styles.removeEntryBtn}
+                              onClick={() => removeProject(idx)}
+                              aria-label={`Remove ${headingText}`}
+                            >
+                              <XCloseIcon size={12} />
+                              <span>Remove</span>
+                            </button>
+                          </div>
+
+                          <div className={styles.grid}>
+                            <TextField
+                              id={`cf-proj-title-${proj.id}`}
+                              label="Project title"
+                              value={proj.title}
+                              onChange={(v) => updateProject(idx, "title", v)}
+                              placeholder="Bolt UI — Multi-Brand Design Token Engine"
+                            />
+                            <TextField
+                              id={`cf-proj-sub-${proj.id}`}
+                              label="Role & year"
+                              optional
+                              value={proj.subtitle}
+                              onChange={(v) => updateProject(idx, "subtitle", v)}
+                              placeholder="Lead Author · 2025"
+                            />
+                            <div className={styles.full}>
+                              <TextAreaField
+                                id={`cf-proj-desc-${proj.id}`}
+                                label="Project details"
+                                optional
+                                value={proj.description}
+                                onChange={(v) => updateProject(idx, "description", v)}
+                                placeholder="Zero-runtime CSS token pipeline and accessible React primitive library..."
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </section>
+
+                <hr className={styles.divider} />
+
+                {/* 6. CERTIFICATIONS */}
+                <section
+                  ref={registerSection("certifications")}
+                  id="sc-sec-certifications"
+                  className={styles.section}
+                  aria-labelledby="sc-heading-certifications"
+                >
+                  <div className={styles.sectionHead}>
+                    <h3 id="sc-heading-certifications" className={`${styles.sectionTitle} text-style-heading-4`}>
+                      Certifications
+                    </h3>
+                    <button
+                      type="button"
+                      className={styles.addSectionBtn}
+                      onClick={addCertification}
+                    >
+                      <PlusSmIcon />
+                      <span>Add certification</span>
+                    </button>
+                  </div>
+
+                  <div className={styles.repeatableStack}>
+                    {values.certificationsList.map((cert, idx) => {
+                      const headingText = cert.name.trim() || `Certification #${idx + 1}`;
+                      return (
+                        <div key={cert.id} className={styles.repeatableItem}>
+                          <div className={styles.entryHeaderRow}>
+                            <h4 className={styles.entryHeading} title={headingText}>
+                              {headingText}
+                            </h4>
+                            <button
+                              type="button"
+                              className={styles.removeEntryBtn}
+                              onClick={() => removeCertification(idx)}
+                              aria-label={`Remove ${headingText}`}
+                            >
+                              <XCloseIcon size={12} />
+                              <span>Remove</span>
+                            </button>
+                          </div>
+
+                          <div className={styles.grid}>
+                            <TextField
+                              id={`cf-cert-name-${cert.id}`}
+                              label="Certification name"
+                              value={cert.name}
+                              onChange={(v) => updateCertification(idx, "name", v)}
+                              placeholder="Google Cloud Certified — Professional Cloud Developer"
+                            />
+                            <TextField
+                              id={`cf-cert-issuer-${cert.id}`}
+                              label="Issuing organization"
+                              value={cert.issuer}
+                              onChange={(v) => updateCertification(idx, "issuer", v)}
+                              placeholder="Google Cloud"
+                            />
+                            <TextField
+                              id={`cf-cert-date-${cert.id}`}
+                              label="Issue date"
+                              value={cert.issuedDate}
+                              onChange={(v) => updateCertification(idx, "issuedDate", v)}
+                              placeholder="Aug 2025"
+                            />
+                            <TextField
+                              id={`cf-cert-id-${cert.id}`}
+                              label="Credential ID"
+                              optional
+                              value={cert.credentialId}
+                              onChange={(v) => updateCertification(idx, "credentialId", v)}
+                              placeholder="GCP-PCD-994182"
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </section>
+
+                <hr className={styles.divider} />
+
+                {/* 7. LINKS */}
+                <section
+                  ref={registerSection("links")}
+                  id="sc-sec-links"
+                  className={styles.section}
+                  aria-labelledby="sc-heading-links"
+                >
+                  <h3 id="sc-heading-links" className={`${styles.sectionTitle} text-style-heading-4`}>
+                    Links
                   </h3>
                   <div className={styles.grid}>
                     <div className={styles.full}>
@@ -386,7 +1097,7 @@ export function SubmitCandidate({
                         label="LinkedIn"
                         type="url"
                         inputMode="url"
-                        placeholder="linkedin.com/in/samsmith"
+                        placeholder="linkedin.com/in/rohan-mehta"
                       />
                     </div>
 
@@ -400,7 +1111,7 @@ export function SubmitCandidate({
                               type="url"
                               inputMode="url"
                               optional
-                              placeholder="github.com/samsmith"
+                              placeholder="github.com/rohan-mehta"
                             />
                           </div>
                           <button
@@ -425,11 +1136,11 @@ export function SubmitCandidate({
                           <div className={styles.closableInput}>
                             <TextField
                               {...bind("portfolio")}
-                              label="Portfolio / website"
+                              label="Portfolio"
                               type="url"
                               inputMode="url"
                               optional
-                              placeholder="samsmith.dev"
+                              placeholder="rohan-mehta.dev"
                             />
                           </div>
                           <button
@@ -465,7 +1176,7 @@ export function SubmitCandidate({
                             className={styles.addLinkBtn}
                             onClick={() => setShowPortfolio(true)}
                           >
-                            + Add Portfolio / Website
+                            + Add Portfolio
                           </button>
                         )}
                       </div>
@@ -475,7 +1186,94 @@ export function SubmitCandidate({
 
                 <hr className={styles.divider} />
 
-                <section className={styles.section} aria-labelledby="sc-requirements">
+                {/* 8. SKILLS */}
+                <section
+                  ref={registerSection("skills")}
+                  id="sc-sec-skills"
+                  className={styles.section}
+                  aria-labelledby="sc-heading-skills"
+                >
+                  <h3 id="sc-heading-skills" className={`${styles.sectionTitle} text-style-heading-4`}>
+                    Skills
+                  </h3>
+                  <div className={styles.skillsEditor}>
+                    {values.skillsList.length > 0 && (
+                      <div className={styles.skillChipsWrap}>
+                        {values.skillsList.map((skill) => (
+                          <span key={skill} className={styles.skillTagPill}>
+                            <span>{skill}</span>
+                            <button
+                              type="button"
+                              className={styles.skillRemoveBtn}
+                              onClick={() => removeSkill(skill)}
+                              aria-label={`Remove ${skill}`}
+                            >
+                              <XCloseIcon size={12} />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className={styles.skillInputRow}>
+                      <div
+                        className={styles.skillInputFieldWrap}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            addSkill();
+                          }
+                        }}
+                      >
+                        <TextField
+                          id="cf-add-skill"
+                          label="Add skills"
+                          optional
+                          value={skillDraft}
+                          onChange={setSkillDraft}
+                          placeholder="Type a skill (e.g. TypeScript, System Design) and press Enter"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        className={styles.skillAddBtn}
+                        onClick={() => addSkill()}
+                      >
+                        Add
+                      </button>
+                    </div>
+
+                    {suggestedSkills.length > 0 && (
+                      <div className={styles.suggestedSkillsBlock}>
+                        <span className={styles.suggestedSkillsLabel}>
+                          Suggested from job requirements:
+                        </span>
+                        <div className={styles.skillChipsWrap}>
+                          {suggestedSkills.map((sk) => (
+                            <button
+                              key={sk}
+                              type="button"
+                              className={styles.suggestedSkillChip}
+                              onClick={() => addSkill(sk)}
+                            >
+                              <span>+ {sk}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </section>
+
+                <hr className={styles.divider} />
+
+                {/* 9. MUST-HAVE REQUIREMENTS (Recruiter verification checklist + Additional remarks) */}
+                <section
+                  ref={registerSection("requirements")}
+                  id="sc-sec-requirements"
+                  className={styles.section}
+                  aria-labelledby="sc-requirements"
+                >
                   <div className={styles.sectionHead}>
                     <h3 id="sc-requirements" className={`${styles.sectionTitle} text-style-heading-4`}>
                       Must-have requirements

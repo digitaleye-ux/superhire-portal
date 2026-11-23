@@ -1,10 +1,47 @@
 import type { JobDetailData } from "@/components/recruiter/JobDetail";
 
+export interface FormEducationEntry {
+  id: string;
+  degree: string;
+  institution: string;
+  startYear: string;
+  endYear: string;
+  location: string;
+  grade: string;
+}
+
+export interface FormWorkExperienceEntry {
+  id: string;
+  role: string;
+  company: string;
+  startDate: string;
+  endDate: string;
+  location: string;
+  highlightsText: string;
+}
+
+export interface FormProjectEntry {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+}
+
+export interface FormCertificationEntry {
+  id: string;
+  name: string;
+  issuer: string;
+  issuedDate: string;
+  credentialId: string;
+}
+
 export interface CandidateFormValues {
   name: string;
   email: string;
   phoneCode: string;
   phone: string;
+  location: string;
+  workModePreference: string;
   experience: string;
   working: string; // "Yes" | "No" | ""
   company: string;
@@ -13,6 +50,11 @@ export interface CandidateFormValues {
   notice: string;
   noticeNegotiable: string; // "Yes" | "No" | ""
   education: string;
+  educationList: FormEducationEntry[];
+  workExperienceList: FormWorkExperienceEntry[];
+  projectsList: FormProjectEntry[];
+  certificationsList: FormCertificationEntry[];
+  skillsList: string[];
   linkedin: string;
   github: string;
   portfolio: string;

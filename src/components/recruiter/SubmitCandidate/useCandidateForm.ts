@@ -1,14 +1,74 @@
 import { useMemo, useRef, useState } from "react";
-import type { CandidateFormValues } from "./SubmitCandidate.types";
+import type {
+  CandidateFormValues,
+  FormCertificationEntry,
+  FormEducationEntry,
+  FormProjectEntry,
+  FormWorkExperienceEntry,
+} from "./SubmitCandidate.types";
 
 export type Key = keyof CandidateFormValues;
-export type StringKey = Exclude<Key, "resume" | "verifiedRequirements">;
+export type StringKey = Exclude<
+  Key,
+  | "resume"
+  | "verifiedRequirements"
+  | "educationList"
+  | "workExperienceList"
+  | "projectsList"
+  | "certificationsList"
+  | "skillsList"
+>;
+
+export function createEmptyEducation(id = `edu-${Date.now()}`): FormEducationEntry {
+  return {
+    id,
+    degree: "",
+    institution: "",
+    startYear: "",
+    endYear: "",
+    location: "",
+    grade: "",
+  };
+}
+
+export function createEmptyWorkExperience(id = `exp-${Date.now()}`): FormWorkExperienceEntry {
+  return {
+    id,
+    role: "",
+    company: "",
+    startDate: "",
+    endDate: "Present",
+    location: "",
+    highlightsText: "",
+  };
+}
+
+export function createEmptyProject(id = `proj-${Date.now()}`): FormProjectEntry {
+  return {
+    id,
+    title: "",
+    subtitle: "",
+    description: "",
+  };
+}
+
+export function createEmptyCertification(id = `cert-${Date.now()}`): FormCertificationEntry {
+  return {
+    id,
+    name: "",
+    issuer: "",
+    issuedDate: "",
+    credentialId: "",
+  };
+}
 
 export const EMPTY: CandidateFormValues = {
   name: "",
   email: "",
   phoneCode: "+91",
   phone: "",
+  location: "",
+  workModePreference: "Hybrid / Remote",
   experience: "",
   working: "Yes",
   company: "",
@@ -17,6 +77,11 @@ export const EMPTY: CandidateFormValues = {
   notice: "",
   noticeNegotiable: "No",
   education: "",
+  educationList: [createEmptyEducation("edu-1")],
+  workExperienceList: [createEmptyWorkExperience("exp-1")],
+  projectsList: [createEmptyProject("proj-1")],
+  certificationsList: [createEmptyCertification("cert-1")],
+  skillsList: [],
   linkedin: "",
   github: "",
   portfolio: "",
@@ -26,6 +91,8 @@ export const EMPTY: CandidateFormValues = {
 };
 
 export const NOTICE_OPTIONS = ["Immediately", "15 days", "30 days", "45 days", "60 days", "90 days"];
+export const WORK_MODE_OPTIONS = ["Hybrid / Remote", "Remote", "Hybrid", "On-site"];
+export const YEAR_OPTIONS = Array.from({ length: 36 }, (_, i) => String(2030 - i));
 export const EDUCATION_OPTIONS = [
   "BE/B.Tech from Tier 1 College (IIT, BITS, NIT, DTU etc)",
   "BE/B.Tech from other college",
@@ -56,17 +123,35 @@ function urlError(raw: string, host?: string, label = "link"): string | undefine
 /** Which keys are currently relevant (conditional fields drop out). */
 export function activeKeys(v: CandidateFormValues): Key[] {
   const keys: Key[] = [
-    "name", "email", "phone", "experience",
-    "expectedCtc", "notice", "linkedin", "github",
-    "portfolio", "resume", "verifiedRequirements", "remarks",
+    "name",
+    "email",
+    "phone",
+    "location",
+    "workModePreference",
+    "experience",
+    "expectedCtc",
+    "notice",
+    "linkedin",
+    "github",
+    "portfolio",
+    "resume",
+    "verifiedRequirements",
+    "remarks",
   ];
-  if (v.working !== "No") keys.push("company", "currentCtc");
+  if (v.working !== "No") keys.push("currentCtc");
   return keys;
 }
 
 export const REQUIRED: Key[] = [
-  "name", "email", "phone", "experience", "company", "currentCtc",
-  "expectedCtc", "notice", "linkedin", "resume",
+  "name",
+  "email",
+  "phone",
+  "experience",
+  "currentCtc",
+  "expectedCtc",
+  "notice",
+  "linkedin",
+  "resume",
 ];
 
 export function validate(v: CandidateFormValues, requiredCount = 0): Partial<Record<Key, string>> {
@@ -79,7 +164,6 @@ export function validate(v: CandidateFormValues, requiredCount = 0): Partial<Rec
   req("email", "Enter an email address");
   req("phone", "Enter a phone number");
   req("experience", "Enter total experience");
-  req("company", "Enter the current company");
   req("currentCtc", "Enter the current CTC");
   req("expectedCtc", "Enter the expected CTC");
   req("notice", "Select a notice period");
@@ -117,20 +201,106 @@ export function validate(v: CandidateFormValues, requiredCount = 0): Partial<Rec
 /** Never auto-fills verifiedRequirements — recruiters must verify dealbreakers manually. */
 export function buildParsedSample(): Partial<CandidateFormValues> {
   return {
-    name: "Sam Smith",
-    email: "samsmith@gmail.com",
-    phone: "9447361834",
-    experience: "4",
+    name: "Rohan Mehta",
+    email: "rohan.mehta@gmail.com",
+    phone: "9845061834",
+    location: "Bengaluru, India",
+    workModePreference: "Hybrid / Remote",
+    experience: "6",
     working: "Yes",
-    company: "Amazon",
+    company: "Zeta",
     currentCtc: "32",
-    expectedCtc: "40",
-    notice: "60 days",
+    expectedCtc: "45",
+    notice: "30 days",
     noticeNegotiable: "Yes",
     education: EDUCATION_OPTIONS[0],
-    linkedin: "linkedin.com/in/samsmith",
-    github: "github.com/samsmith",
-    portfolio: "samsmith.dev",
+    educationList: [
+      {
+        id: "edu-1",
+        degree: "B.Tech in Computer Science & Engineering",
+        institution: "National Institute of Technology Karnataka (NITK), Surathkal",
+        startYear: "2016",
+        endYear: "2020",
+        location: "Mangaluru",
+        grade: "8.9 CGPA · First Class with Distinction",
+      },
+    ],
+    workExperienceList: [
+      {
+        id: "exp-1",
+        role: "Senior Frontend Engineer",
+        company: "Zeta",
+        startDate: "Apr 2023",
+        endDate: "Present",
+        location: "Bengaluru · Hybrid",
+        highlightsText: [
+          "Architected the core card-issuing console in React 18 & TypeScript used by 40+ enterprise banking partners.",
+          "Led migration to a token-driven design system, cutting feature delivery cycle time by 34% across 6 squads.",
+          "Reduced P95 interaction latency (INP) from 240ms to 68ms via virtualized data grids and web-worker offloads.",
+        ].join("\n"),
+      },
+      {
+        id: "exp-2",
+        role: "Software Engineer II — Web Platform",
+        company: "Razorpay",
+        startDate: "Jul 2020",
+        endDate: "Mar 2023",
+        location: "Bengaluru",
+        highlightsText: [
+          "Built merchant checkout customization workflows handling over ₹1,200 Cr in monthly transaction volume.",
+          "Authored automated Playwright visual regression suites achieving 99.4% release confidence across payment flows.",
+        ].join("\n"),
+      },
+    ],
+    projectsList: [
+      {
+        id: "proj-1",
+        title: "Bolt UI — Multi-Brand Design Token Engine",
+        subtitle: "Lead Author · 2025",
+        description:
+          "Zero-runtime CSS token pipeline and accessible React primitive library supporting instant theme switching and WCAG AA contrast validation.",
+      },
+      {
+        id: "proj-2",
+        title: "TraceLens Web Vitals Telemetry",
+        subtitle: "Creator · 2024",
+        description:
+          "Lightweight RUM collector and flamegraph visualizer for long animation frames (LoAF) and INP attribution.",
+      },
+    ],
+    certificationsList: [
+      {
+        id: "cert-1",
+        name: "Google Cloud Certified — Professional Cloud Developer",
+        issuer: "Google Cloud",
+        issuedDate: "Aug 2025",
+        credentialId: "GCP-PCD-994182",
+      },
+      {
+        id: "cert-2",
+        name: "W3C Web Accessibility Specialist (WAS)",
+        issuer: "IAAP / W3C",
+        issuedDate: "Jan 2024",
+        credentialId: "IAAP-WAS-41029",
+      },
+    ],
+    skillsList: [
+      "TypeScript",
+      "React 18/19",
+      "Next.js",
+      "JavaScript (ES2024)",
+      "HTML5 / CSS Architecture",
+      "Design Systems",
+      "GraphQL & Apollo",
+      "Core Web Vitals (LCP / INP)",
+      "Accessibility (WCAG 2.2 AA)",
+      "Playwright & Vitest",
+      "Node.js",
+      "Webpack / Vite",
+    ],
+    linkedin: "linkedin.com/in/rohan-mehta",
+    github: "github.com/rohan-mehta",
+    portfolio: "rohan-mehta.dev",
   };
 }
 
@@ -173,9 +343,58 @@ export function useCandidateForm(
     for (const [k, v] of Object.entries(parsed) as [Key, unknown][]) {
       if (k === "resume") continue;
       const cur = values[k];
+
+      if (k === "educationList" && Array.isArray(v)) {
+        const isDefaultBlank =
+          values.educationList.length === 1 &&
+          !values.educationList[0].degree.trim() &&
+          !values.educationList[0].institution.trim();
+        if (values.educationList.length === 0 || isDefaultBlank) {
+          patch.educationList = v as FormEducationEntry[];
+          count++;
+        }
+        continue;
+      }
+
+      if (k === "workExperienceList" && Array.isArray(v)) {
+        const isDefaultBlank =
+          values.workExperienceList.length === 1 &&
+          !values.workExperienceList[0].role.trim() &&
+          !values.workExperienceList[0].company.trim();
+        if (values.workExperienceList.length === 0 || isDefaultBlank) {
+          patch.workExperienceList = v as FormWorkExperienceEntry[];
+          count++;
+        }
+        continue;
+      }
+
+      if (k === "projectsList" && Array.isArray(v)) {
+        const isDefaultBlank =
+          values.projectsList.length === 1 &&
+          !values.projectsList[0].title.trim() &&
+          !values.projectsList[0].description.trim();
+        if (values.projectsList.length === 0 || isDefaultBlank) {
+          patch.projectsList = v as FormProjectEntry[];
+          count++;
+        }
+        continue;
+      }
+
+      if (k === "certificationsList" && Array.isArray(v)) {
+        const isDefaultBlank =
+          values.certificationsList.length === 1 &&
+          !values.certificationsList[0].name.trim() &&
+          !values.certificationsList[0].issuer.trim();
+        if (values.certificationsList.length === 0 || isDefaultBlank) {
+          patch.certificationsList = v as FormCertificationEntry[];
+          count++;
+        }
+        continue;
+      }
+
       if (Array.isArray(cur) && Array.isArray(v)) {
         if (cur.length === 0 && v.length > 0) {
-          (patch[k] as string[]) = v;
+          (patch[k] as string[]) = v as string[];
           count++;
         }
       } else if ((cur === "" || cur == null) && v != null && v !== "") {
@@ -205,14 +424,29 @@ export function useCandidateForm(
   };
 
   const reset = () => {
-    setValues(EMPTY);
+    setValues({
+      ...EMPTY,
+      educationList: [createEmptyEducation("edu-1")],
+      workExperienceList: [createEmptyWorkExperience("exp-1")],
+      projectsList: [createEmptyProject("proj-1")],
+      certificationsList: [createEmptyCertification("cert-1")],
+    });
     setTouched(new Set());
     setAttempted(false);
     setStatus("idle");
   };
 
   return {
-    values, set, bind, errors, shown, touch, prefill, submit, reset, status,
+    values,
+    set,
+    bind,
+    errors,
+    shown,
+    touch,
+    prefill,
+    submit,
+    reset,
+    status,
   };
 }
 

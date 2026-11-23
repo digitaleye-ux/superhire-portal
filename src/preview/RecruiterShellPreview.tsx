@@ -16,6 +16,10 @@ import type { CandidateFormValues } from "@/components/recruiter/SubmitCandidate
 import type { CandidateItem } from "@/proto/candidate-cards/data";
 import { DUMMY_CANDIDATE_ITEMS } from "@/proto/candidate-cards/data";
 import { buildDetail } from "@/proto/candidate-panel/data";
+import {
+  buildCandidateProfile,
+  saveSubmittedCandidateProfile,
+} from "@/proto/candidate-profile/profileData";
 import VariantIntegratedSpine from "@/proto/candidate-panel/Variant3Conversation";
 import { SortFilterBar } from "@/components/recruiter/SortFilterBar";
 import type { FilterState } from "@/components/recruiter/SortFilterBar";
@@ -421,6 +425,7 @@ function detailFor(job: DummyJob): JobDetailData {
 
 function buildInitialCandidateValues(c: CandidateItem): Partial<CandidateFormValues> {
   const detail = buildDetail(c);
+  const profile = buildCandidateProfile(detail);
   const expMatch = c.experience.match(/[\d.]+/);
   const curCtcMatch = c.currentCtc.match(/[\d.]+/);
   const expCtcMatch = c.expectedCtc.match(/[\d.]+/);
@@ -428,16 +433,20 @@ function buildInitialCandidateValues(c: CandidateItem): Partial<CandidateFormVal
     typeof File !== "undefined"
       ? new File(
           ["Candidate resume on file"],
-          detail.resumeName || `${c.name.replace(/\s+/g, "_")}_Resume.pdf`,
+          profile.resumeFileName || detail.resumeName || `${c.name.replace(/\s+/g, "_")}_Resume.pdf`,
           { type: "application/pdf" }
         )
       : null;
+
+  const portfolioLink = profile.links.find((l) => l.label.toLowerCase() === "portfolio");
 
   return {
     name: c.name,
     email: detail.email || `${c.name.toLowerCase().replace(/\s+/g, ".")}@gmail.com`,
     phoneCode: "+91",
     phone: detail.phone.replace(/[^\d]/g, "").slice(-10) || "9845061834",
+    location: profile.location || `${c.location}, India`,
+    workModePreference: profile.workModePreference || "Hybrid / Remote",
     experience: expMatch ? expMatch[0] : "5",
     working: "Yes",
     company: detail.designation.includes(" at ") ? detail.designation.split(" at ")[1] : "Zeta",
@@ -446,9 +455,47 @@ function buildInitialCandidateValues(c: CandidateItem): Partial<CandidateFormVal
     notice: c.noticePeriod || "30 days",
     noticeNegotiable: "Yes",
     education: "BE/B.Tech from Tier 1 College (IIT, BITS, NIT, DTU etc)",
-    linkedin: `linkedin.com/in/${c.name.toLowerCase().replace(/\s+/g, "")}`,
-    github: c.github ? c.github.replace(/^https?:\/\//, "") : "",
-    portfolio: "",
+    educationList: profile.education.map((edu) => {
+      const [startYear = "2016", endYear = "2020"] = edu.duration.split(/\s*[–-]\s*/);
+      return {
+        id: edu.id,
+        degree: edu.degree,
+        institution: edu.institution,
+        startYear: startYear.trim(),
+        endYear: endYear.trim(),
+        location: edu.location,
+        grade: edu.grade,
+      };
+    }),
+    workExperienceList: profile.workExperience.map((exp) => {
+      const [startDate = "Jan 2022", endDate = "Present"] = exp.duration.split(/\s*[–-]\s*/);
+      return {
+        id: exp.id,
+        role: exp.role,
+        company: exp.company,
+        startDate: startDate.trim(),
+        endDate: endDate.trim(),
+        location: exp.location,
+        highlightsText: exp.highlights.join("\n"),
+      };
+    }),
+    projectsList: profile.projects.map((proj) => ({
+      id: proj.id,
+      title: proj.title,
+      subtitle: proj.subtitle,
+      description: proj.description,
+    })),
+    certificationsList: profile.certifications.map((cert) => ({
+      id: cert.id,
+      name: cert.name,
+      issuer: cert.issuer,
+      issuedDate: cert.issuedDate,
+      credentialId: cert.credentialId,
+    })),
+    skillsList: profile.skills,
+    linkedin: `linkedin.com/in/${c.name.toLowerCase().replace(/\s+/g, "-")}`,
+    github: c.github ? c.github.replace(/^https?:\/\//, "") : `github.com/${c.name.toLowerCase().replace(/\s+/g, "-")}`,
+    portfolio: portfolioLink ? portfolioLink.handle : `${c.name.toLowerCase().replace(/\s+/g, "-")}.dev`,
     resume: mockResume,
     verifiedRequirements: [],
     remarks: "",
@@ -574,24 +621,33 @@ export function RecruiterShellPreview() {
 
   const handleCreateCandidateSubmission = (
     values: CandidateFormValues,
-    sourceCandidate: CandidateItem,
+    sourceCandidate: CandidateItem | null,
     targetJob: DummyJob
   ) => {
-    const expClean = values.experience?.trim() || sourceCandidate.experience;
+    const expClean = values.experience?.trim() || sourceCandidate?.experience || "5";
     const expFormatted = expClean.includes("yr") ? expClean : `${expClean} yrs`;
+    const candidateName = values.name?.trim() || sourceCandidate?.name || "Candidate";
+    const initials =
+      sourceCandidate?.initials ||
+      candidateName
+        .split(/\s+/)
+        .map((w) => w[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase();
 
     const newCandidate: CandidateItem = {
       id: Date.now(),
-      name: values.name || sourceCandidate.name,
-      initials: sourceCandidate.initials,
+      name: candidateName,
+      initials,
       company: targetJob.company,
       domain: targetJob.domain,
       role: targetJob.role,
       experience: expFormatted,
-      noticePeriod: values.notice || sourceCandidate.noticePeriod,
-      location: formatLocations(targetJob.locations),
-      currentCtc: values.currentCtc ? `₹${values.currentCtc} LPA` : sourceCandidate.currentCtc,
-      expectedCtc: values.expectedCtc ? `₹${values.expectedCtc} LPA` : sourceCandidate.expectedCtc,
+      noticePeriod: values.notice || sourceCandidate?.noticePeriod || "30 days",
+      location: values.location?.split(",")[0]?.trim() || formatLocations(targetJob.locations),
+      currentCtc: values.currentCtc ? `₹${values.currentCtc} LPA` : sourceCandidate?.currentCtc || "₹30 LPA",
+      expectedCtc: values.expectedCtc ? `₹${values.expectedCtc} LPA` : sourceCandidate?.expectedCtc || "₹42 LPA",
       status: "submitted",
       stageName: "Application Dispatched",
       stageSubtext: "Pending employer acknowledgment",
@@ -600,20 +656,33 @@ export function RecruiterShellPreview() {
       commissionLabel: targetJob.earningModel === "closure" ? "closure payout on joining + 1 mo" : "shortlist payout",
       earningModel: targetJob.earningModel,
       submitted: "Submitted today",
-      matchScore: sourceCandidate.matchScore,
-      topSkills: sourceCandidate.topSkills,
+      matchScore: sourceCandidate?.matchScore || "94% Match",
+      topSkills:
+        values.skillsList && values.skillsList.length > 0
+          ? values.skillsList.slice(0, 4)
+          : sourceCandidate?.topSkills || ["TypeScript", "React", "System Design"],
       github: values.github
-        ? (values.github.startsWith("http") ? values.github : `https://${values.github}`)
-        : sourceCandidate.github,
+        ? values.github.startsWith("http")
+          ? values.github
+          : `https://${values.github}`
+        : sourceCandidate?.github,
     };
 
+    saveSubmittedCandidateProfile(newCandidate.id, values);
     setCandidates((prev) => [newCandidate, ...prev]);
-    toast.success(`Candidate submitted for ${targetJob.role}`, {
-      description: `Submitted ${values.name || sourceCandidate.name} to ${targetJob.company}. Tracking application on Track page.`,
-    });
-    setAddRoleCandidate(null);
-    setAddRoleJob(null);
-    setSelectedId(newCandidate.id);
+
+    if (sourceCandidate) {
+      toast.success(`Candidate submitted for ${targetJob.role}`, {
+        description: `Submitted ${candidateName} to ${targetJob.company}. Tracking application on Track page.`,
+      });
+      setAddRoleCandidate(null);
+      setAddRoleJob(null);
+      setSelectedId(newCandidate.id);
+    } else {
+      toast.success(`Submitted ${candidateName} to ${targetJob.company}`, {
+        description: `Profile saved — view full details under Track candidates.`,
+      });
+    }
   };
 
   const visibleJobs = DUMMY_JOBS.filter((job) => {
@@ -1071,6 +1140,9 @@ export function RecruiterShellPreview() {
                 key={selectedJob.id}
                 job={detailFor(selectedJob)}
                 onClose={() => setSelectedId(null)}
+                onSubmit={(values) => {
+                  handleCreateCandidateSubmission(values, null, selectedJob);
+                }}
               />
             ) : (
               <JobDetail

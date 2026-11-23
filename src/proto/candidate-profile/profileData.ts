@@ -1,4 +1,5 @@
 import type { CandidateDetail } from "@/proto/candidate-panel/data";
+import type { CandidateFormValues } from "@/components/recruiter/SubmitCandidate/SubmitCandidate.types";
 
 export interface WorkExperienceEntry {
   id: string;
@@ -104,7 +105,144 @@ export const PROFILE_TOC_SECTIONS: ProfileTocItem[] = [
   { id: "skills", label: "Skills", shortLabel: "Skills" },
 ];
 
+const SUBMITTED_PROFILES = new Map<number, CandidateProfileData>();
+
+export function saveSubmittedCandidateProfile(
+  candidateId: number,
+  values: CandidateFormValues
+): void {
+  const slug = (values.name || "candidate")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
+  const cleanHandle = (u: string) => u.trim().replace(/^https?:\/\/(www\.)?/i, "").replace(/\/$/, "");
+  const ensureUrl = (u: string) => (/^https?:\/\//i.test(u.trim()) ? u.trim() : `https://${u.trim()}`);
+
+  const links: ExternalLinkEntry[] = [];
+  if (values.linkedin?.trim()) {
+    links.push({
+      id: "lnk-1",
+      label: "LinkedIn",
+      url: ensureUrl(values.linkedin),
+      handle: cleanHandle(values.linkedin),
+      verified: true,
+    });
+  }
+  if (values.github?.trim()) {
+    links.push({
+      id: "lnk-2",
+      label: "GitHub",
+      url: ensureUrl(values.github),
+      handle: cleanHandle(values.github),
+      verified: true,
+    });
+  }
+  if (values.portfolio?.trim()) {
+    links.push({
+      id: "lnk-3",
+      label: "Portfolio",
+      url: ensureUrl(values.portfolio),
+      handle: cleanHandle(values.portfolio),
+    });
+  }
+
+  const education: EducationEntry[] = (values.educationList || [])
+    .filter((e) => e.degree.trim() || e.institution.trim())
+    .map((e, idx) => ({
+      id: e.id || `edu-${idx + 1}`,
+      degree: e.degree.trim() || "Degree",
+      institution: e.institution.trim() || "University",
+      duration: [e.startYear.trim(), e.endYear.trim()].filter(Boolean).join(" – ") || "2018 – 2022",
+      grade: e.grade.trim() || "First Class",
+      location: e.location.trim() || "India",
+    }));
+
+  const workExperience: WorkExperienceEntry[] = (values.workExperienceList || [])
+    .filter((w) => w.role.trim() || w.company.trim())
+    .map((w, idx) => {
+      const highlights = w.highlightsText
+        .split(/\r?\n/)
+        .map((line) => line.replace(/^[•\-*]\s*/, "").trim())
+        .filter(Boolean);
+      return {
+        id: w.id || `exp-${idx + 1}`,
+        role: w.role.trim() || "Software Engineer",
+        company: w.company.trim() || values.company || "Company",
+        duration: [w.startDate.trim(), w.endDate.trim()].filter(Boolean).join(" – ") || "Present",
+        tenure: "",
+        location: w.location.trim() || values.location || "Bengaluru",
+        current: idx === 0,
+        highlights:
+          highlights.length > 0
+            ? highlights
+            : ["Delivered key product and engineering initiatives."],
+        skills: [],
+      };
+    });
+
+  const projects: ProjectEntry[] = (values.projectsList || [])
+    .filter((p) => p.title.trim() || p.description.trim())
+    .map((p, idx) => ({
+      id: p.id || `proj-${idx + 1}`,
+      title: p.title.trim() || `Project ${idx + 1}`,
+      subtitle: p.subtitle.trim() || "2025",
+      description: p.description.trim() || "",
+      techStack: [],
+    }));
+
+  const certifications: CertificationEntry[] = (values.certificationsList || [])
+    .filter((c) => c.name.trim() || c.issuer.trim())
+    .map((c, idx) => ({
+      id: c.id || `cert-${idx + 1}`,
+      name: c.name.trim() || "Certification",
+      issuer: c.issuer.trim() || "Issuer",
+      issuedDate: c.issuedDate.trim() || "2025",
+      credentialId: c.credentialId.trim() || "VERIFIED",
+    }));
+
+  const resumeSizeKb = values.resume
+    ? values.resume.size > 1024 * 1024
+      ? `${(values.resume.size / 1024 / 1024).toFixed(1)} MB`
+      : `${Math.max(1, Math.round(values.resume.size / 1024))} KB`
+    : "412 KB";
+
+  const expFormatted = values.experience?.trim()
+    ? values.experience.includes("yr")
+      ? values.experience.trim()
+      : `${values.experience.trim()} yrs`
+    : "5 yrs";
+
+  SUBMITTED_PROFILES.set(candidateId, {
+    fullName: values.name.trim() || "Candidate",
+    email: values.email.trim() || `${slug}@gmail.com`,
+    phone: `${values.phoneCode || "+91"} ${values.phone.trim()}`,
+    linkedinUrl: values.linkedin?.trim() ? ensureUrl(values.linkedin) : `https://linkedin.com/in/${slug}`,
+    linkedinVerified: true,
+    location: values.location?.trim() || "Bengaluru, India",
+    preferredLocations: values.location?.trim() || "Bengaluru, Remote",
+    workModePreference: values.workModePreference || "Hybrid / Remote",
+    currentCtc: values.currentCtc ? `₹${values.currentCtc} LPA` : "₹30 LPA",
+    expectedCtc: values.expectedCtc ? `₹${values.expectedCtc} LPA` : "₹42 LPA",
+    noticePeriod: values.notice || "30 days",
+    totalExperience: expFormatted,
+    summary: "",
+    resumeFileName: values.resume?.name || `cv-${slug}.pdf`,
+    resumeUploadedAt: "23/11/26",
+    resumeFileSize: resumeSizeKb,
+    education,
+    workExperience,
+    projects,
+    certifications,
+    links,
+    skills: values.skillsList.length > 0 ? values.skillsList : ["TypeScript", "React", "System Design"],
+    skillGroups: [],
+  });
+}
+
 export function buildCandidateProfile(detail: CandidateDetail): CandidateProfileData {
+  const custom = SUBMITTED_PROFILES.get(detail.item.id);
+  if (custom) return custom;
   const slug = detail.name
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
