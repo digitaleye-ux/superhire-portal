@@ -140,9 +140,6 @@ export function HiringProgressTracker({ detail }: HiringProgressTrackerProps) {
                         {stage.badgeLabel}
                       </span>
                     )}
-
-                    {/* Upcoming indicator */}
-                    {isUpcoming && <span className={s.upcomingTag}>Upcoming</span>}
                   </div>
                 </div>
 

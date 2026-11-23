@@ -86,23 +86,8 @@ export function CandidateOverviewHeader({
   return (
     <header className={s.header}>
       <div className={s.headMain}>
-        {/* Top row: Status tag close to close button on right */}
+        {/* Top row: Candidate Name + LinkedIn on left | Status tag + Close button on right */}
         <div className={s.topRow}>
-          <div className={s.topRowRight}>
-            <StatusTag status={detail.item.status} />
-            <button
-              type="button"
-              className={s.close}
-              aria-label="Close candidate panel"
-              onClick={onClose}
-            >
-              <XIcon size="md" />
-            </button>
-          </div>
-        </div>
-
-        {/* Head Title: Candidate Name (20px semibold) + LinkedIn, Applied for role at company, Meta row */}
-        <div className={s.headTitle}>
           <div className={s.candidateRow}>
             <h2 className={s.candidateTitle} title={detail.name}>
               {detail.name}
@@ -125,6 +110,21 @@ export function CandidateOverviewHeader({
             </div>
           </div>
 
+          <div className={s.topRowRight}>
+            <StatusTag status={detail.item.status} />
+            <button
+              type="button"
+              className={s.close}
+              aria-label="Close candidate panel"
+              onClick={onClose}
+            >
+              <XIcon size="md" />
+            </button>
+          </div>
+        </div>
+
+        {/* Subtitle: Role at Company & Meta row */}
+        <div className={s.headTitle}>
           {showJobInline && (
             <p
               className={s.roleAndCompany}

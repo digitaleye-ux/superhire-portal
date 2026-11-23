@@ -48,37 +48,24 @@
 .topRow {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
+  gap: var(--space-3x);
   width: 100%;
-}
-
-.topRowRight {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2x);
-}
-
-.headerLeft {
-  display: flex;
-  flex: 1 0 0;
-  min-width: 0;
-  align-items: center;
-  gap: var(--space-2x);
-}
-
-.headTitle {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2x);
-  width: 100%;
-  min-width: 0;
 }
 
 .candidateRow {
   display: flex;
   align-items: center;
   gap: var(--space-2x);
-  width: 100%;
+  min-width: 0;
+  flex: 1;
+}
+
+.topRowRight {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2x);
+  flex-shrink: 0;
 }
 
 /* 20px semibold title matching JobDetail .role */
