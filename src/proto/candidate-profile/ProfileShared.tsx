@@ -591,13 +591,6 @@ export function CandidateProfileSections({
                 <span className={s.entryDate}>{proj.subtitle}</span>
               </div>
               <p className={s.projectDesc}>{proj.description}</p>
-              <div className={s.inlineTagRow}>
-                {proj.techStack.map((tech) => (
-                  <span key={tech} className={s.miniTag}>
-                    {tech}
-                  </span>
-                ))}
-              </div>
             </div>
           ))}
         </div>

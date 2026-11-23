@@ -91,7 +91,7 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: var(--space-6x);
+  padding: var(--space-8x);
   scrollbar-width: none;
 }
 
@@ -106,14 +106,14 @@
 .sectionsStream {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6x);
+  gap: var(--space-8x);
   padding-bottom: var(--space-8x);
 }
 
 .sectionEditorial {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3x);
+  gap: var(--space-5x);
   scroll-margin-top: var(--space-4x);
 }
 
@@ -172,13 +172,13 @@
 .kvGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-3x) var(--space-4x);
+  gap: var(--space-5x) var(--space-6x);
 }
 
 .kvItem {
   display: flex;
   flex-direction: column;
-  gap: var(--space-x-2);
+  gap: var(--space-1x);
   min-width: 0;
 }
 
@@ -333,13 +333,13 @@
 .entryList {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4x);
+  gap: var(--space-6x);
 }
 
 .experienceList {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6x);
+  gap: var(--space-8x);
 }
 
 .entryBlock,
@@ -347,14 +347,14 @@
 .projectItem {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2x);
+  gap: var(--space-3x);
 }
 
 .projectCard {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2x);
-  padding: var(--space-3x);
+  gap: var(--space-3x);
+  padding: var(--space-4x);
   border-radius: var(--radius-md);
   border: 1px solid var(--semantics-border-default);
   background: var(--semantics-surface-secondary);
@@ -364,33 +364,36 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--space-3x);
+  gap: var(--space-4x);
 }
 
 .expRoleGroup {
   display: flex;
   flex-direction: column;
-  gap: var(--space-x-2);
+  gap: var(--space-1x);
   min-width: 0;
 }
 
-/* Entry Title: Label-1 / Body-1 Semibold (14px / 20px) */
+/* Entry Title: text-style-label-2 in primary (14px / 20px Medium, 0 letter-spacing) */
 .entryTitle {
   margin: 0;
   font-family: var(--font-family-sans);
   font-size: var(--font-size-14);
   line-height: var(--line-height-14);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
   color: var(--semantics-text-primary);
 }
 
+/* College, Company & Certification details: text-style-label-2 in secondary */
 .expCompanyLine,
 .entrySub {
   margin: 0;
   font-family: var(--font-family-sans);
   font-size: var(--font-size-14);
   line-height: var(--line-height-14);
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
   color: var(--semantics-text-secondary);
 }
 
@@ -398,15 +401,17 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: var(--space-x-2);
+  gap: var(--space-1x);
   flex-shrink: 0;
 }
 
+/* Year, Date: text-style-label-2 in tertiary (14px / 20px Medium, 0 letter-spacing) */
 .entryDate {
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-12);
-  line-height: var(--line-height-12);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
   font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
   color: var(--semantics-text-tertiary);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -414,8 +419,8 @@
 
 .expTenure {
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-10);
-  line-height: var(--line-height-10);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
   font-weight: var(--font-weight-medium);
   color: var(--semantics-text-tertiary);
   font-variant-numeric: tabular-nums;
@@ -435,23 +440,29 @@
   font-weight: var(--font-weight-medium);
 }
 
+/* Experience Details: text-style-body-2 in secondary (14px / 20px Regular) */
 .bulletList {
-  margin: var(--space-1x) 0 0;
+  margin: var(--space-2x) 0 0;
   padding-inline-start: var(--space-5x);
   display: flex;
   flex-direction: column;
-  gap: var(--space-1x);
+  gap: var(--space-2x);
   font-family: var(--font-family-sans);
   font-size: var(--font-size-14);
   line-height: var(--line-height-14);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-none);
   color: var(--semantics-text-secondary);
 }
 
+/* Project Details: text-style-body-2 in secondary (14px / 20px Regular) */
 .projectDesc {
   margin: 0;
   font-family: var(--font-family-sans);
   font-size: var(--font-size-14);
   line-height: var(--line-height-14);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-none);
   color: var(--semantics-text-secondary);
 }
 
@@ -480,13 +491,13 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--space-3x);
+  gap: var(--space-4x);
 }
 
 .certMain {
   display: flex;
   flex-direction: column;
-  gap: var(--space-x-2);
+  gap: var(--space-1x);
   min-width: 0;
 }
 
@@ -494,16 +505,16 @@
 
 .linksGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: var(--space-3x);
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-4x);
 }
 
 .linkCard {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-2x);
-  padding: var(--space-3x);
+  gap: var(--space-3x);
+  padding: var(--space-4x);
   border-radius: var(--radius-md);
   border: 1px solid var(--semantics-border-default);
   background: var(--semantics-background-primary);
@@ -530,7 +541,7 @@
 .linkCardLeft {
   display: flex;
   flex-direction: column;
-  gap: var(--space-x-2);
+  gap: var(--space-1x);
   min-width: 0;
 }
 
@@ -557,13 +568,13 @@
 .skillGroupsStack {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3x);
+  gap: var(--space-4x);
 }
 
 .skillGroupRow {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2x);
+  gap: var(--space-3x);
 }
 
 .skillGroupTitle {
@@ -577,7 +588,7 @@
 .skillChipsWrap {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2x);
+  gap: var(--space-3x);
 }
 
 .skillChip {
