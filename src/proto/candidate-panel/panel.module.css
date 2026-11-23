@@ -57,6 +57,7 @@
   min-height: 0;
   width: 100%;
   overflow: hidden;
+  margin-top: var(--space-4x);
 }
 
 /* Matches JobDetail & SubmitCandidate headMain spacing */

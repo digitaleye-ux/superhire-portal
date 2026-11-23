@@ -28,6 +28,7 @@
   gap: var(--space-2x);
   padding: var(--space-2x) var(--space-6x);
   background: var(--semantics-background-primary);
+  border-top: 1px solid var(--semantics-border-default);
   border-bottom: 1px solid var(--semantics-border-default);
   overflow-x: auto;
   flex-shrink: 0;
@@ -47,11 +48,12 @@
   border-radius: var(--radius-md);
   border: 1px solid transparent;
   background: transparent;
-  color: var(--semantics-text-secondary);
+  color: var(--semantics-text-tertiary);
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-12);
-  line-height: var(--line-height-12);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
   font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
   white-space: nowrap;
   cursor: pointer;
   flex-shrink: 0;
@@ -59,8 +61,13 @@
   transition:
     background-color 140ms ease-out,
     color 140ms ease-out,
-    border-color 140ms ease-out,
     transform 120ms ease-out;
+}
+
+.tocPill svg {
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+  flex-shrink: 0;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -81,10 +88,10 @@
 
 .tocPillActive,
 .tocPillActive:hover {
-  background: var(--semantics-surface-brand-subtle);
-  border-color: var(--semantics-interactive-subtle-border);
-  color: var(--semantics-interactive-primary);
-  font-weight: var(--font-weight-semibold);
+  background: var(--semantics-primary-100, var(--primitives-primary-100, #EBE9FE));
+  border: 1px solid transparent;
+  color: var(--semantics-text-link);
+  font-weight: var(--font-weight-medium);
 }
 
 .tocScrollArea {

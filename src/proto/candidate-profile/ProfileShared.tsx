@@ -19,12 +19,12 @@ export function TocSectionIcon({
   className?: string;
 }) {
   const props = {
-    width: 15,
-    height: 15,
+    width: 16,
+    height: 16,
     viewBox: "0 0 24 24",
     fill: "none",
     stroke: "currentColor",
-    strokeWidth: 1.9,
+    strokeWidth: 2,
     strokeLinecap: "round" as const,
     strokeLinejoin: "round" as const,
     className,
