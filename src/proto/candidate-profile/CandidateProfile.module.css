@@ -264,26 +264,31 @@
 .resumeFileMeta {
   display: flex;
   flex-direction: column;
-  gap: var(--space-x-2);
+  gap: var(--space-1x);
   flex: 1;
   min-width: 0;
 }
 
+/* Resume Name: text-style-label-2 in primary (14px / 20px Medium) */
 .resumeFileName {
   font-family: var(--font-family-sans);
   font-size: var(--font-size-14);
   line-height: var(--line-height-14);
-  font-weight: var(--font-weight-semibold);
-  color: var(--semantics-interactive-primary);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+  color: var(--semantics-text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+/* Upload Details: text-style-label-2 in tertiary (14px / 20px Medium) */
 .resumeSubMeta {
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-12);
-  line-height: var(--line-height-12);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
   color: var(--semantics-text-tertiary);
   font-variant-numeric: tabular-nums;
 }

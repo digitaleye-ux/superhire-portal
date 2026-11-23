@@ -457,20 +457,6 @@ export function CandidateProfileSections({
         </div>
 
         <div className={s.resumeDropCard}>
-          <div className={s.resumeFileBadge} aria-hidden="true">
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-          </div>
           <div className={s.resumeFileMeta}>
             <span className={s.resumeFileName}>{profile.resumeFileName}</span>
             <span className={s.resumeSubMeta}>
