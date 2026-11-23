@@ -28,7 +28,6 @@
   gap: var(--space-2x);
   padding: var(--space-2x) var(--space-6x);
   background: var(--semantics-background-primary);
-  border-top: 1px solid var(--semantics-border-default);
   border-bottom: 1px solid var(--semantics-border-default);
   overflow-x: auto;
   flex-shrink: 0;
@@ -88,7 +87,7 @@
 
 .tocPillActive,
 .tocPillActive:hover {
-  background: var(--semantics-primary-100, var(--primitives-primary-100, #EBE9FE));
+  background: var(--semantics-primary-50, var(--semantics-surface-brand-subtle, var(--primitives-primary-50, #FAFAFF)));
   border: 1px solid transparent;
   color: var(--semantics-text-link);
   font-weight: var(--font-weight-medium);
