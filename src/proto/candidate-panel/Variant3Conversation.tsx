@@ -1,18 +1,16 @@
 import type { CandidateDetail } from "./data";
-import {
-  CandidateOverviewHeader,
-  NotesSection,
-} from "./shared";
+import { CandidateOverviewHeader } from "./shared";
 import { HiringProgressTracker } from "@/proto/hiring-progress/HiringProgressTracker";
+import { NotesPrivateScratchpad } from "@/proto/recruiter-notes/NotesPrivateScratchpad";
 import s from "./panel.module.css";
 
 /**
- * Candidate Detail Side Panel — Seamless Spine
+ * Candidate Detail Side Panel — Seamless Spine + Private Scratchpad Recruiter Notes
  *
  * Hierarchy:
- *   1. Candidate overview header (tightened, tag next to close button, details pushed up)
- *   2. 6-Milestone Hiring progress (Seamless Spine, 16px heading, 14px body descriptions)
- *   3. Notes (Recruiter & Employer)
+ *   1. Candidate overview header
+ *   2. 6-Milestone Hiring progress (Seamless Spine)
+ *   3. Private Recruiter notes (Scratchpad)
  */
 export default function VariantIntegratedSpine({
   detail,
@@ -34,12 +32,9 @@ export default function VariantIntegratedSpine({
 
         <hr className={s.divider} />
 
-        {/* 3. Recruiter & employer notes */}
-        <section className={s.section} aria-label="Notes">
-          <NotesSection
-            recruiterNotes={detail.recruiterNotes}
-            employerNotes={detail.employerNotes}
-          />
+        {/* 3. Private Recruiter notes (Scratchpad) */}
+        <section className={s.section} aria-label="Recruiter notes">
+          <NotesPrivateScratchpad detail={detail} />
         </section>
       </div>
     </aside>

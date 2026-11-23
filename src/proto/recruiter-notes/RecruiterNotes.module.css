@@ -1,0 +1,577 @@
+/* ==========================================================================
+   Recruiter Notes Prototype Exploration (/emil-prototype)
+   Adheres strictly to Bolt Design System tokens & Emil Kowalski UI craft rules:
+   - 16px section headings, 14px note body, 12px tabular-nums metadata
+   - 16px textarea inputs (prevents iOS zoom)
+   - No transition: all; tactile active:scale(0.96); visible focus rings
+   ========================================================================== */
+
+.sectionWrap {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   Shared Header & Private Pill
+   -------------------------------------------------------------------------- */
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2x);
+}
+
+.titleGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2x);
+  min-width: 0;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-16);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-heading);
+  color: var(--semantics-text-primary);
+}
+
+.privateBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--semantics-badge-neutral-bg);
+  border: 1px solid var(--semantics-badge-neutral-border);
+  color: var(--semantics-text-secondary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.helperText {
+  margin: 4px 0 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14, 20px);
+  font-weight: var(--font-weight-regular);
+  color: var(--semantics-text-tertiary);
+}
+
+/* --------------------------------------------------------------------------
+   Shared Form & Textarea (16px minimum font size per emil-forms-and-inputs)
+   -------------------------------------------------------------------------- */
+
+.composerForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2x);
+  margin-top: var(--space-3x);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 76px;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid var(--semantics-border-strong);
+  background: var(--semantics-background-primary);
+  color: var(--semantics-text-primary);
+  font-family: var(--font-family-sans);
+  font-size: 16px; /* Prevents iOS Safari zoom on focus */
+  line-height: 22px;
+  resize: vertical;
+  transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
+}
+
+.textarea::placeholder {
+  color: var(--semantics-text-placeholder);
+  font-size: var(--font-size-14);
+}
+
+.textarea:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 1px;
+  border-color: var(--semantics-interactive-primary);
+}
+
+.composerFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2x);
+}
+
+.shortcutHint {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  color: var(--semantics-text-tertiary);
+  user-select: none;
+}
+
+.composerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2x);
+  margin-left: auto;
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius-md, 8px);
+  background: var(--semantics-interactive-primary);
+  color: var(--semantics-text-on-brand);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13, 13px);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 150ms ease-out, transform 120ms ease-out;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btnPrimary:hover:not(:disabled) {
+    background: var(--semantics-interactive-primary-hover, #4f35d2);
+  }
+}
+
+.btnPrimary:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.btnPrimary:disabled {
+  background: var(--semantics-surface-secondary);
+  color: var(--semantics-text-placeholder);
+  cursor: not-allowed;
+}
+
+.btnPrimary:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 2px;
+}
+
+.btnCancel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--semantics-border-default);
+  border-radius: var(--radius-md, 8px);
+  background: var(--semantics-background-primary);
+  color: var(--semantics-text-secondary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13, 13px);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 150ms ease-out, color 150ms ease-out, transform 120ms ease-out;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btnCancel:hover {
+    background: var(--semantics-surface-secondary);
+    color: var(--semantics-text-primary);
+  }
+}
+
+.btnCancel:active {
+  transform: scale(0.96);
+}
+
+.btnCancel:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   VARIANT 1: Quiet Stream (Borderless Typographic List + Bottom Add Trigger)
+   ========================================================================== */
+
+.streamList {
+  list-style: none;
+  margin: var(--space-4x) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.streamItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: var(--space-3x) 0;
+  border-top: 1px solid var(--semantics-border-default);
+}
+
+.streamItem:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.noteBody {
+  margin: 0;
+  max-width: 65ch;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14, 20px);
+  font-weight: var(--font-weight-regular);
+  color: var(--semantics-text-primary);
+  white-space: pre-wrap;
+  text-wrap: pretty;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2x);
+  min-height: 22px;
+}
+
+.metaTimestamp {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-regular);
+  color: var(--semantics-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.noteActions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3x);
+  flex-shrink: 0;
+}
+
+.actionLink {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--semantics-text-tertiary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: color 150ms ease-out, background-color 150ms ease-out, transform 120ms ease-out;
+}
+
+/* Extended hit area for small action buttons */
+.actionLink::before {
+  content: "";
+  position: absolute;
+  inset: -6px -4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .actionLink:hover {
+    color: var(--semantics-text-primary);
+    background: var(--semantics-surface-secondary);
+  }
+}
+
+.actionLink:active {
+  transform: scale(0.96);
+}
+
+.actionLink:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 1px;
+}
+
+.actionLinkDanger {
+  color: var(--semantics-text-tertiary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .actionLinkDanger:hover {
+    color: var(--semantics-text-danger);
+    background: var(--semantics-surface-danger-subtle, #fef2f2);
+  }
+}
+
+.addNoteTrigger {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: var(--space-3x);
+  height: 32px;
+  padding: 0 12px 0 10px;
+  border: 1px solid var(--semantics-border-default);
+  border-radius: var(--radius-md, 8px);
+  background: var(--semantics-background-primary);
+  color: var(--semantics-text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13, 13px);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 150ms ease-out, border-color 150ms ease-out, transform 120ms ease-out;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .addNoteTrigger:hover {
+    background: var(--semantics-surface-secondary);
+    border-color: var(--semantics-border-strong);
+  }
+}
+
+.addNoteTrigger:active {
+  transform: scale(0.96);
+}
+
+.addNoteTrigger:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   VARIANT 2: Private Scratchpad (Tinted Dossier Surface + Always-Ready Bar)
+   ========================================================================== */
+
+.scratchpadSurface {
+  margin-top: var(--space-3x);
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid var(--semantics-border-default);
+  background: var(--semantics-surface-secondary, #f8fafc);
+  overflow: hidden;
+}
+
+.scratchpadScopeBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2x);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--semantics-border-default);
+  background: var(--semantics-background-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  color: var(--semantics-text-tertiary);
+}
+
+.scratchpadList {
+  list-style: none;
+  margin: 0;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.scratchpadEntry {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 10px;
+  border-left: 2px solid var(--semantics-interactive-primary);
+}
+
+.scratchpadEmpty {
+  padding: 16px 12px 8px;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13, 13px);
+  line-height: 18px;
+  color: var(--semantics-text-tertiary);
+}
+
+.quickCaptureForm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px 12px;
+  border-top: 1px solid var(--semantics-border-default);
+  background: var(--semantics-background-primary);
+}
+
+.quickInput {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 10px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  border: 1px solid var(--semantics-border-default);
+  background: var(--semantics-surface-secondary, #f8fafc);
+  color: var(--semantics-text-primary);
+  font-family: var(--font-family-sans);
+  font-size: 16px;
+  line-height: 20px;
+  resize: none;
+  transition: border-color 150ms ease-out, background-color 150ms ease-out;
+}
+
+.quickInputExpanded {
+  min-height: 68px;
+  background: var(--semantics-background-primary);
+  border-color: var(--semantics-border-strong);
+  resize: vertical;
+}
+
+.quickInput::placeholder {
+  color: var(--semantics-text-placeholder);
+  font-size: var(--font-size-13, 13px);
+}
+
+.quickInput:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 1px;
+  background: var(--semantics-background-primary);
+}
+
+/* ==========================================================================
+   VARIANT 3: Guided Cards (Contained Note Cards + Starter Prompt Chips)
+   ========================================================================== */
+
+.headerAddBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 28px;
+  padding: 0 10px 0 8px;
+  border: 1px solid var(--semantics-border-default);
+  border-radius: var(--radius-md, 8px);
+  background: var(--semantics-background-primary);
+  color: var(--semantics-text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 150ms ease-out, border-color 150ms ease-out, transform 120ms ease-out;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .headerAddBtn:hover {
+    background: var(--semantics-surface-secondary);
+    border-color: var(--semantics-border-strong);
+  }
+}
+
+.headerAddBtn:active {
+  transform: scale(0.96);
+}
+
+.headerAddBtn:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 2px;
+}
+
+.cardList {
+  list-style: none;
+  margin: var(--space-3x) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2x);
+}
+
+.noteCard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid var(--semantics-border-default);
+  background: var(--semantics-background-primary);
+}
+
+.promptBar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.promptBarLabel {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  color: var(--semantics-text-tertiary);
+}
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.promptChip {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--semantics-border-default);
+  background: var(--semantics-surface-secondary);
+  color: var(--semantics-text-secondary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 150ms ease-out, color 150ms ease-out, border-color 150ms ease-out, transform 120ms ease-out;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .promptChip:hover {
+    background: var(--semantics-background-primary);
+    color: var(--semantics-text-primary);
+    border-color: var(--semantics-border-strong);
+  }
+}
+
+.promptChip:active {
+  transform: scale(0.96);
+}
+
+.promptChip:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 1px;
+}
+
+.emptyCardBox {
+  margin-top: var(--space-3x);
+  padding: 14px;
+  border-radius: var(--radius-md, 8px);
+  border: 1px dashed var(--semantics-border-strong);
+  background: var(--semantics-surface-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.emptyCardText {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13, 13px);
+  line-height: 18px;
+  color: var(--semantics-text-secondary);
+}

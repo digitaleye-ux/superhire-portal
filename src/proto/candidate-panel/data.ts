@@ -252,17 +252,17 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
     recruiterNotes = [
       {
         id: "rn1",
-        author: "Aisha Khan",
+        author: "Added by you",
         authorRole: "recruiter",
-        date: "16 Nov",
-        text: "Rohan cleared Round 1 with strong browser rendering feedback. Prepped him on the System Design format — he's done this loop twice before at Zeta.",
+        date: "18 Nov, 2:30 PM",
+        text: "Candidate prefers remote opportunities. Flexible on compensation for the right role.",
       },
       {
         id: "rn2",
-        author: "Aisha Khan",
+        author: "Added by you",
         authorRole: "recruiter",
-        date: "14 Nov",
-        text: "96% role match from the screening. Flagged TypeScript architecture as a strength to probe in Round 2.",
+        date: "15 Nov, 6:10 PM",
+        text: "Available for calls after 5 PM on weekdays. Interested in the company but currently evaluating another offer.",
       },
     ];
 
@@ -359,10 +359,10 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
     recruiterNotes = [
       {
         id: "rn1",
-        author: "Aisha Khan",
+        author: "Added by you",
         authorRole: "recruiter",
-        date: "15 Nov",
-        text: "Round 2 completed on 13 Nov. Scorecard is still pending — escalated to the Cred hiring lead on 16 Nov.",
+        date: "15 Nov, 4:20 PM",
+        text: "Prefers high-ownership mobile teams. Available for calls after 6 PM; check in on Friday regarding his timeline.",
       },
     ];
 
@@ -451,10 +451,10 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
     recruiterNotes = [
       {
         id: "rn1",
-        author: "Aisha Khan",
+        author: "Added by you",
         authorRole: "recruiter",
-        date: "17 Nov",
-        text: "92% match on the distributed systems screen. Priya is strong on Go and Kafka — I'd place her in the payments platform team.",
+        date: "17 Nov, 4:15 PM",
+        text: "Open to relocating to Bengaluru with 2 weeks' notice. Flexible on expected CTC depending on the opportunity.",
       },
     ];
 
@@ -528,10 +528,10 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
     recruiterNotes = [
       {
         id: "rn1",
-        author: "Aisha Khan",
+        author: "Added by you",
         authorRole: "recruiter",
-        date: "17 Nov",
-        text: "98% fit score from the completeness check. Forwarded to Stripe Platform hiring lead — typical shortlist turnaround is 48 hours.",
+        date: "17 Nov, 11:20 AM",
+        text: "Prefers remote roles; open to hybrid for a Staff platform scope. Available for calls before 11 AM or after 5 PM.",
       },
     ];
 
@@ -634,10 +634,10 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
     recruiterNotes = [
       {
         id: "rn1",
-        author: "Aisha Khan",
+        author: "Added by you",
         authorRole: "recruiter",
-        date: "15 Nov",
-        text: "Offer released directly by Atlassian to candidate. Acceptance deadline is 21 Nov — awaiting candidate decision.",
+        date: "16 Nov, 3:45 PM",
+        text: "Check with candidate about offer decision on Friday. Interested in the team but currently comparing scope with another offer.",
       },
     ];
 
@@ -746,10 +746,10 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
     recruiterNotes = [
       {
         id: "rn1",
-        author: "Aisha Khan",
+        author: "Added by you",
         authorRole: "recruiter",
-        date: "18 Nov",
-        text: "₹3,00,000 commission settled via NEFT after the 15-day retention window closed. Placement is complete — no further action needed.",
+        date: "20 Oct, 5:00 PM",
+        text: "Prioritized design systems and core canvas engineering culture over higher competing cash offer.",
       },
     ];
 
@@ -831,10 +831,10 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
     recruiterNotes = [
       {
         id: "rn1",
-        author: "Aisha Khan",
+        author: "Added by you",
         authorRole: "recruiter",
-        date: "13 Nov",
-        text: "Role paused for Q3 budget review. Meera remains shortlisted — I've flagged her for reactivation the moment the headcount opens.",
+        date: "14 Nov, 2:10 PM",
+        text: "Happy to wait for the Notion role to reopen in Q4, as long as we share an updated timeline by next Friday.",
       },
     ];
 
@@ -931,10 +931,10 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
     recruiterNotes = [
       {
         id: "rn1",
-        author: "Aisha Khan",
+        author: "Added by you",
         authorRole: "recruiter",
-        date: "15 Nov",
-        text: "Application closed after Round 1. Employer feedback was specific — bare-metal Kubernetes scale. Ananya's Docker and CI/CD fundamentals were solid.",
+        date: "15 Nov, 6:00 PM",
+        text: "Open to cloud-native DevOps roles at mid-stage fintech startups. Prefers Bengaluru or remote.",
       },
     ];
 
