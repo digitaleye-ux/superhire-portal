@@ -3,7 +3,6 @@ import type { CandidateDetail } from "@/proto/candidate-panel/data";
 import { MoreVerticalIcon } from "@/components/shared/Icon";
 import {
   useRecruiterNotes,
-  LockMiniIcon,
   PlusMiniIcon,
   PencilMiniIcon,
   TrashMiniIcon,
@@ -67,28 +66,25 @@ export function NotesPrivateScratchpad({ detail }: { detail: CandidateDetail }) 
   return (
     <div className={s.sectionWrap}>
       {/* Header */}
-      <div className={s.headerRow}>
-        <div className={s.titleGroup}>
+      <div className={s.header}>
+        <div className={s.headerRow}>
           <h3 className={s.sectionTitle}>Recruiter notes</h3>
-          <span
-            className={s.privateBadge}
-            title="Visible only to you — not shared with the employer or candidate"
-          >
-            <LockMiniIcon />
-            <span>Private</span>
-          </span>
+
+          {!isAdding && (
+            <button
+              type="button"
+              className={s.addNoteLinkBtn}
+              onClick={() => setIsAdding(true)}
+            >
+              <PlusMiniIcon />
+              <span>Add note</span>
+            </button>
+          )}
         </div>
 
-        {!isAdding && (
-          <button
-            type="button"
-            className={s.headerAddBtn}
-            onClick={() => setIsAdding(true)}
-          >
-            <PlusMiniIcon />
-            <span>Add note</span>
-          </button>
-        )}
+        <p className={s.headerDescription}>
+          Notes are private and won’t be shared with the candidate or employer.
+        </p>
       </div>
 
       {/* Interactive composer on demand */}
@@ -149,7 +145,7 @@ export function NotesPrivateScratchpad({ detail }: { detail: CandidateDetail }) 
         </form>
       )}
 
-      {/* Saved Notes: Rendered as distinct cards with top-right kebab action menu & subtle separators */}
+      {/* Saved Notes: Rendered as distinct cards with top-right kebab action menu */}
       {notes.length > 0 ? (
         <ul className={s.savedNotesList} aria-label="Recruiter notes list">
           {notes.map((note) => {
@@ -157,120 +153,117 @@ export function NotesPrivateScratchpad({ detail }: { detail: CandidateDetail }) 
             const isMenuOpen = openMenuId === note.id;
 
             return (
-              <li key={note.id} className={s.savedNoteItem}>
-                <div className={s.savedNoteCard}>
-                  {isEditing ? (
-                    <form
-                      className={s.composerForm}
-                      style={{ marginTop: 0 }}
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        handleSaveEdit(note.id);
+              <li key={note.id} className={s.savedNoteCard}>
+                {isEditing ? (
+                  <form
+                    className={s.composerForm}
+                    style={{ marginTop: 0 }}
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      handleSaveEdit(note.id);
+                    }}
+                  >
+                    <textarea
+                      className={s.textarea}
+                      aria-label="Edit recruiter note"
+                      value={editText}
+                      onChange={(e) => setEditText(e.target.value)}
+                      onKeyDown={(e) => {
+                        if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+                          e.preventDefault();
+                          handleSaveEdit(note.id);
+                        } else if (e.key === "Escape") {
+                          cancelEditing();
+                        }
                       }}
-                    >
-                      <textarea
-                        className={s.textarea}
-                        aria-label="Edit recruiter note"
-                        value={editText}
-                        onChange={(e) => setEditText(e.target.value)}
-                        onKeyDown={(e) => {
-                          if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
-                            e.preventDefault();
-                            handleSaveEdit(note.id);
-                          } else if (e.key === "Escape") {
-                            cancelEditing();
-                          }
-                        }}
-                        spellCheck={false}
-                        autoFocus
-                      />
-                      <div className={s.composerFooter}>
-                        <div className={s.composerActions}>
-                          <button
-                            type="button"
-                            className={s.btnCancel}
-                            onClick={cancelEditing}
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            type="submit"
-                            className={s.btnPrimary}
-                            disabled={!editText.trim()}
-                          >
-                            Save changes
-                          </button>
-                        </div>
-                      </div>
-                    </form>
-                  ) : (
-                    <>
-                      <div className={s.noteTopRow}>
-                        <p className={s.noteBody}>{note.text}</p>
-
-                        {/* Kebab action menu moved to top right */}
-                        <div
-                          className={s.kebabContainer}
-                          ref={isMenuOpen ? menuRef : undefined}
+                      spellCheck={false}
+                      autoFocus
+                    />
+                    <div className={s.composerFooter}>
+                      <div className={s.composerActions}>
+                        <button
+                          type="button"
+                          className={s.btnCancel}
+                          onClick={cancelEditing}
                         >
-                          <button
-                            type="button"
-                            className={`${s.kebabBtn} ${
-                              isMenuOpen ? s.kebabBtnActive : ""
-                            }`}
-                            aria-label={`Options for note: ${note.text.slice(0, 24)}...`}
-                            aria-haspopup="menu"
-                            aria-expanded={isMenuOpen}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setOpenMenuId((prev) =>
-                                prev === note.id ? null : note.id
-                              );
-                            }}
-                          >
-                            <MoreVerticalIcon size={16} />
-                          </button>
-
-                          {isMenuOpen && (
-                            <div className={s.dropdown} role="menu">
-                              <button
-                                type="button"
-                                className={s.dropdownItem}
-                                role="menuitem"
-                                onClick={() => {
-                                  setOpenMenuId(null);
-                                  startEditing(note);
-                                }}
-                              >
-                                <PencilMiniIcon />
-                                <span>Edit</span>
-                              </button>
-                              <button
-                                type="button"
-                                className={`${s.dropdownItem} ${s.dropdownItemDanger}`}
-                                role="menuitem"
-                                onClick={() => {
-                                  setOpenMenuId(null);
-                                  handleDeleteNote(note.id);
-                                }}
-                              >
-                                <TrashMiniIcon />
-                                <span>Delete</span>
-                              </button>
-                            </div>
-                          )}
-                        </div>
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          className={s.btnPrimary}
+                          disabled={!editText.trim()}
+                        >
+                          Save changes
+                        </button>
                       </div>
+                    </div>
+                  </form>
+                ) : (
+                  <>
+                    <div className={s.noteTopRow}>
+                      <p className={s.noteBody}>{note.text}</p>
 
-                      <div className={s.noteFooter}>
-                        <span className={s.metaTimestamp}>
-                          {note.date}
-                        </span>
+                      {/* Kebab action menu moved to top right */}
+                      <div
+                        className={s.kebabContainer}
+                        ref={isMenuOpen ? menuRef : undefined}
+                      >
+                        <button
+                          type="button"
+                          className={`${s.kebabBtn} ${
+                            isMenuOpen ? s.kebabBtnActive : ""
+                          }`}
+                          aria-label={`Options for note: ${note.text.slice(0, 24)}...`}
+                          aria-haspopup="menu"
+                          aria-expanded={isMenuOpen}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setOpenMenuId((prev) =>
+                              prev === note.id ? null : note.id
+                            );
+                          }}
+                        >
+                          <MoreVerticalIcon size={16} />
+                        </button>
+
+                        {isMenuOpen && (
+                          <div className={s.dropdown} role="menu">
+                            <button
+                              type="button"
+                              className={s.dropdownItem}
+                              role="menuitem"
+                              onClick={() => {
+                                setOpenMenuId(null);
+                                startEditing(note);
+                              }}
+                            >
+                              <PencilMiniIcon />
+                              <span>Edit</span>
+                            </button>
+                            <button
+                              type="button"
+                              className={`${s.dropdownItem} ${s.dropdownItemDanger}`}
+                              role="menuitem"
+                              onClick={() => {
+                                setOpenMenuId(null);
+                                handleDeleteNote(note.id);
+                              }}
+                            >
+                              <TrashMiniIcon />
+                              <span>Delete</span>
+                            </button>
+                          </div>
+                        )}
                       </div>
-                    </>
-                  )}
-                </div>
-                <hr className={s.noteSeparator} />
+                    </div>
+
+                    <div className={s.noteFooter}>
+                      <span className={s.metaTimestamp}>
+                        {note.date}
+                      </span>
+                    </div>
+                  </>
+                )}
               </li>
             );
           })}

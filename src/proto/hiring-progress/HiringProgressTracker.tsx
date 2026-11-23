@@ -19,25 +19,6 @@ export function HiringProgressTracker({ detail }: HiringProgressTrackerProps) {
     state === "withdrawn" ||
     state === "on-hold";
 
-  const getHeaderBadgeClass = () => {
-    const hl = detail.progressHeadline.toLowerCase();
-    if (
-      hl.includes("closed") ||
-      hl.includes("not") ||
-      hl.includes("unsuccessful") ||
-      hl.includes("withdrawn")
-    ) {
-      return s.badgeDanger;
-    }
-    if (hl.includes("hold") || hl.includes("paused")) {
-      return s.badgeWarning;
-    }
-    if (detail.milestonesReached === detail.totalMilestones) {
-      return s.badgeSuccess;
-    }
-    return s.badgeNeutral;
-  };
-
   const getCardBadgeClass = (stage: TimelineStage) => {
     const label = (stage.badgeLabel ?? "").toLowerCase();
     if (
@@ -62,9 +43,6 @@ export function HiringProgressTracker({ detail }: HiringProgressTrackerProps) {
       {/* Tracker Header */}
       <div className={s.header}>
         <h3 className={s.title}>Hiring progress</h3>
-        <span className={`${s.badge} ${getHeaderBadgeClass()}`}>
-          {detail.progressHeadline}
-        </span>
       </div>
 
       {/* 6 Milestones Vertical Timeline */}

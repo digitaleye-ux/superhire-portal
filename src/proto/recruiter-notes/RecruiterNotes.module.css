@@ -16,11 +16,59 @@
    Shared Header & Private Pill
    -------------------------------------------------------------------------- */
 
+.header {
+  display: flex;
+  flex-direction: column;
+}
+
 .headerRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-2x);
+}
+
+.headerDescription {
+  margin: 4px 0 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13, 13px);
+  line-height: 18px;
+  font-weight: var(--font-weight-regular);
+  color: var(--semantics-text-tertiary);
+}
+
+.addNoteLinkBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  margin-right: -6px;
+  border: 0;
+  border-radius: var(--radius-4, 4px);
+  background: transparent;
+  color: var(--semantics-interactive-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13, 13px);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: color 120ms ease, background-color 120ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .addNoteLinkBtn:hover {
+    color: var(--semantics-interactive-primary-hover, #4f35d2);
+    background: var(--semantics-surface-secondary);
+  }
+}
+
+.addNoteLinkBtn:active {
+  transform: scale(0.96);
+}
+
+.addNoteLinkBtn:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 2px;
 }
 
 .titleGroup {
@@ -357,17 +405,11 @@
 
 .savedNotesList {
   list-style: none;
-  margin: var(--space-3x) 0 0;
+  margin: var(--space-4x) 0 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-3x);
-}
-
-.savedNoteItem {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3x);
+  gap: var(--space-4x);
 }
 
 .savedNoteCard {
@@ -394,14 +436,6 @@
   align-items: center;
   gap: var(--space-2x);
   min-height: 18px;
-}
-
-.noteSeparator {
-  height: 1px;
-  width: 100%;
-  border: 0;
-  margin: 0;
-  background: var(--semantics-border-default);
 }
 
 .kebabContainer {
