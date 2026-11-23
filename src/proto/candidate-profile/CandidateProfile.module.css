@@ -367,6 +367,7 @@
   gap: var(--space-4x);
 }
 
+.eduGroup,
 .expRoleGroup {
   display: flex;
   flex-direction: column;
@@ -374,12 +375,12 @@
   min-width: 0;
 }
 
-/* Entry Title: text-style-label-2 in primary (14px / 20px Medium, 0 letter-spacing) */
+/* Entry Title: text-style-label-1 in primary (16px / 24px Medium, 0 letter-spacing) */
 .entryTitle {
   margin: 0;
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-14);
-  line-height: var(--line-height-14);
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-16);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-none);
   color: var(--semantics-text-primary);
@@ -426,18 +427,15 @@
   font-variant-numeric: tabular-nums;
 }
 
-.entryGradeTag {
-  align-self: flex-start;
-  display: inline-flex;
-  align-items: center;
-  padding: var(--space-x-2) var(--space-2x);
-  border-radius: var(--radius-4);
-  background: var(--semantics-surface-secondary);
-  color: var(--semantics-text-secondary);
+/* CGPA details: text-style-label-2 in tertiary (14px / 20px Medium, 0 letter-spacing) */
+.entryGrade {
+  margin: 0;
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-12);
-  line-height: var(--line-height-12);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
   font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+  color: var(--semantics-text-tertiary);
 }
 
 /* Experience Details: text-style-body-2 in secondary (14px / 20px Regular) */

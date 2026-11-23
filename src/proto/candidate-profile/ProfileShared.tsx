@@ -520,13 +520,15 @@ export function CandidateProfileSections({
           {profile.education.map((edu) => (
             <div key={edu.id} className={s.entryBlock}>
               <div className={s.entryTopRow}>
-                <h4 className={s.entryTitle}>{edu.degree}</h4>
+                <div className={s.eduGroup}>
+                  <h4 className={s.entryTitle}>{edu.degree}</h4>
+                  <p className={s.entrySub}>
+                    {edu.institution} · {edu.location}
+                  </p>
+                </div>
                 <span className={s.entryDate}>{edu.duration}</span>
               </div>
-              <p className={s.entrySub}>
-                {edu.institution} · {edu.location}
-              </p>
-              <span className={s.entryGradeTag}>{edu.grade}</span>
+              <p className={s.entryGrade}>{edu.grade}</p>
             </div>
           ))}
         </div>
