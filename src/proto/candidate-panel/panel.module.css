@@ -37,6 +37,28 @@
   box-sizing: border-box;
 }
 
+.headerWithTabs {
+  gap: var(--space-5x);
+  padding: var(--space-6x) var(--space-6x) 0;
+  border-bottom: 0;
+}
+
+.tabs {
+  display: flex;
+  gap: 0;
+  width: 100%;
+  border-bottom: 1px solid var(--semantics-border-default);
+}
+
+.profileTabPanel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
 /* Matches JobDetail & SubmitCandidate headMain spacing */
 .headMain {
   display: flex;

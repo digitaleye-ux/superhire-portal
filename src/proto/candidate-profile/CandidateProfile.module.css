@@ -1,0 +1,941 @@
+/* ==========================================================================
+   Candidate Profile + Table of Contents (TOC) Prototype (/emil-prototype)
+   Adheres strictly to Bolt Design System tokens & Emil Kowalski UI craft:
+   - 16px section headings, 14px body text, 12px tabular-nums metadata
+   - Smooth scroll-spy navigation, tactile active:scale(0.97)
+   ========================================================================== */
+
+.profileRoot {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+  background: var(--semantics-background-primary);
+}
+
+/* ==========================================================================
+   VARIANT 1: Sticky Horizontal Pill Bar (Space-Saving Top Rail)
+   ========================================================================== */
+
+.horizontalTocBar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px var(--space-6x);
+  background: var(--semantics-background-primary);
+  border-bottom: 1px solid var(--semantics-border-default);
+  overflow-x: auto;
+  flex-shrink: 0;
+  scrollbar-width: none;
+}
+
+.horizontalTocBar::-webkit-scrollbar {
+  display: none;
+}
+
+.tocPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 11px;
+  border-radius: var(--radius-8, 8px);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--semantics-text-secondary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13, 13px);
+  line-height: 18px;
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+  touch-action: manipulation;
+  transition:
+    background-color 150ms ease-out,
+    color 150ms ease-out,
+    border-color 150ms ease-out,
+    transform 120ms ease-out;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tocPill:hover {
+    background: var(--semantics-surface-secondary);
+    color: var(--semantics-text-primary);
+  }
+}
+
+.tocPill:active {
+  transform: scale(0.96);
+}
+
+.tocPill:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 1px;
+}
+
+.tocPillActive,
+.tocPillActive:hover {
+  background: var(--semantics-surface-brand-subtle, #eef0ff);
+  color: var(--semantics-interactive-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.tocScrollArea {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--space-6x);
+  scrollbar-width: none;
+}
+
+.tocScrollArea::-webkit-scrollbar {
+  display: none;
+}
+
+/* ==========================================================================
+   VARIANT 2: Vertical Left Sidebar TOC (Matches Reference Screenshot)
+   ========================================================================== */
+
+.splitRoot {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+  background: var(--semantics-background-primary);
+}
+
+.verticalSidebar {
+  width: 172px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-5x) var(--space-3x);
+  border-right: 1px solid var(--semantics-border-default);
+  background: var(--semantics-background-primary);
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.verticalSidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebarHeader {
+  padding: 0 10px var(--space-3x);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebarTitle {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: 20px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--semantics-text-primary);
+}
+
+.sidebarSubtitle {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: 11px;
+  line-height: 15px;
+  color: var(--semantics-text-tertiary);
+}
+
+.sidebarNav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebarItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: var(--radius-8, 8px);
+  background: transparent;
+  color: var(--semantics-text-secondary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13, 13px);
+  line-height: 18px;
+  font-weight: var(--font-weight-medium);
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    background-color 140ms ease-out,
+    color 140ms ease-out,
+    transform 120ms ease-out;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sidebarItem:hover {
+    background: var(--semantics-surface-secondary);
+    color: var(--semantics-text-primary);
+  }
+}
+
+.sidebarItem:active {
+  transform: scale(0.97);
+}
+
+.sidebarItem:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 1px;
+}
+
+.sidebarItemActive,
+.sidebarItemActive:hover {
+  background: var(--semantics-surface-brand-subtle, #eef0ff);
+  color: var(--semantics-interactive-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.splitContentScroll {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--space-5x) var(--space-5x) var(--space-8x);
+  scrollbar-width: none;
+}
+
+.splitContentScroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* ==========================================================================
+   VARIANT 3: Compact Scroll-Spy Spine (Underline Anchor Bar + Progress Line)
+   ========================================================================== */
+
+.spineBarWrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--semantics-background-primary);
+  border-bottom: 1px solid var(--semantics-border-default);
+  flex-shrink: 0;
+}
+
+.spineBar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 var(--space-6x);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.spineBar::-webkit-scrollbar {
+  display: none;
+}
+
+.spineTab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 38px;
+  padding: 0 10px;
+  border: 0;
+  background: transparent;
+  color: var(--semantics-text-tertiary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: 16px;
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+  touch-action: manipulation;
+  transition: color 140ms ease-out;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .spineTab:hover {
+    color: var(--semantics-text-primary);
+  }
+}
+
+.spineTabActive {
+  color: var(--semantics-interactive-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.spineTabActive::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 0;
+  height: 2px;
+  border-radius: var(--radius-pill);
+  background: var(--semantics-interactive-primary);
+}
+
+.spineProgressTrack {
+  width: 100%;
+  height: 2px;
+  background: transparent;
+  overflow: hidden;
+}
+
+.spineProgressFill {
+  height: 100%;
+  background: var(--semantics-interactive-primary);
+  opacity: 0.25;
+  transform-origin: left center;
+  transition: transform 80ms linear;
+}
+
+/* ==========================================================================
+   VARIANT 4: Segmented Chip Bar + Contained Dossier Cards
+   ========================================================================== */
+
+.segmentedBarWrap {
+  padding: 10px var(--space-6x);
+  background: var(--semantics-surface-secondary);
+  border-bottom: 1px solid var(--semantics-border-default);
+  flex-shrink: 0;
+}
+
+.segmentedTrack {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.segmentedTrack::-webkit-scrollbar {
+  display: none;
+}
+
+.segmentChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--semantics-border-default);
+  background: var(--semantics-background-primary);
+  color: var(--semantics-text-secondary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+  touch-action: manipulation;
+  transition:
+    background-color 140ms ease-out,
+    color 140ms ease-out,
+    border-color 140ms ease-out,
+    transform 120ms ease-out;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .segmentChip:hover {
+    border-color: var(--semantics-border-strong);
+    color: var(--semantics-text-primary);
+  }
+}
+
+.segmentChip:active {
+  transform: scale(0.96);
+}
+
+.segmentChipActive,
+.segmentChipActive:hover {
+  background: var(--semantics-interactive-primary);
+  border-color: var(--semantics-interactive-primary);
+  color: var(--semantics-text-on-brand, #ffffff);
+}
+
+.cardsScrollArea {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--space-5x) var(--space-6x) var(--space-8x);
+  background: var(--semantics-surface-secondary);
+  scrollbar-width: none;
+}
+
+.cardsScrollArea::-webkit-scrollbar {
+  display: none;
+}
+
+/* ==========================================================================
+   SHARED SECTION CONTENT STYLES
+   ========================================================================== */
+
+.sectionsStream {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5x);
+  padding-bottom: var(--space-8x);
+}
+
+.sectionsStreamCards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4x);
+  padding-bottom: var(--space-8x);
+}
+
+.sectionEditorial,
+.sectionFormBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3x);
+  scroll-margin-top: 16px;
+}
+
+.sectionCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3x);
+  padding: var(--space-4x);
+  border-radius: var(--radius-8, 8px);
+  border: 1px solid var(--semantics-border-default);
+  background: var(--semantics-background-primary);
+  scroll-margin-top: 16px;
+}
+
+.sectionDivider {
+  height: 1px;
+  width: 100%;
+  border: 0;
+  margin: 0;
+  background: var(--semantics-border-default);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2x);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-16);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-heading);
+  color: var(--semantics-text-primary);
+}
+
+.sectionCountBadge {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.verifiedPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--radius-6, 6px);
+  background: var(--semantics-badge-success-bg, #ecfdf5);
+  border: 1px solid var(--semantics-badge-success-border, #a7f3d0);
+  color: var(--semantics-badge-success-text, #047857);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: 16px;
+  font-weight: var(--font-weight-medium);
+}
+
+/* ---- Read-only Form Grid (Matches Reference Screenshot) ---- */
+
+.readonlyFormGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.readonlyFieldFull {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.readonlyField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.readonlyLabel {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: 16px;
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-secondary);
+}
+
+.readonlyInputBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 10px;
+  border-radius: var(--radius-6, 6px);
+  border: 1px solid var(--semantics-border-default);
+  background: var(--semantics-surface-secondary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13, 13px);
+  line-height: 18px;
+  color: var(--semantics-text-primary);
+  min-width: 0;
+}
+
+.inlineCopyBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--semantics-text-tertiary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.inlineCopyBtn:hover {
+  color: var(--semantics-text-primary);
+  background: var(--semantics-background-primary);
+}
+
+/* ---- Editorial Key-Value Grid ---- */
+
+.kvGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px;
+}
+
+.kvItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.kvLabel {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: 16px;
+  color: var(--semantics-text-tertiary);
+}
+
+.kvValue {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: 20px;
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.kvCopyValue {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: 20px;
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-primary);
+  cursor: pointer;
+  text-align: left;
+  min-width: 0;
+}
+
+.kvCopyValue svg {
+  color: var(--semantics-text-tertiary);
+  flex-shrink: 0;
+}
+
+.kvCopyValue:hover {
+  color: var(--semantics-interactive-primary);
+}
+
+.kvCopyValue:hover svg {
+  color: var(--semantics-interactive-primary);
+}
+
+.truncateText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+/* ---- Resume Card (Matches Reference Screenshot Dashed Card) ---- */
+
+.resumeDropCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-8, 8px);
+  border: 1px dashed var(--semantics-border-strong);
+  background: var(--semantics-surface-secondary);
+}
+
+.resumeFileBadge {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--semantics-interactive-primary);
+  color: var(--semantics-text-on-brand, #ffffff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.resumeFileMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.resumeFileName {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: 20px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--semantics-interactive-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.resumeSubMeta {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: 16px;
+  color: var(--semantics-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.resumeActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.resumeBtnSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: var(--radius-6, 6px);
+  border: 1px solid var(--semantics-border-default);
+  background: var(--semantics-background-primary);
+  color: var(--semantics-text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    background-color 140ms ease-out,
+    border-color 140ms ease-out,
+    transform 120ms ease-out;
+}
+
+.resumeBtnSecondary:hover {
+  background: var(--semantics-surface-secondary);
+  border-color: var(--semantics-border-strong);
+}
+
+.resumeBtnSecondary:active {
+  transform: scale(0.96);
+}
+
+/* ---- Entries: Education, Work Experience, Projects, Certifications ---- */
+
+.entryList,
+.experienceList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4x);
+}
+
+.entryBlock,
+.experienceItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.projectCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: var(--radius-8, 8px);
+  border: 1px solid var(--semantics-border-default);
+  background: var(--semantics-surface-secondary);
+}
+
+.entryTopRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.expRoleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.entryTitle {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: 20px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--semantics-text-primary);
+}
+
+.expCompanyLine,
+.entrySub {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13, 13px);
+  line-height: 18px;
+  color: var(--semantics-text-secondary);
+}
+
+.expDurationRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.entryDate {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: 16px;
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-tertiary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.expTenure {
+  font-family: var(--font-family-sans);
+  font-size: 11px;
+  line-height: 14px;
+  color: var(--semantics-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.entryGradeTag {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-6, 6px);
+  background: var(--semantics-surface-secondary);
+  color: var(--semantics-text-secondary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: 16px;
+  font-weight: var(--font-weight-medium);
+}
+
+.bulletList {
+  margin: 4px 0 0;
+  padding-inline-start: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13, 13px);
+  line-height: 19px;
+  color: var(--semantics-text-secondary);
+}
+
+.projectDesc {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13, 13px);
+  line-height: 19px;
+  color: var(--semantics-text-secondary);
+}
+
+.inlineTagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.miniTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-6, 6px);
+  background: var(--semantics-background-primary);
+  border: 1px solid var(--semantics-border-default);
+  color: var(--semantics-text-secondary);
+  font-family: var(--font-family-sans);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: var(--font-weight-medium);
+}
+
+.certRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.certMain {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+/* ---- Links Grid ---- */
+
+.linksGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.linkCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--radius-8, 8px);
+  border: 1px solid var(--semantics-border-default);
+  background: var(--semantics-background-primary);
+  color: var(--semantics-text-secondary);
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    border-color 140ms ease-out,
+    background-color 140ms ease-out,
+    transform 120ms ease-out;
+}
+
+.linkCard:hover {
+  border-color: var(--semantics-border-strong);
+  background: var(--semantics-surface-secondary);
+  color: var(--semantics-text-primary);
+}
+
+.linkCard:active {
+  transform: scale(0.98);
+}
+
+.linkCardLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.linkLabel {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: 16px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--semantics-text-primary);
+}
+
+.linkHandle {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: 16px;
+  color: var(--semantics-interactive-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- Skills Section ---- */
+
+.skillGroupsStack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skillGroupRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.skillGroupTitle {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: 16px;
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-tertiary);
+}
+
+.skillChipsWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.skillChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: var(--radius-6, 6px);
+  background: var(--semantics-surface-secondary);
+  border: 1px solid var(--semantics-border-default);
+  color: var(--semantics-text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: 16px;
+  font-weight: var(--font-weight-medium);
+}

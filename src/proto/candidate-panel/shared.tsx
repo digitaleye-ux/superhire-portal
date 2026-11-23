@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { toast } from "sonner";
+import { Tab as TabButton } from "@/components/shared/Tab";
 import {
   BriefcaseBusinessIcon,
   Icon,
@@ -63,14 +64,20 @@ export function StatusTag({ status, label }: { status: CandidateStatus; label?: 
 
 /* ------------------------------ 1. Candidate Overview Header ------------------------------ */
 
+export type CandidatePanelTab = "status" | "profile";
+
 export function CandidateOverviewHeader({
   detail,
   onClose,
   showJobInline = true,
+  activeTab,
+  onTabChange,
 }: {
   detail: CandidateDetail;
   onClose: () => void;
   showJobInline?: boolean;
+  activeTab?: CandidatePanelTab;
+  onTabChange?: (tab: CandidatePanelTab) => void;
 }) {
   const ctcText = formatCandidateCtc(
     detail.item.ctcRange,
@@ -90,8 +97,10 @@ export function CandidateOverviewHeader({
     detail.location?.trim() ? { key: "loc", icon: MapPinIcon, text: detail.location.trim() } : null,
   ].filter(Boolean) as { key: string; icon?: typeof IndianRupeeIcon; text: string }[];
 
+  const hasTabs = Boolean(activeTab && onTabChange);
+
   return (
-    <header className={s.header}>
+    <header className={`${s.header} ${hasTabs ? s.headerWithTabs : ""}`}>
       <div className={s.headMain}>
         {/* Top row: Candidate Name + LinkedIn on left | Status tag + Close button on right */}
         <div className={s.topRow}>
@@ -166,6 +175,25 @@ export function CandidateOverviewHeader({
           )}
         </div>
       </div>
+
+      {activeTab && onTabChange && (
+        <nav
+          className={s.tabs}
+          role="tablist"
+          aria-label="Candidate status and profile"
+        >
+          <TabButton
+            label="Candidate status"
+            active={activeTab === "status"}
+            onClick={() => onTabChange("status")}
+          />
+          <TabButton
+            label="Candidate profile"
+            active={activeTab === "profile"}
+            onClick={() => onTabChange("profile")}
+          />
+        </nav>
+      )}
     </header>
   );
 }
