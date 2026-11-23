@@ -4,6 +4,7 @@ import { MoreVerticalIcon } from "@/components/shared/Icon";
 import {
   useRecruiterNotes,
   LockMiniIcon,
+  PlusMiniIcon,
   PencilMiniIcon,
   TrashMiniIcon,
 } from "./useRecruiterNotes";
@@ -14,8 +15,8 @@ import s from "./RecruiterNotes.module.css";
  *
  * Hierarchy:
  *   1. Header: "Recruiter notes" (16px semibold) + "Private" pill badge
- *   2. Saved notes list: Crisp white cards with purple accent bar, timestamp, and kebab menu (⋮)
- *   3. Text input composer: Visually distinct active input field with clear placeholder & actions
+ *   2. Saved notes list: Crisp editorial entries with purple left accent, timestamp, and kebab menu (⋮)
+ *   3. "Add note" button: Clean trigger that opens the interactive composer on demand
  */
 export function NotesPrivateScratchpad({ detail }: { detail: CandidateDetail }) {
   const {
@@ -32,9 +33,17 @@ export function NotesPrivateScratchpad({ detail }: { detail: CandidateDetail }) 
     handleDeleteNote,
   } = useRecruiterNotes(detail);
 
-  const [inputFocused, setInputFocused] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const composerRef = useRef<HTMLTextAreaElement>(null);
+
+  // Focus textarea when composer opens
+  useEffect(() => {
+    if (isAdding && composerRef.current) {
+      composerRef.current.focus();
+    }
+  }, [isAdding]);
 
   // Close kebab menu when clicking outside or pressing Escape
   useEffect(() => {
@@ -54,8 +63,6 @@ export function NotesPrivateScratchpad({ detail }: { detail: CandidateDetail }) 
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [openMenuId]);
-
-  const showQuickActions = inputFocused || draftText.trim().length > 0;
 
   return (
     <div className={s.sectionWrap}>
@@ -199,38 +206,40 @@ export function NotesPrivateScratchpad({ detail }: { detail: CandidateDetail }) 
         </div>
       )}
 
-      {/* Input Field / Composer: Visually distinct active input area */}
-      <form
-        className={s.quickCaptureBox}
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleAddNote();
-          setInputFocused(false);
-        }}
-      >
-        <textarea
-          className={`${s.quickInput} ${
-            showQuickActions ? s.quickInputExpanded : ""
-          }`}
-          aria-label={`Add a private note for ${detail.name}`}
-          placeholder="Add a note (e.g., available after 5 PM, evaluating another offer)…"
-          value={draftText}
-          onFocus={() => setInputFocused(true)}
-          onChange={(e) => setDraftText(e.target.value)}
-          onKeyDown={(e) => {
-            if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
-              e.preventDefault();
-              handleAddNote();
-              setInputFocused(false);
-            } else if (e.key === "Escape") {
-              if (!draftText.trim()) {
-                setInputFocused(false);
-              }
-            }
+      {/* Interactive composer or "Add note" trigger button */}
+      {isAdding ? (
+        <form
+          className={s.quickCaptureBox}
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!draftText.trim()) return;
+            handleAddNote();
+            setIsAdding(false);
           }}
-          spellCheck={false}
-        />
-        {showQuickActions && (
+        >
+          <textarea
+            ref={composerRef}
+            className={`${s.quickInput} ${s.quickInputExpanded}`}
+            aria-label={`Add a private note for ${detail.name}`}
+            placeholder="Add a note (e.g., available after 5 PM, evaluating another offer)…"
+            value={draftText}
+            onChange={(e) => setDraftText(e.target.value)}
+            onKeyDown={(e) => {
+              if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+                e.preventDefault();
+                if (draftText.trim()) {
+                  handleAddNote();
+                  setIsAdding(false);
+                }
+              } else if (e.key === "Escape") {
+                e.preventDefault();
+                setDraftText("");
+                setIsAdding(false);
+              }
+            }}
+            spellCheck={false}
+            autoFocus
+          />
           <div className={s.composerFooter}>
             <div className={s.composerActions}>
               <button
@@ -238,7 +247,7 @@ export function NotesPrivateScratchpad({ detail }: { detail: CandidateDetail }) 
                 className={s.btnCancel}
                 onClick={() => {
                   setDraftText("");
-                  setInputFocused(false);
+                  setIsAdding(false);
                 }}
               >
                 Cancel
@@ -252,8 +261,17 @@ export function NotesPrivateScratchpad({ detail }: { detail: CandidateDetail }) 
               </button>
             </div>
           </div>
-        )}
-      </form>
+        </form>
+      ) : (
+        <button
+          type="button"
+          className={s.addNoteTrigger}
+          onClick={() => setIsAdding(true)}
+        >
+          <PlusMiniIcon />
+          <span>Add note</span>
+        </button>
+      )}
     </div>
   );
 }
