@@ -351,99 +351,199 @@
 }
 
 /* ==========================================================================
-   VARIANT 2: Private Scratchpad (Tinted Dossier Surface + Always-Ready Bar)
+   VARIANT 2: Private Scratchpad (Crisp Saved Note Cards + Distinct Composer)
    ========================================================================== */
 
-.scratchpadSurface {
-  margin-top: var(--space-3x);
+.savedNotesList {
+  list-style: none;
+  margin: var(--space-3x) 0 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  border-radius: var(--radius-md, 8px);
-  border: 1px solid var(--semantics-border-default);
-  background: var(--semantics-surface-secondary, #f8fafc);
-  overflow: hidden;
+  gap: var(--space-2x);
 }
 
-.scratchpadScopeBar {
+.savedNoteCard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid var(--semantics-border-default);
+  border-left: 3px solid var(--semantics-interactive-primary);
+  background: var(--semantics-background-primary);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.noteFooter {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-2x);
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--semantics-border-default);
-  background: var(--semantics-background-primary);
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-12);
-  line-height: var(--line-height-12);
+  min-height: 24px;
+}
+
+.kebabContainer {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.kebabBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: var(--radius-4, 4px);
   color: var(--semantics-text-tertiary);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 120ms ease, color 120ms ease;
 }
 
-.scratchpadList {
-  list-style: none;
-  margin: 0;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+@media (hover: hover) and (pointer: fine) {
+  .kebabBtn:hover,
+  .kebabBtnActive {
+    background: var(--semantics-surface-secondary);
+    color: var(--semantics-text-primary);
+  }
 }
 
-.scratchpadEntry {
+.kebabBtn:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 1px;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 100;
+  box-sizing: border-box;
+  min-width: 120px;
+  background: var(--semantics-background-primary);
+  border: 1px solid var(--semantics-border-strong);
+  border-radius: var(--radius-md, 8px);
+  box-shadow: var(--elevation-md, 0 4px 12px rgba(0, 0, 0, 0.08));
+  padding: 4px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding-left: 10px;
-  border-left: 2px solid var(--semantics-interactive-primary);
+  gap: 2px;
+  animation: dropdownIn 120ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes dropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  border: 0;
+  background: transparent;
+  border-radius: var(--radius-4, 4px);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13, 13px);
+  line-height: var(--line-height-13, 18px);
+  font-weight: var(--font-weight-regular);
+  color: var(--semantics-text-primary);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 120ms ease;
+  white-space: nowrap;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dropdownItem:hover {
+    background: var(--semantics-surface-secondary);
+    color: var(--semantics-text-primary);
+  }
+}
+
+.dropdownItem svg {
+  flex-shrink: 0;
+  color: var(--semantics-text-secondary);
+}
+
+.dropdownItemDanger {
+  color: var(--semantics-text-danger);
+}
+
+.dropdownItemDanger svg {
+  color: var(--semantics-text-danger);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .dropdownItemDanger:hover {
+    background: var(--semantics-surface-danger-subtle, #fef2f2);
+    color: var(--semantics-text-danger);
+  }
 }
 
 .scratchpadEmpty {
-  padding: 16px 12px 8px;
+  margin-top: var(--space-3x);
+  padding: 12px 14px;
+  border-radius: var(--radius-md, 8px);
+  border: 1px dashed var(--semantics-border-default);
+  background: var(--semantics-surface-secondary);
   font-family: var(--font-family-sans);
   font-size: var(--font-size-13, 13px);
   line-height: 18px;
   color: var(--semantics-text-tertiary);
 }
 
-.quickCaptureForm {
+.quickCaptureBox {
+  margin-top: var(--space-3x);
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 10px 12px 12px;
-  border-top: 1px solid var(--semantics-border-default);
-  background: var(--semantics-background-primary);
 }
 
 .quickInput {
   width: 100%;
-  min-height: 40px;
-  padding: 8px 10px;
+  min-height: 48px;
+  padding: 10px 12px;
   box-sizing: border-box;
-  border-radius: 6px;
-  border: 1px solid var(--semantics-border-default);
-  background: var(--semantics-surface-secondary, #f8fafc);
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid var(--semantics-border-strong);
+  background: var(--semantics-background-primary);
   color: var(--semantics-text-primary);
   font-family: var(--font-family-sans);
-  font-size: 16px;
+  font-size: 16px; /* Prevents iOS Safari zoom */
   line-height: 20px;
   resize: none;
-  transition: border-color 150ms ease-out, background-color 150ms ease-out;
+  transition: border-color 150ms ease-out, box-shadow 150ms ease-out, min-height 150ms ease-out;
 }
 
 .quickInputExpanded {
-  min-height: 68px;
-  background: var(--semantics-background-primary);
-  border-color: var(--semantics-border-strong);
+  min-height: 76px;
   resize: vertical;
 }
 
 .quickInput::placeholder {
   color: var(--semantics-text-placeholder);
-  font-size: var(--font-size-13, 13px);
+  font-size: var(--font-size-14);
 }
 
 .quickInput:focus-visible {
   outline: 2px solid var(--semantics-border-focus);
   outline-offset: 1px;
-  background: var(--semantics-background-primary);
+  border-color: var(--semantics-interactive-primary);
 }
 
 /* ==========================================================================
