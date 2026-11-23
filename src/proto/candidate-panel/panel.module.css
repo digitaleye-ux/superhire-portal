@@ -30,7 +30,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: var(--space-4x) var(--space-6x) var(--space-4x);
+  padding: var(--space-6x) var(--space-6x) var(--space-6x);
   border-bottom: 1px solid var(--semantics-border-default);
   background: var(--semantics-background-primary);
   flex-shrink: 0;
@@ -41,7 +41,7 @@
 .headMain {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2x);
+  gap: var(--space-4x);
   width: 100%;
 }
 
@@ -66,6 +66,14 @@
   align-items: center;
   gap: var(--space-2x);
   flex-shrink: 0;
+}
+
+.headTitle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2x);
+  width: 100%;
+  min-width: 0;
 }
 
 /* 20px semibold title matching JobDetail .role */
@@ -145,8 +153,8 @@
 .roleAndCompany {
   margin: 0;
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-14);
-  line-height: var(--line-height-14);
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-16);
   letter-spacing: var(--letter-spacing-none);
   overflow: hidden;
   text-overflow: ellipsis;

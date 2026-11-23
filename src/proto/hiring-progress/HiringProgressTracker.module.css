@@ -88,8 +88,8 @@
   align-items: flex-start;
   gap: var(--spacing-3x);
   /* 12px */
-  padding-bottom: var(--spacing-4x);
-  /* 16px */
+  padding-bottom: var(--spacing-5x);
+  /* 20px */
 }
 
 .item:last-child {
