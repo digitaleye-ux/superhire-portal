@@ -73,7 +73,7 @@
 .composerForm {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2x);
+  gap: 12px;
   margin-top: var(--space-3x);
 }
 
@@ -107,8 +107,9 @@
 .composerFooter {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: var(--space-2x);
+  margin-top: 2px;
 }
 
 .shortcutHint {
@@ -368,7 +369,7 @@
   flex-direction: column;
   gap: 8px;
   padding: 12px 14px;
-  border-radius: var(--radius-md, 8px);
+  border-radius: 0 var(--radius-md, 8px) var(--radius-md, 8px) 0;
   border: 1px solid var(--semantics-border-default);
   border-left: 3px solid var(--semantics-interactive-primary);
   background: var(--semantics-background-primary);
@@ -425,7 +426,8 @@
   right: 0;
   z-index: 100;
   box-sizing: border-box;
-  min-width: 120px;
+  width: max-content;
+  min-width: 0;
   background: var(--semantics-background-primary);
   border: 1px solid var(--semantics-border-strong);
   border-radius: var(--radius-md, 8px);
@@ -451,9 +453,9 @@
 .dropdownItem {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   width: 100%;
-  padding: 6px 8px;
+  padding: 6px 10px;
   border: 0;
   background: transparent;
   border-radius: var(--radius-4, 4px);
@@ -511,7 +513,7 @@
   margin-top: var(--space-3x);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
 .quickInput {

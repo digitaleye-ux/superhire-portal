@@ -108,7 +108,6 @@ export function NotesPrivateScratchpad({ detail }: { detail: CandidateDetail }) 
                       autoFocus
                     />
                     <div className={s.composerFooter}>
-                      <span className={s.shortcutHint}>⌘ + Enter to save</span>
                       <div className={s.composerActions}>
                         <button
                           type="button"
@@ -132,7 +131,7 @@ export function NotesPrivateScratchpad({ detail }: { detail: CandidateDetail }) 
                     <p className={s.noteBody}>{note.text}</p>
                     <div className={s.noteFooter}>
                       <span className={s.metaTimestamp}>
-                        {note.author} · {note.date}
+                        {note.date}
                       </span>
 
                       {/* Kebab action menu: Edit and Delete */}
@@ -233,7 +232,6 @@ export function NotesPrivateScratchpad({ detail }: { detail: CandidateDetail }) 
         />
         {showQuickActions && (
           <div className={s.composerFooter}>
-            <span className={s.shortcutHint}>⌘ + Enter to save</span>
             <div className={s.composerActions}>
               <button
                 type="button"
