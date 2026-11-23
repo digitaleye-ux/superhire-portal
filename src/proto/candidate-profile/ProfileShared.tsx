@@ -114,17 +114,18 @@ export function VerifiedCheckMiniIcon() {
   );
 }
 
-export function CopyMiniIcon() {
+export function CopyMiniIcon({ className }: { className?: string }) {
   return (
     <svg
-      width="13"
-      height="13"
+      width="16"
+      height="16"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      className={className}
       aria-hidden="true"
     >
       <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />

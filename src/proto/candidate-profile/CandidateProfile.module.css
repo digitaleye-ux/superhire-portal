@@ -216,20 +216,18 @@
   text-align: left;
   min-width: 0;
   touch-action: manipulation;
-  transition: color 120ms ease;
 }
 
 .kvCopyValue svg {
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
   color: var(--semantics-text-tertiary);
   flex-shrink: 0;
-}
-
-.kvCopyValue:hover {
-  color: var(--semantics-interactive-primary);
+  transition: color 120ms ease;
 }
 
 .kvCopyValue:hover svg {
-  color: var(--semantics-interactive-primary);
+  color: var(--semantics-text-primary);
 }
 
 .truncateText {
