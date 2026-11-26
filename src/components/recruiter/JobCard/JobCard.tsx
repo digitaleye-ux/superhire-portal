@@ -15,6 +15,7 @@ import {
 } from "@/components/shared/Icon";
 import type { IconBaseProps } from "@/components/shared/Icon";
 import { Badge } from "@/components/shared/Badge";
+import { IconButton } from "@/components/shared/IconButton";
 import type { JobCardProps } from "./JobCard.types";
 import styles from "./JobCard.module.css";
 
@@ -175,18 +176,17 @@ export function JobCard({
 
           {hasMenu && (
             <div className={styles.menuContainer} ref={menuRef}>
-              <button
-                type="button"
-                className={`${styles.kebabBtn} ${menuOpen ? styles.kebabBtnActive : ""}`}
-                aria-label="Job options"
+              <IconButton
+                icon={<MoreVerticalIcon size="sm" />}
+                ariaLabel="Job options"
+                size="sm"
+                active={menuOpen}
                 aria-expanded={menuOpen}
                 onClick={(e) => {
                   e.stopPropagation();
                   setMenuOpen((prev) => !prev);
                 }}
-              >
-                <MoreVerticalIcon size={16} />
-              </button>
+              />
 
               {menuOpen && (
                 <div

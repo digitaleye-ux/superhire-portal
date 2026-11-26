@@ -1,4 +1,6 @@
-/* Checkbox — Figma node 426:3084. 16px, 4px radius, primary fill + check when on. */
+/* Checkbox — Figma node 426:3084.
+   16px control, 4px radius.
+   States: default | hover | active | checked | focus-visible | invalid | disabled. */
 
 .root {
   position: relative;
@@ -6,6 +8,11 @@
   align-items: center;
   gap: var(--space-2x);
   cursor: pointer;
+  user-select: none;
+}
+
+.disabled {
+  cursor: not-allowed;
 }
 
 .input {
@@ -30,9 +37,11 @@
   width: var(--control-size-sm);
   height: var(--control-size-sm);
   border-radius: var(--radius-4);
-  border: 1px solid var(--semantics-control-border);
+  border: var(--border-width-thin) solid var(--semantics-control-border);
   background: var(--semantics-control-bg);
-  transition: background-color 120ms ease, border-color 120ms ease;
+  transition:
+    background-color var(--duration-fast) var(--easing-standard),
+    border-color var(--duration-fast) var(--easing-standard);
 }
 
 .check {
@@ -40,18 +49,53 @@
   opacity: 0;
 }
 
+/* Hover */
+.root:hover .input:not(:disabled):not(:checked) + .control {
+  background: var(--semantics-control-bg-hover);
+  border-color: var(--semantics-control-border-hover);
+}
+
+/* Checked */
 .input:checked + .control {
   background: var(--semantics-control-indicator-checked);
   border-color: var(--semantics-control-indicator-checked);
+}
+
+.root:hover .input:not(:disabled):checked + .control {
+  background: var(--semantics-interactive-primary-hover);
+  border-color: var(--semantics-interactive-primary-hover);
+}
+
+/* Active / Pressed */
+.root:active .input:not(:disabled):checked + .control {
+  background: var(--semantics-interactive-primary-active);
+  border-color: var(--semantics-interactive-primary-active);
 }
 
 .input:checked + .control .check {
   opacity: 1;
 }
 
+/* Invalid / Error */
+.input[aria-invalid="true"]:not(:disabled):not(:checked) + .control {
+  border-color: var(--semantics-control-border-error);
+}
+
+/* Focus visible */
 .input:focus-visible + .control {
-  outline: 2px solid var(--semantics-border-focus);
-  outline-offset: 2px;
+  outline: var(--border-width-thick) solid var(--semantics-border-focus);
+  outline-offset: var(--space-x-2);
+}
+
+/* Disabled */
+.input:disabled + .control {
+  background: var(--semantics-control-bg-disabled);
+  border-color: var(--semantics-border-disabled);
+}
+
+.input:disabled:checked + .control {
+  background: var(--semantics-border-disabled);
+  border-color: var(--semantics-border-disabled);
 }
 
 .label {
@@ -61,4 +105,8 @@
   line-height: var(--line-height-14);
   color: var(--semantics-text-secondary);
   white-space: nowrap;
+}
+
+.input:disabled ~ .label {
+  color: var(--semantics-text-disabled);
 }

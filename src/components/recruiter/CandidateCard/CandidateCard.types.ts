@@ -31,7 +31,7 @@ export interface CandidateCardProps {
   noticePeriod?: string;
   /** Current candidate pipeline status tag shown in the header. */
   status: CandidateStatus;
-  /** Commission amount shown in the footer. Defaults to "₹25,000". */
+  /** Commission amount shown in the footer. Defaults to "₹2,000". */
   commission?: string;
   /**
    * Recruiter earning model:
@@ -57,7 +57,9 @@ export interface CandidateCardProps {
   onAction?: () => void;
   /** Fired when the whole card is clicked (e.g. to open candidate detail drawer). */
   onClick?: () => void;
-  /** Optional callback fired when clicking "Copy candidate link" in the kebab menu. */
+  /** Optional callback fired when clicking "Edit candidate details" in the kebab menu. */
+  onEditCandidate?: () => void;
+  /** Optional callback fired when clicking "Copy candidate link" in the kebab menu (deprecated). */
   onCopyLink?: () => void;
   /** Optional callback fired when clicking "Withdraw candidate" in the kebab menu. */
   onWithdraw?: () => void;

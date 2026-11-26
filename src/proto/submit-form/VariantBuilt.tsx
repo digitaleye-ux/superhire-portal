@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { KeyboardEvent } from "react";
 import { Checkbox } from "@/components/shared/Checkbox";
+import { SegmentedControl } from "@/components/shared/SegmentedControl";
 import { CheckIcon, MailIcon } from "@/components/recruiter/SubmitCandidate/icons";
 import {
   EDUCATION_OPTIONS,
@@ -60,7 +60,7 @@ function Stepper({
         </div>
         <button type="button" className={v.stepBtn} aria-label="Increase by half a year" onClick={() => bump(0.5)}>+</button>
       </div>
-      {error && <p className={v.sub} style={{ color: "var(--primitives-error-600)" }}>{error}</p>}
+      {error && <p className={v.sub} style={{ color: "var(--semantics-text-danger)" }}>{error}</p>}
     </div>
   );
 }
@@ -78,36 +78,17 @@ function ChipChoice({
   onChange: (v: string) => void;
   error?: string;
 }) {
-  const idx = options.indexOf(value);
-  const onKey = (e: KeyboardEvent<HTMLButtonElement>) => {
-    const d = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : e.key === "ArrowLeft" || e.key === "ArrowUp" ? -1 : 0;
-    if (!d) return;
-    e.preventDefault();
-    const next = options[(Math.max(idx, 0) + d + options.length) % options.length];
-    onChange(next);
-    (e.currentTarget.parentElement?.querySelector(`[data-v="${next}"]`) as HTMLElement | null)?.focus();
-  };
   return (
     <div className={v.field}>
       <span className={v.label} id="cf-notice-lbl">{label}</span>
-      <div className={v.chipGroup} role="radiogroup" aria-labelledby="cf-notice-lbl" data-invalid={error ? "" : undefined}>
-        {options.map((o, i) => (
-          <button
-            key={o}
-            type="button"
-            role="radio"
-            data-v={o}
-            aria-checked={value === o}
-            tabIndex={value === o || (idx < 0 && i === 0) ? 0 : -1}
-            className={v.chip}
-            onClick={() => onChange(o)}
-            onKeyDown={onKey}
-          >
-            {o}
-          </button>
-        ))}
-      </div>
-      {error && <p className={v.sub} style={{ color: "var(--primitives-error-600)" }}>{error}</p>}
+      <SegmentedControl
+        ariaLabel={label}
+        value={value}
+        onChange={onChange}
+        size="sm"
+        options={options.map((o) => ({ value: o, label: o }))}
+      />
+      {error && <p className={v.sub} style={{ color: "var(--semantics-text-danger)" }}>{error}</p>}
     </div>
   );
 }

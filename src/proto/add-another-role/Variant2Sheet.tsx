@@ -2,6 +2,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/shared/Badge";
 import { Checkbox } from "@/components/shared/Checkbox";
+import { IconButton } from "@/components/shared/IconButton";
 import {
   BriefcaseBusinessIcon,
   ChevronDownIcon,
@@ -71,21 +72,12 @@ export default function Variant2Sheet({
               Pick a claimed mandate to reuse {candidate.name}'s verified profile.
             </span>
           </div>
-          <button
-            type="button"
-            className={s.closeBtn}
+          <IconButton
+            icon={<XIcon size="md" />}
+            ariaLabel="Close add role sheet"
+            size="md"
             onClick={onClose}
-            aria-label="Close"
-            style={{
-              border: 0,
-              background: "transparent",
-              cursor: "pointer",
-              padding: 4,
-              color: "var(--semantics-text-tertiary)",
-            }}
-          >
-            <XIcon size="md" />
-          </button>
+          />
         </div>
 
         {/* Body */}
@@ -246,7 +238,7 @@ export default function Variant2Sheet({
                           style={{
                             padding: "8px 16px",
                             borderRadius: 6,
-                            background: allVerified ? "var(--color-primary-base, #4f46e5)" : "var(--semantics-surface-disabled, #e2e8f0)",
+                            background: allVerified ? "var(--button-primary-background)" : "var(--semantics-surface-disabled, #e2e8f0)",
                             color: allVerified ? "#fff" : "var(--semantics-text-disabled, #94a3b8)",
                             border: 0,
                             fontWeight: 600,

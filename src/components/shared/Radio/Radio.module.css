@@ -1,4 +1,6 @@
-/* Radio button — Figma node 424:3050. 16px control, filled dot when selected. */
+/* Radio button — Figma node 424:3050.
+   16px circular control, 8px inner dot when selected.
+   States: default | hover | active | selected | focus-visible | invalid | disabled. */
 
 .root {
   position: relative;
@@ -6,6 +8,11 @@
   align-items: center;
   gap: var(--space-2x);
   cursor: pointer;
+  user-select: none;
+}
+
+.disabled {
+  cursor: not-allowed;
 }
 
 /* Visually-hidden native input (keeps keyboard + a11y). */
@@ -28,15 +35,31 @@
   flex-shrink: 0;
   width: var(--control-size-sm);
   height: var(--control-size-sm);
-  border-radius: 50%;
-  border: 1px solid var(--semantics-control-border);
+  border-radius: var(--radius-pill);
+  border: var(--border-width-thin) solid var(--semantics-control-border);
   background: var(--semantics-control-bg);
-  transition: border-color 120ms ease;
+  transition:
+    border-color var(--duration-fast) var(--easing-standard),
+    background-color var(--duration-fast) var(--easing-standard);
+}
+
+/* Hover */
+.root:hover .input:not(:disabled):not(:checked) + .control {
+  background: var(--semantics-control-bg-hover);
+  border-color: var(--semantics-control-border-hover);
 }
 
 /* Selected: interactive ring + filled center dot. */
 .input:checked + .control {
   border-color: var(--semantics-control-indicator-checked);
+}
+
+.root:hover .input:not(:disabled):checked + .control {
+  border-color: var(--semantics-interactive-primary-hover);
+}
+
+.root:active .input:not(:disabled):checked + .control {
+  border-color: var(--semantics-interactive-primary-active);
 }
 
 .input:checked + .control::after {
@@ -46,13 +69,33 @@
   margin: auto;
   width: var(--space-2x);
   height: var(--space-2x);
-  border-radius: 50%;
+  border-radius: var(--radius-pill);
   background: var(--semantics-control-indicator-checked);
 }
 
+.root:hover .input:not(:disabled):checked + .control::after {
+  background: var(--semantics-interactive-primary-hover);
+}
+
+/* Invalid / Error */
+.input[aria-invalid="true"]:not(:disabled):not(:checked) + .control {
+  border-color: var(--semantics-control-border-error);
+}
+
+/* Focus visible */
 .input:focus-visible + .control {
-  outline: 2px solid var(--semantics-border-focus);
-  outline-offset: 2px;
+  outline: var(--border-width-thick) solid var(--semantics-border-focus);
+  outline-offset: var(--space-x-2);
+}
+
+/* Disabled */
+.input:disabled + .control {
+  background: var(--semantics-control-bg-disabled);
+  border-color: var(--semantics-border-disabled);
+}
+
+.input:disabled:checked + .control::after {
+  background: var(--semantics-text-disabled);
 }
 
 .label {
@@ -62,4 +105,8 @@
   line-height: var(--line-height-14);
   color: var(--semantics-text-secondary);
   white-space: nowrap;
+}
+
+.input:disabled ~ .label {
+  color: var(--semantics-text-disabled);
 }

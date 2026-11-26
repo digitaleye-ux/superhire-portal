@@ -4,6 +4,7 @@ export interface FormEducationEntry {
   id: string;
   degree: string;
   institution: string;
+  areaOfStudy?: string;
   startYear: string;
   endYear: string;
   location: string;
@@ -17,6 +18,8 @@ export interface FormWorkExperienceEntry {
   startDate: string;
   endDate: string;
   location: string;
+  workMode?: string;
+  isCurrent?: boolean;
   highlightsText: string;
 }
 
@@ -77,6 +80,8 @@ export interface SubmitCandidateProps {
   initialValues?: Partial<CandidateFormValues>;
   /** Descriptive banner label explaining where the prefill came from. */
   prefillSourceLabel?: string;
+  /** Custom label for the primary submit action button. Defaults to "Submit candidate". */
+  submitLabel?: string;
   /** Back button callback to return to role picker drawer. */
   onBack?: () => void;
 }

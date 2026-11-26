@@ -59,12 +59,19 @@
   background: var(--semantics-control-bg);
   font-family: var(--font-family-sans);
   font-weight: var(--font-weight-regular);
-  font-size: var(--font-size-16);
-  line-height: var(--line-height-16);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  letter-spacing: var(--letter-spacing-none);
   color: var(--semantics-text-primary);
   transition: border-color 120ms ease, box-shadow 120ms ease;
   appearance: none;
   -webkit-appearance: none;
+}
+.input:disabled {
+  background: var(--semantics-control-bg-disabled);
+  color: var(--semantics-text-disabled);
+  cursor: not-allowed;
+  border-color: var(--semantics-border-disabled);
 }
 .input::placeholder {
   color: var(--semantics-text-placeholder);
@@ -113,6 +120,11 @@
   padding-right: calc(var(--space-3x) + var(--size-icon-sm) + var(--space-2x));
   cursor: pointer;
   text-overflow: ellipsis;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  letter-spacing: var(--letter-spacing-none);
 }
 .select[data-empty] {
   color: var(--semantics-text-placeholder);
@@ -127,9 +139,14 @@
   min-height: 104px;
   padding: var(--space-2x) var(--space-3x);
   resize: vertical;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  letter-spacing: var(--letter-spacing-none);
 }
 
-/* ---- Phone field with Dropdown component ---- */
+/* ---- Phone field with fixed +91 prefix ---- */
 .phoneControl {
   box-sizing: border-box;
   display: flex;
@@ -141,59 +158,38 @@
   background: var(--semantics-control-bg);
   transition: border-color 120ms ease, box-shadow 120ms ease;
   position: relative;
+  overflow: hidden;
 }
 
 .phoneControl:focus-within {
   border-color: var(--semantics-border-focus);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  box-shadow: var(--semantics-focus-ring);
 }
 
 .phoneControl[data-invalid] {
-  border-color: var(--semantics-text-danger);
+  border-color: var(--semantics-control-border-error);
 }
 
 .phoneControl[data-invalid]:focus-within {
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+  box-shadow: var(--semantics-focus-ring-danger);
 }
 
-.phoneDropdownRoot {
-  flex-shrink: 0;
+.phoneFixedPrefix {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   height: 100%;
-  display: flex;
-}
-
-.phoneDropdownTrigger {
-  box-sizing: border-box !important;
-  height: 100% !important;
-  border: 0 !important;
-  border-right: 1px solid var(--semantics-control-border) !important;
-  border-radius: var(--radius-md) 0 0 var(--radius-md) !important;
-  background: transparent !important;
-  padding: 0 var(--space-3x) !important;
-  gap: var(--space-2x) !important;
-  color: var(--semantics-text-primary) !important;
-  font-family: var(--font-family-sans) !important;
-  font-size: var(--font-size-16) !important;
-  font-weight: var(--font-weight-medium) !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  cursor: pointer;
-  transition: background-color 120ms ease;
-}
-
-.phoneDropdownTrigger:hover {
-  background: var(--semantics-surface-secondary, #f8fafc) !important;
-}
-
-.phoneDropdownTrigger:focus-visible {
-  outline: none !important;
-}
-
-.phoneDropdownMenu {
-  min-width: unset !important;
-  width: max-content !important;
-  box-sizing: border-box !important;
-  z-index: 100 !important;
+  padding: 0 var(--space-3x);
+  border-right: 1px solid var(--semantics-control-border);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+  color: var(--semantics-text-secondary);
+  background: transparent;
+  user-select: none;
+  flex-shrink: 0;
 }
 
 .phoneInput {
@@ -207,8 +203,9 @@
   padding: 0 var(--space-3x) !important;
   font-family: var(--font-family-sans);
   font-weight: var(--font-weight-regular);
-  font-size: var(--font-size-16);
-  line-height: var(--line-height-16);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  letter-spacing: var(--letter-spacing-none);
   color: var(--semantics-text-primary);
 }
 
@@ -219,6 +216,18 @@
 /* ---- SelectField (Notice Period) with Dropdown component ---- */
 .selectDropdownWrap {
   width: 100%;
+}
+
+.monthYearRow {
+  display: flex;
+  gap: var(--space-2x);
+  width: 100%;
+}
+
+.monthCol,
+.yearCol {
+  flex: 1;
+  min-width: 0;
 }
 
 .fullWidthDropdown {
@@ -238,8 +247,10 @@
   border-radius: var(--radius-md) !important;
   background: var(--semantics-control-bg) !important;
   font-family: var(--font-family-sans) !important;
-  font-size: var(--font-size-16) !important;
+  font-size: var(--font-size-14) !important;
+  line-height: var(--line-height-14) !important;
   font-weight: var(--font-weight-regular) !important;
+  letter-spacing: var(--letter-spacing-none) !important;
   color: var(--semantics-text-primary) !important;
   cursor: pointer;
   transition: border-color 120ms ease, box-shadow 120ms ease;
@@ -251,16 +262,16 @@
 
 .selectDropdownTrigger:focus-visible {
   border-color: var(--semantics-border-focus) !important;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
+  box-shadow: var(--semantics-focus-ring) !important;
   outline: none !important;
 }
 
 .selectDropdownWrap[data-invalid] .selectDropdownTrigger {
-  border-color: var(--semantics-text-danger) !important;
+  border-color: var(--semantics-control-border-error) !important;
 }
 
 .selectDropdownWrap[data-invalid] .selectDropdownTrigger:focus-visible {
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+  box-shadow: var(--semantics-focus-ring-danger) !important;
 }
 
 .selectDropdownTrigger[data-empty] > span:first-child {
@@ -315,7 +326,7 @@
 .segment input:checked + .segmentFace {
   background: var(--semantics-surface-primary);
   color: var(--semantics-text-link);
-  box-shadow: 0 0 0 1px var(--semantics-border-strong), 0 1px 2px rgba(16, 24, 40, 0.08);
+  box-shadow: var(--elevation-xs);
 }
 .segment input:focus-visible + .segmentFace {
   outline: 2px solid var(--semantics-border-focus);
@@ -413,31 +424,31 @@
   padding: var(--space-3x) var(--space-4x);
   margin: 0;
   box-sizing: border-box;
-  border: 1px solid var(--semantics-border-default);
+  border: var(--border-width-thin) solid var(--semantics-border-default);
   border-radius: var(--radius-md);
-  background: var(--semantics-surface-primary, #ffffff);
+  background: var(--semantics-surface-primary);
   cursor: pointer;
-  transition: border-color 140ms ease, background-color 140ms ease, box-shadow 140ms ease;
+  transition: border-color var(--duration-fast) ease, background-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
   touch-action: manipulation;
 }
 
 .checkRow:hover {
   border-color: var(--semantics-border-strong);
-  background: var(--semantics-surface-secondary, #f8fafc);
+  background: var(--semantics-surface-secondary);
 }
 
 .checkRow[data-on] {
-  border-color: var(--semantics-border-interactive, #4f46e5);
-  background: var(--semantics-surface-brand-subtle, #f5f7ff);
+  border-color: var(--semantics-border-interactive);
+  background: var(--semantics-surface-brand-subtle);
 }
 
 .checklist[data-invalid] .checkRow:not([data-on]) {
-  border-color: var(--semantics-control-border-error, #ef4444);
+  border-color: var(--semantics-control-border-error);
 }
 
 .checkRow:has(input:focus-visible) {
-  outline: 2px solid var(--semantics-border-focus);
-  outline-offset: 2px;
+  outline: var(--border-width-thick) solid var(--semantics-border-focus);
+  outline-offset: var(--space-x-2);
 }
 
 .checkBox {
@@ -445,14 +456,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 18px;
-  height: 18px;
-  margin-top: 2px;
-  border: 1.5px solid var(--semantics-control-border);
-  border-radius: var(--radius-4, 4px);
-  background: var(--semantics-control-bg, #ffffff);
-  color: var(--semantics-text-inverse, #ffffff);
-  transition: background-color 140ms ease, border-color 140ms ease;
+  width: var(--control-size-sm);
+  height: var(--control-size-sm);
+  margin-top: var(--space-x-2);
+  border: var(--border-width-thin) solid var(--semantics-control-border);
+  border-radius: var(--radius-4);
+  background: var(--semantics-control-bg);
+  color: var(--semantics-text-inverse);
+  transition: background-color var(--duration-fast) ease, border-color var(--duration-fast) ease;
 }
 
 .checkRow:hover .checkBox:not([data-on]) {
@@ -460,8 +471,8 @@
 }
 
 .checkBox[data-on] {
-  background: var(--semantics-control-indicator-checked, #4f46e5);
-  border-color: var(--semantics-control-indicator-checked, #4f46e5);
+  background: var(--semantics-control-indicator-checked);
+  border-color: var(--semantics-control-indicator-checked);
 }
 
 .checkText {

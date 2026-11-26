@@ -1,7 +1,9 @@
 import type { InputHTMLAttributes, ReactNode } from "react";
 
 export interface InputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "prefix"> {
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "prefix" | "size"> {
+  /** Size variant: "sm" (32px, text-style-body-2) or "lg" (40px, default). */
+  size?: "sm" | "md" | "lg";
   /** Visible label text. */
   label?: string;
   /** Whether to render the label. Defaults to true if `label` is provided. */

@@ -24,6 +24,7 @@ export function createEmptyEducation(id = `edu-${Date.now()}`): FormEducationEnt
     id,
     degree: "",
     institution: "",
+    areaOfStudy: "",
     startYear: "",
     endYear: "",
     location: "",
@@ -39,6 +40,8 @@ export function createEmptyWorkExperience(id = `exp-${Date.now()}`): FormWorkExp
     startDate: "",
     endDate: "Present",
     location: "",
+    workMode: "Hybrid",
+    isCurrent: true,
     highlightsText: "",
   };
 }
@@ -68,7 +71,7 @@ export const EMPTY: CandidateFormValues = {
   phoneCode: "+91",
   phone: "",
   location: "",
-  workModePreference: "Hybrid / Remote",
+  workModePreference: "Any",
   experience: "",
   working: "Yes",
   company: "",
@@ -91,8 +94,21 @@ export const EMPTY: CandidateFormValues = {
 };
 
 export const NOTICE_OPTIONS = ["Immediately", "15 days", "30 days", "45 days", "60 days", "90 days"];
-export const WORK_MODE_OPTIONS = ["Hybrid / Remote", "Remote", "Hybrid", "On-site"];
-export const YEAR_OPTIONS = Array.from({ length: 36 }, (_, i) => String(2030 - i));
+export const WORK_MODE_OPTIONS = ["Any", "Remote", "Hybrid", "On-site"];
+export const EXPERIENCE_WORK_MODE_OPTIONS = ["On-site", "Hybrid", "Remote"];
+export const YEAR_OPTIONS = Array.from({ length: 46 }, (_, i) => String(2030 - i));
+export const MONTH_OPTIONS = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+];
+export const DEGREE_OPTIONS = [
+  "Bachelors",
+  "Masters",
+  "Doctorate",
+  "Diploma",
+  "Associate",
+  "Other",
+];
 export const EDUCATION_OPTIONS = [
   "BE/B.Tech from Tier 1 College (IIT, BITS, NIT, DTU etc)",
   "BE/B.Tech from other college",
@@ -121,7 +137,7 @@ function urlError(raw: string, host?: string, label = "link"): string | undefine
 }
 
 /** Which keys are currently relevant (conditional fields drop out). */
-export function activeKeys(v: CandidateFormValues): Key[] {
+export function activeKeys(_v: CandidateFormValues): Key[] {
   const keys: Key[] = [
     "name",
     "email",
@@ -129,6 +145,7 @@ export function activeKeys(v: CandidateFormValues): Key[] {
     "location",
     "workModePreference",
     "experience",
+    "currentCtc",
     "expectedCtc",
     "notice",
     "linkedin",
@@ -138,7 +155,6 @@ export function activeKeys(v: CandidateFormValues): Key[] {
     "verifiedRequirements",
     "remarks",
   ];
-  if (v.working !== "No") keys.push("currentCtc");
   return keys;
 }
 
@@ -205,7 +221,7 @@ export function buildParsedSample(): Partial<CandidateFormValues> {
     email: "rohan.mehta@gmail.com",
     phone: "9845061834",
     location: "Bengaluru, India",
-    workModePreference: "Hybrid / Remote",
+    workModePreference: "Any",
     experience: "6",
     working: "Yes",
     company: "Zeta",
@@ -217,11 +233,12 @@ export function buildParsedSample(): Partial<CandidateFormValues> {
     educationList: [
       {
         id: "edu-1",
-        degree: "B.Tech in Computer Science & Engineering",
+        degree: "Masters",
+        areaOfStudy: "Computer Science",
         institution: "National Institute of Technology Karnataka (NITK), Surathkal",
-        startYear: "2016",
-        endYear: "2020",
-        location: "Mangaluru",
+        startYear: "Aug 2018",
+        endYear: "May 2020",
+        location: "Mangaluru, India",
         grade: "8.9 CGPA · First Class with Distinction",
       },
     ],
@@ -232,7 +249,9 @@ export function buildParsedSample(): Partial<CandidateFormValues> {
         company: "Zeta",
         startDate: "Apr 2023",
         endDate: "Present",
-        location: "Bengaluru · Hybrid",
+        location: "Bengaluru",
+        workMode: "Hybrid",
+        isCurrent: true,
         highlightsText: [
           "Architected the core card-issuing console in React 18 & TypeScript used by 40+ enterprise banking partners.",
           "Led migration to a token-driven design system, cutting feature delivery cycle time by 34% across 6 squads.",
@@ -246,6 +265,8 @@ export function buildParsedSample(): Partial<CandidateFormValues> {
         startDate: "Jul 2020",
         endDate: "Mar 2023",
         location: "Bengaluru",
+        workMode: "On-site",
+        isCurrent: false,
         highlightsText: [
           "Built merchant checkout customization workflows handling over ₹1,200 Cr in monthly transaction volume.",
           "Authored automated Playwright visual regression suites achieving 99.4% release confidence across payment flows.",
@@ -256,14 +277,14 @@ export function buildParsedSample(): Partial<CandidateFormValues> {
       {
         id: "proj-1",
         title: "Bolt UI — Multi-Brand Design Token Engine",
-        subtitle: "Lead Author · 2025",
+        subtitle: "2025",
         description:
           "Zero-runtime CSS token pipeline and accessible React primitive library supporting instant theme switching and WCAG AA contrast validation.",
       },
       {
         id: "proj-2",
         title: "TraceLens Web Vitals Telemetry",
-        subtitle: "Creator · 2024",
+        subtitle: "2024",
         description:
           "Lightweight RUM collector and flamegraph visualizer for long animation frames (LoAF) and INP attribution.",
       },
@@ -447,6 +468,7 @@ export function useCandidateForm(
     submit,
     reset,
     status,
+    attempted,
   };
 }
 

@@ -1,19 +1,20 @@
 /**
- * Design tokens — sourced from Figma variables (Bolt | Design System).
- * Figma is the source of truth. Values mirror the Figma variable definitions.
+ * Design tokens — sourced from Figma variables (Bolt | Design System, file R4SLa0NOU3UHMfnEFJJmxp).
+ * Figma is the source of truth.
  *
  * Layering:
- *  - Primitives: raw values (colors, sizes). Do not reference these directly in components.
- *  - Semantics:  intent-based aliases that components consume. A future per-portal
- *                theme can override the --semantics-* / spacing layer without touching
- *                component CSS.
- *
- * Only the tokens needed by the current components (Job Card) are included so far.
- * This file grows as more Figma variables are pulled in.
+ *  1. Primitives: raw values (colors, typography, spacing, radii, border-width, motion).
+ *     NEVER reference --primitives-* or --spacing-* directly in component CSS.
+ *  2. Semantics: intent-based aliases (--semantics-*, --space-*, --elevation-*) that components consume.
+ *  3. Component tokens: scoped state tokens (--button-*, --control-*, --segmented-*) aliased to semantics.
  */
 
 :root {
-  /* ---- Primitives: color (Figma: Bolt | Design System node 5:526) ---- */
+  /* ---- Primitives: color (Figma: Bolt | Design System collection 'colors', node 5:526) ---- */
+  /* Shades */
+  --primitives-shade-white: #FFFFFF;
+  --primitives-shade-black: #000000;
+
   /* Primary */
   --primitives-primary-50: #FAFAFF;
   --primitives-primary-100: #EBE9FE;
@@ -86,133 +87,125 @@
   --primitives-info-800: #1E40AF;
   --primitives-info-900: #1E3A8A;
 
-  /* ---- Primitives: typography (Figma: Bolt | Design System Typescale node 32:2825) ---- */
-  --font-family-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
-    Helvetica, Arial, sans-serif;
+  /* ---- Primitives: typography (Figma collection 'typography', node 32:2825) ---- */
+  --font-family-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-weight-regular: 400;
-  /* Figma: font-weight/regular */
   --font-weight-medium: 500;
-  /* Figma: font-weight/medium */
   --font-weight-semibold: 600;
-  /* Figma: font-weight/semibold */
 
   --font-size-10: 10px;
-  /* Figma: font-size/10 */
   --font-size-12: 12px;
-  /* Figma: font-size/12 */
   --font-size-14: 14px;
-  /* Figma: font-size/14 */
   --font-size-16: 16px;
-  /* Figma: font-size/16 */
   --font-size-20: 20px;
-  /* Figma: font-size/20 */
   --font-size-24: 24px;
-  /* Figma: font-size/24 */
   --font-size-32: 32px;
-  /* Figma: font-size/32 */
   --font-size-40: 40px;
-  /* Figma: font-size/40 */
 
   --line-height-10: 12px;
-  /* Figma: line-height/10 */
   --line-height-12: 16px;
-  /* Figma: line-height/12 */
   --line-height-14: 20px;
-  /* Figma: line-height/14 */
   --line-height-16: 24px;
-  /* Figma: line-height/16 */
   --line-height-20: 28px;
-  /* Figma: line-height/20 */
   --line-height-24: 32px;
-  /* Figma: line-height/24 */
   --line-height-32: 40px;
-  /* Figma: line-height/32 */
   --line-height-40: 48px;
-  /* Figma: line-height/40 */
 
-  --letter-spacing-none: 0;
-  --letter-spacing-display: -0.4px;
-  /* Figma: -1% */
-  --letter-spacing-heading: -0.5%;
-  /* Figma: -0.5% */
-  --letter-spacing-overline: 0.48px;
-  /* Figma: 4% */
+  /* Letter spacing (valid CSS em units equivalent to Figma % tracking: -1%, -0.5%, 0%, +4%) */
+  --letter-spacing-tightest: -0.01em;
+  --letter-spacing-tight: -0.005em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-loose: 0.04em;
 
-  /* ---- Primitives: spatial tokens (Figma: Bolt | Design System node 57:267) ---- */
+  /* Role-based letter-spacing aliases */
+  --letter-spacing-display: var(--letter-spacing-tightest);
+  --letter-spacing-heading: var(--letter-spacing-tight);
+  --letter-spacing-none: var(--letter-spacing-normal);
+  --letter-spacing-overline: var(--letter-spacing-loose);
+
+  /* ---- Primitives: spatial tokens (Figma collection 'spacing', node 57:267) ---- */
   --spacing-0x: 0px;
-  /* Figma: spacing-0x */
+  --spacing-x-4: 1px;
+  --spacing-x-2: 2px;
   --spacing-1x: 4px;
-  /* Figma: spacing-1x */
   --spacing-2x: 8px;
-  /* Figma: spacing-2x */
   --spacing-3x: 12px;
-  /* Figma: spacing-3x */
   --spacing-4x: 16px;
-  /* Figma: spacing-4x */
   --spacing-5x: 20px;
-  /* Figma: spacing-5x */
   --spacing-6x: 24px;
-  /* Figma: spacing-6x */
+  --spacing-7x: 28px;
   --spacing-8x: 32px;
-  /* Figma: spacing-8x */
+  --spacing-9x: 36px;
   --spacing-10x: 40px;
-  /* Figma: spacing-10x */
   --spacing-12x: 48px;
-  /* Figma: spacing-12x */
   --spacing-16x: 64px;
-  /* Figma: spacing-16x */
   --spacing-20x: 80px;
-  /* Figma: spacing-20x */
 
-  /* Backwards-compatible aliases */
-  --space-x-2: 2px;
-  /* Half unit (2px) */
+  /* Consumed spatial aliases */
   --space-0x: var(--spacing-0x);
+  --space-x-4: var(--spacing-x-4);
+  --space-x-2: var(--spacing-x-2);
   --space-1x: var(--spacing-1x);
   --space-2x: var(--spacing-2x);
   --space-3x: var(--spacing-3x);
   --space-4x: var(--spacing-4x);
   --space-5x: var(--spacing-5x);
   --space-6x: var(--spacing-6x);
+  --space-7x: var(--spacing-7x);
   --space-8x: var(--spacing-8x);
+  --space-9x: var(--spacing-9x);
   --space-10x: var(--spacing-10x);
   --space-12x: var(--spacing-12x);
   --space-16x: var(--spacing-16x);
   --space-20x: var(--spacing-20x);
 
-  /* ---- Primitives: radius ----
-     NOTE: Figma reports `sm` as 16px in some nodes and 4px in others (form
-     controls). Treated as two tokens here until the Figma file is reconciled:
-     --radius-sm = 16px (as first seen), --radius-4 = 4px (checkbox/menu items). */
-  --radius-xs: 12px;
-  /* Figma: xs */
-  --radius-4: 4px;
-  /* Figma: sm (form controls) */
-  --radius-md: 8px;
-  /* Figma: md */
-  --radius-sm: 16px;
-  /* Figma: sm (first seen) */
-  --radius-pill: 100px;
+  /* ---- Primitives: border-width (Figma collection 'border-width') ---- */
+  --border-width-thin: 1px;
+  --border-width-thick: 2px;
 
-  /* ---- Primitives: icon sizes ---- */
+  /* ---- Primitives: radius (Figma collection 'border-radius', standardized scale) ----
+     Standardized: xs=2px, sm=4px, md=8px, lg=12px, xl=16px, 2xl=24px, full=999px */
+  --radius-none: 0px;
+  --radius-2xs: 2px;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-4: var(--radius-sm);
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-pill: 100px;
+  --radius-max: 999px;
+  --radius-full: var(--radius-max);
+
+  /* ---- Primitives: icon sizes (Figma collection 'icon') ---- */
   --size-icon-xs: 12px;
   --size-icon-sm: 16px;
   --size-icon-md: 20px;
+  --size-icon-lg: var(--spacing-6x);
+
+  /* ---- Primitives: motion ---- */
+  --duration-fast: 120ms;
+  --duration-normal: 180ms;
+  --duration-slow: 240ms;
+  --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --easing-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /**
- * Semantic layer (default / base theme).
+ * Semantic layer (default / light theme).
  * Nomenclature: --semantics-{domain}-{role}[-{state}]
- * Domains: surface | background | text | border | interactive | control | badge
- * Components reference only these semantic tokens rather than raw primitives.
+ * Components MUST consume semantic or component-scoped tokens — never --primitives-*.
  */
 :root {
   /* ---- Surfaces & Backgrounds ---- */
-  --semantics-surface-primary: #ffffff;
+  --semantics-surface-primary: var(--primitives-shade-white);
   --semantics-surface-secondary: var(--primitives-neutral-50);
   --semantics-surface-tertiary: var(--primitives-neutral-100);
   --semantics-surface-page: var(--primitives-neutral-50);
   --semantics-surface-disabled: var(--primitives-neutral-100);
+  --semantics-surface-overlay: rgba(15, 23, 42, 0.45);
+  --semantics-surface-hover-subtle: rgba(15, 23, 42, 0.04);
   --semantics-surface-brand: var(--primitives-primary-600);
   --semantics-surface-brand-subtle: var(--primitives-primary-50);
   --semantics-surface-success-subtle: var(--primitives-success-50);
@@ -220,27 +213,26 @@
   --semantics-surface-danger-subtle: var(--primitives-error-50);
   --semantics-surface-info-subtle: var(--primitives-info-50);
 
-  /* Legacy aliases for surface */
+  /* Figma 'semantics/background/*' parity aliases */
   --semantics-background-primary: var(--semantics-surface-primary);
   --semantics-background-secondary: var(--primitives-neutral-100);
+  --semantics-background-tertiary: var(--primitives-neutral-200);
   --semantics-background-page: var(--semantics-surface-page);
+  --semantics-background-disabled: var(--semantics-surface-disabled);
+  --semantics-background-overlay: var(--semantics-surface-overlay);
 
   /* ---- Text & Typography ---- */
   --semantics-text-primary: var(--primitives-neutral-900);
-  /* #0F172A: Headings, high-contrast labels */
   --semantics-text-secondary: var(--primitives-neutral-700);
-  /* #334155: Body copy, standard content */
   --semantics-text-tertiary: var(--primitives-neutral-500);
-  /* #64748B: Captions, timestamps, hints */
   --semantics-text-placeholder: var(--primitives-neutral-400);
-  /* #94A3B8: Field placeholders */
   --semantics-text-disabled: var(--primitives-neutral-400);
   --semantics-text-link: var(--primitives-primary-700);
-  /* #5925DC: Hyperlinks & active nav */
   --semantics-text-link-hover: var(--primitives-primary-800);
   --semantics-text-brand: var(--primitives-primary-600);
-  --semantics-text-inverse: #ffffff;
-  --semantics-text-on-brand: #ffffff;
+  --semantics-text-inverse: var(--primitives-shade-white);
+  --semantics-text-on-brand: var(--primitives-shade-white);
+  --semantics-text-on-brand-muted: rgba(255, 255, 255, 0.35);
   --semantics-text-success: var(--primitives-success-700);
   --semantics-text-warning: var(--primitives-warning-700);
   --semantics-text-danger: var(--primitives-error-600);
@@ -248,15 +240,21 @@
 
   /* ---- Borders & Separators ---- */
   --semantics-border-subtle: var(--primitives-neutral-100);
-  /* Hairline dividers, card separators */
   --semantics-border-default: var(--primitives-neutral-200);
-  /* Standard card borders, container outlines */
+  --semantics-border-hover: var(--primitives-neutral-300);
   --semantics-border-strong: var(--primitives-neutral-300);
-  /* Inputs, prominent borders */
+
+  /* Divider & stroke tier aliases */
+  --semantics-divider-subtle: var(--semantics-border-subtle);
+  --semantics-divider-default: var(--semantics-border-default);
+  --semantics-divider-strong: var(--semantics-border-strong);
+  --semantics-stroke-subtle: var(--semantics-border-subtle);
+  --semantics-stroke-default: var(--semantics-border-default);
+  --semantics-stroke-strong: var(--semantics-border-strong);
+  --semantics-border-placeholder: var(--primitives-neutral-500);
   --semantics-border-interactive: var(--primitives-primary-600);
-  /* Active tabs, selected cards */
+  --semantics-border-brand-muted: var(--primitives-primary-300);
   --semantics-border-focus: var(--primitives-primary-600);
-  /* Focus rings */
   --semantics-border-disabled: var(--primitives-neutral-200);
   --semantics-border-success: var(--primitives-success-500);
   --semantics-border-warning: var(--primitives-warning-500);
@@ -270,6 +268,8 @@
   --semantics-interactive-subtle: var(--primitives-primary-50);
   --semantics-interactive-subtle-hover: var(--primitives-primary-100);
   --semantics-interactive-subtle-border: var(--primitives-primary-200);
+  --semantics-interactive-danger: var(--primitives-error-600);
+  --semantics-interactive-danger-hover: var(--primitives-error-700);
 
   /* ---- Form Controls ---- */
   --semantics-control-bg: var(--semantics-surface-primary);
@@ -310,144 +310,142 @@
 
   /* ---- Semantic Spacing & Layout ---- */
   --semantics-spacing-gap-inline-xs: var(--spacing-1x);
-  /* 4px: micro inline gap */
   --semantics-spacing-gap-inline-sm: var(--spacing-2x);
-  /* 8px: badge/button icon gap */
   --semantics-spacing-gap-inline-md: var(--spacing-3x);
-  /* 12px: inline field gap */
   --semantics-spacing-gap-inline-lg: var(--spacing-4x);
-  /* 16px: column gap */
 
   --semantics-spacing-gap-stack-xs: var(--spacing-1x);
-  /* 4px: title to subtitle */
   --semantics-spacing-gap-stack-sm: var(--spacing-2x);
-  /* 8px: label to field */
   --semantics-spacing-gap-stack-md: var(--spacing-4x);
-  /* 16px: between fields in section */
   --semantics-spacing-gap-stack-lg: var(--spacing-6x);
-  /* 24px: between content blocks */
   --semantics-spacing-gap-stack-xl: var(--spacing-8x);
-  /* 32px: between form sections */
 
   --semantics-spacing-padding-control-x: var(--spacing-3x);
-  /* 12px */
   --semantics-spacing-padding-control-y: var(--spacing-2x);
-  /* 8px */
   --semantics-spacing-padding-card: var(--spacing-4x);
-  /* 16px */
   --semantics-spacing-padding-panel-x: var(--spacing-8x);
-  /* 32px */
   --semantics-spacing-padding-panel-y: var(--spacing-6x);
-  /* 24px */
 
-  /* ---- Button tokens (Figma: Bolt | Design System node 97:563) ---- */
+  /* ---- Button tokens (Figma collection 'Components', node 97:563) ---- */
   /* Primary */
   --button-primary-background: var(--semantics-interactive-primary);
-  /* #6938EF */
   --button-primary-background-hover: var(--semantics-interactive-primary-hover);
-  /* #5925DC */
+  --button-primary-background-active: var(--semantics-interactive-primary-active);
   --button-primary-text: var(--semantics-text-on-brand);
-  /* #FFFFFF */
   --button-primary-background-disabled: var(--semantics-surface-disabled);
-  /* #F3F4F6 */
   --button-primary-text-disabled: var(--primitives-neutral-300);
-  /* #D1D5DB */
   --button-primary-focus-ring: var(--primitives-primary-200);
-  /* #D9D6FE */
 
   /* Secondary */
   --button-secondary-background: var(--semantics-surface-primary);
-  /* #FFFFFF */
   --button-secondary-background-hover: var(--semantics-surface-secondary);
-  /* #F9FAFB */
+  --button-secondary-background-active: var(--semantics-surface-tertiary);
   --button-secondary-border: var(--semantics-border-strong);
-  /* #D1D5DB */
   --button-secondary-border-hover: var(--primitives-neutral-400);
-  /* #9CA3AF */
   --button-secondary-text: var(--semantics-text-primary);
-  /* #111827 */
   --button-secondary-background-disabled: var(--semantics-surface-disabled);
-  /* #F3F4F6 */
   --button-secondary-border-disabled: var(--semantics-border-disabled);
-  /* #E5E7EB */
   --button-secondary-text-disabled: var(--primitives-neutral-300);
-  /* #D1D5DB */
+  --button-secondary-focus-ring: var(--primitives-primary-200);
 
   /* Tertiary */
   --button-tertiary-background: transparent;
   --button-tertiary-background-hover: var(--semantics-surface-brand-subtle);
-  /* #FAFAFF */
+  --button-tertiary-background-active: var(--semantics-interactive-subtle-hover);
   --button-tertiary-text: var(--semantics-text-link);
-  /* #5925DC */
   --button-tertiary-background-disabled: var(--semantics-surface-disabled);
-  /* #F3F4F6 */
   --button-tertiary-text-disabled: var(--primitives-neutral-300);
-  /* #D1D5DB */
+  --button-tertiary-focus-ring: var(--primitives-primary-200);
 
-  /* Focus ring */
-  --button-focus-ring-width: 2px;
-  /* Figma: thick */
-  --button-focus-ring-offset: 1px;
-  /* Figma: button/focus-ring/offset */
+  /* Borders & Focus ring */
+  --button-border-width-default: var(--border-width-thin);
+  --button-focus-ring-width: var(--border-width-thick);
+  --button-focus-ring-offset: var(--spacing-x-4);
   --button-focus-ring-corner-radius: var(--radius-md);
-  /* Figma: button/focus-ring/corner-radius */
 
   /* Sizes: xs (28px), sm (32px), md (36px), lg (40px) */
-  --button-height-xs: 28px;
+  --button-height-xs: var(--spacing-7x);
   --button-padding-x-xs: var(--spacing-2x);
-  /* 8px */
   --button-icon-gap-xs: var(--spacing-2x);
-  /* 8px */
   --button-corner-radius-xs: var(--radius-md);
-  /* 8px */
   --button-icon-size-xs: var(--size-icon-xs);
-  /* 12px */
 
   --button-height-sm: var(--spacing-8x);
-  /* 32px */
   --button-padding-x-sm: var(--spacing-3x);
-  /* 12px */
   --button-icon-gap-sm: var(--spacing-2x);
-  /* 8px */
   --button-corner-radius-sm: var(--radius-md);
-  /* 8px */
   --button-icon-size-sm: var(--size-icon-xs);
-  /* 12px */
 
-  --button-height-md: 36px;
+  --button-height-md: var(--spacing-9x);
   --button-padding-x-md: var(--spacing-3x);
-  /* 12px */
   --button-icon-gap-md: var(--spacing-2x);
-  /* 8px */
   --button-corner-radius-md: var(--radius-md);
-  /* 8px */
   --button-icon-size-md: var(--size-icon-sm);
-  /* 16px */
 
   --button-height-lg: var(--spacing-10x);
-  /* 40px */
   --button-padding-x-lg: var(--spacing-4x);
-  /* 16px */
   --button-icon-gap-lg: var(--spacing-2x);
-  /* 8px */
   --button-corner-radius-lg: var(--radius-md);
-  /* 8px */
   --button-icon-size-lg: var(--size-icon-md);
-  /* 20px */
 
-  /* Form control sizing */
+  /* ---- Segmented Control tokens ---- */
+  --segmented-track-bg: var(--semantics-surface-secondary);
+  --segmented-track-border: var(--semantics-border-default);
+  --segmented-item-text: var(--semantics-text-secondary);
+  --segmented-item-text-hover: var(--semantics-text-primary);
+  --segmented-item-bg-hover: var(--semantics-surface-hover-subtle);
+  --segmented-item-bg-active: var(--semantics-surface-primary);
+  --segmented-item-text-active: var(--semantics-text-primary);
+  --segmented-item-shadow-active: var(--elevation-xs);
+  --segmented-item-text-disabled: var(--semantics-text-disabled);
+
+  /* ---- IconButton tokens ---- */
+  --icon-button-size-xs: var(--space-7x);
+  --icon-button-size-sm: var(--space-8x);
+  --icon-button-size-md: var(--space-9x);
+  --icon-button-size-lg: var(--space-10x);
+  --icon-button-radius: var(--radius-full);
+
+  --icon-button-icon-size-xs: var(--size-icon-xs);
+  --icon-button-icon-size-sm: var(--size-icon-sm);
+  --icon-button-icon-size-md: var(--size-icon-md);
+  --icon-button-icon-size-lg: var(--size-icon-md);
+
+  /* Default state: background/primary fill, text/secondary icon (borderless) */
+  --icon-button-background: var(--semantics-surface-primary);
+  --icon-button-color: var(--semantics-text-secondary);
+  --icon-button-border: transparent;
+
+  /* Hover state: primitives/neutral/50 fill, text/primary icon */
+  --icon-button-background-hover: var(--primitives-neutral-50);
+  --icon-button-color-hover: var(--semantics-text-primary);
+  --icon-button-border-hover: transparent;
+
+  /* Active / Pressed state */
+  --icon-button-background-active: var(--semantics-surface-secondary);
+  --icon-button-color-active: var(--semantics-text-primary);
+  --icon-button-border-active: transparent;
+
+  /* Focus ring */
+  --icon-button-focus-ring: var(--semantics-border-focus);
+
+  /* Disabled state */
+  --icon-button-background-disabled: var(--semantics-surface-disabled);
+  --icon-button-color-disabled: var(--semantics-text-disabled);
+  --icon-button-border-disabled: transparent;
+
+  /* ---- Form control sizing ---- */
   --control-height-sm: var(--spacing-8x);
-  /* 32px */
-  --control-height-md: 36px;
+  --control-height-md: var(--spacing-9x);
   --control-height-lg: var(--spacing-10x);
-  /* 40px */
   --control-size-sm: var(--spacing-4x);
-  /* 16px */
-  --size-icon-lg: var(--spacing-6x);
-  /* 24px */
 
-  /* elevation-md — Figma drop shadow (offset 0,8 / blur 24 / #1118271f) */
+  /* ---- Elevation & Shadows (Figma effectStyles 'elevation-sm/md/lg' + collection 'elevation') ---- */
+  --elevation-xs: 0px 1px 2px 0px rgba(15, 23, 42, 0.06), 0px 0px 0px 1px rgba(15, 23, 42, 0.04);
+  --elevation-sm: 0px 2px 16px 0px rgba(17, 24, 39, 0.09);
   --elevation-md: 0px 8px 24px 0px rgba(17, 24, 39, 0.12);
+  --elevation-lg: 0px 16px 48px -4px rgba(17, 24, 39, 0.18);
+  --elevation-drawer: -12px 0px 40px 0px rgba(15, 23, 42, 0.18);
 }
 
 /**

@@ -21,10 +21,10 @@ const STATUS_CLASS: Record<string, string> = {
 
 const STATUS_LABEL: Record<string, string> = {
   submitted: "Submitted",
-  "under-review": "Under review",
+  "under-review": "Review",
   shortlisted: "Shortlisted",
   interview: "Interview",
-  offered: "Offered",
+  offered: "Offer",
   joined: "Joined",
   "on-hold": "On hold",
   rejected: "Rejected",

@@ -1,6 +1,7 @@
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import type { ComponentType, FormEvent, ReactNode } from "react";
 import { Badge } from "@/components/shared/Badge";
+import { IconButton } from "@/components/shared/IconButton";
 import { Checkbox } from "@/components/shared/Checkbox";
 import { Tab as TabButton } from "@/components/shared/Tab";
 import {
@@ -16,6 +17,7 @@ import type { ProfileSectionId } from "@/proto/candidate-profile/profileData";
 import {
   ChecklistGroup,
   FileField,
+  MonthYearPicker,
   PhoneField,
   SelectField,
   TextAreaField,
@@ -23,9 +25,10 @@ import {
 } from "./fields";
 import { CheckIcon, MailIcon, SparklesIcon, XIcon as XCloseIcon } from "./icons";
 import {
+  DEGREE_OPTIONS,
+  EXPERIENCE_WORK_MODE_OPTIONS,
   NOTICE_OPTIONS,
   WORK_MODE_OPTIONS,
-  YEAR_OPTIONS,
   buildParsedSample,
   createEmptyCertification,
   createEmptyEducation,
@@ -133,6 +136,7 @@ export function SubmitCandidate({
   className,
   initialValues,
   prefillSourceLabel,
+  submitLabel = "Submit candidate",
   onBack,
 }: SubmitCandidateProps) {
   const requirements =
@@ -268,7 +272,6 @@ export function SubmitCandidate({
   ].filter((entry) => entry.text.length > 0);
 
   const { values, set, bind, touch, shown } = form;
-  const working = values.working !== "No";
   const showNegotiable = values.notice !== "" && values.notice !== "Immediately";
 
   useEffect(() => {
@@ -296,7 +299,11 @@ export function SubmitCandidate({
   };
 
   // Repeatable Education handlers
-  const updateEducation = (idx: number, field: keyof FormEducationEntry, val: string) => {
+  const updateEducation = <K extends keyof FormEducationEntry>(
+    idx: number,
+    field: K,
+    val: FormEducationEntry[K]
+  ) => {
     const next = values.educationList.map((item, i) =>
       i === idx ? { ...item, [field]: val } : item
     );
@@ -322,16 +329,16 @@ export function SubmitCandidate({
   };
 
   // Repeatable Work Experience handlers
-  const updateWorkExperience = (
+  const updateWorkExperience = <K extends keyof FormWorkExperienceEntry>(
     idx: number,
-    field: keyof FormWorkExperienceEntry,
-    val: string
+    field: K,
+    val: FormWorkExperienceEntry[K]
   ) => {
     const next = values.workExperienceList.map((item, i) =>
       i === idx ? { ...item, [field]: val } : item
     );
     set("workExperienceList", next);
-    if (idx === 0 && field === "company") {
+    if (idx === 0 && field === "company" && typeof val === "string") {
       set("company", val);
     }
   };
@@ -352,6 +359,22 @@ export function SubmitCandidate({
       "workExperienceList",
       values.workExperienceList.filter((_, i) => i !== idx)
     );
+  };
+
+  const toggleCurrentRole = (idx: number, checked: boolean) => {
+    const next = values.workExperienceList.map((item, i) => {
+      if (i !== idx) return item;
+      return {
+        ...item,
+        isCurrent: checked,
+        endDate: checked
+          ? "Present"
+          : item.endDate.toLowerCase() === "present"
+            ? ""
+            : item.endDate,
+      };
+    });
+    set("workExperienceList", next);
   };
 
   // Repeatable Projects handlers
@@ -427,7 +450,10 @@ export function SubmitCandidate({
     );
   };
 
-  const suggestedSkills = skills.filter(
+  const poolSkills = skills.length > 0
+    ? skills
+    : ["Figma", "Design Systems", "User Research", "Interaction Design", "Rapid Prototyping", "Visual Design", "Wireframing", "Usability Testing", "Product Strategy"];
+  const suggestedSkills = poolSkills.filter(
     (sk) => !values.skillsList.some((existing) => existing.toLowerCase() === sk.toLowerCase())
   );
 
@@ -452,7 +478,7 @@ export function SubmitCandidate({
   return (
     <section
       className={[styles.panel, className].filter(Boolean).join(" ")}
-      aria-label={`Submit candidate for ${job.role} at ${job.company}`}
+      aria-label={`${submitLabel} for ${job.role} at ${job.company}`}
     >
       <header className={styles.header}>
         <div className={styles.headMain}>
@@ -485,9 +511,12 @@ export function SubmitCandidate({
               </span>
             </div>
             {job.badge && <Badge type={job.badge} className={styles.badge} />}
-            <button type="button" className={styles.close} aria-label="Close" onClick={onClose}>
-              <XIcon size="md" />
-            </button>
+            <IconButton
+              icon={<XIcon size="md" />}
+              ariaLabel="Close candidate submission"
+              size="md"
+              onClick={onClose}
+            />
           </div>
           <div className={styles.headTitle}>
             <h2 className={styles.role} title={job.role}>
@@ -519,7 +548,7 @@ export function SubmitCandidate({
         {form.status !== "done" && (
           <nav className={styles.tabs} role="tablist" aria-label="Submit candidate and job details">
             <TabButton
-              label="Submit candidate"
+              label={submitLabel}
               active={tab === "submit"}
               onClick={() => setTab("submit")}
             />
@@ -607,7 +636,7 @@ export function SubmitCandidate({
                     hero
                     label="Resume"
                     title="Start with the resume"
-                    help="We'll prefill Personal info, Education, Work experience, Projects, Certifications, Links & Skills. PDF or Word · up to 5 MB"
+                    help="Upload a candidate resume to auto-fill details. Supports PDF, DOC, DOCX upto 5 MB."
                     value={values.resume}
                     busy={parsing}
                     onChange={handleResumeChange}
@@ -643,7 +672,7 @@ export function SubmitCandidate({
                         {...bind("name")}
                         label="Full legal name"
                         autoComplete="name"
-                        placeholder="Rohan Mehta"
+                        placeholder="e.g. John Doe"
                         autoFocus
                       />
                     </div>
@@ -653,7 +682,7 @@ export function SubmitCandidate({
                       type="email"
                       inputMode="email"
                       autoComplete="email"
-                      placeholder="rohan.mehta@gmail.com"
+                      placeholder="e.g. name@example.com"
                       prefix={<MailIcon />}
                     />
                     <PhoneField
@@ -665,7 +694,7 @@ export function SubmitCandidate({
                     <TextField
                       {...bind("location")}
                       label="Location"
-                      placeholder="Bengaluru, India"
+                      placeholder="e.g. Bengaluru, India"
                     />
                     <SelectField
                       {...bind("workModePreference")}
@@ -678,7 +707,7 @@ export function SubmitCandidate({
                       label="Total experience"
                       numeric
                       suffix="Years"
-                      placeholder="6"
+                      placeholder="e.g. 5"
                     />
                     <SelectField
                       {...bind("notice")}
@@ -701,21 +730,19 @@ export function SubmitCandidate({
                         onChange={(e) => set("working", e.target.checked ? "No" : "Yes")}
                       />
                     </div>
-                    {working && (
-                      <TextField
-                        {...bind("currentCtc")}
-                        label="Current CTC"
-                        numeric
-                        suffix="Lakhs"
-                        placeholder="32"
-                      />
-                    )}
+                    <TextField
+                      {...bind("currentCtc")}
+                      label={values.working === "No" ? "Last CTC" : "Current CTC"}
+                      numeric
+                      suffix="Lakhs"
+                      placeholder="e.g. 24"
+                    />
                     <TextField
                       {...bind("expectedCtc")}
                       label="Expected CTC"
                       numeric
                       suffix="Lakhs"
-                      placeholder="45"
+                      placeholder="e.g. 35"
                     />
                   </div>
                 </section>
@@ -752,58 +779,66 @@ export function SubmitCandidate({
 
                       return (
                         <div key={edu.id} className={styles.repeatableItem}>
-                          <div className={styles.entryHeaderRow}>
-                            <h4 className={styles.entryHeading} title={headingText}>
-                              {headingText}
-                            </h4>
-                            <button
-                              type="button"
-                              className={styles.removeEntryBtn}
-                              onClick={() => removeEducation(idx)}
-                              aria-label={`Remove ${headingText}`}
-                            >
-                              <XCloseIcon size={12} />
-                              <span>Remove</span>
-                            </button>
-                          </div>
+                          {idx > 0 && (
+                            <div className={styles.entryHeaderRow}>
+                              <h4 className={`${styles.entryHeading} text-style-label-1`} title={headingText}>
+                                {headingText}
+                              </h4>
+                              <button
+                                type="button"
+                                className={styles.removeEntryBtn}
+                                onClick={() => removeEducation(idx)}
+                                aria-label={`Remove ${headingText}`}
+                              >
+                                <XCloseIcon size={12} />
+                                <span>Remove</span>
+                              </button>
+                            </div>
+                          )}
 
                           <div className={styles.grid}>
-                            <TextField
-                              id={`cf-edu-school-${edu.id}`}
-                              label="School / College"
-                              value={edu.institution}
-                              onChange={(v) => updateEducation(idx, "institution", v)}
-                              placeholder="National Institute of Technology Karnataka (NITK)"
-                            />
-                            <TextField
+                            <div className={styles.full}>
+                              <TextField
+                                id={`cf-edu-school-${edu.id}`}
+                                label="School / College"
+                                value={edu.institution}
+                                onChange={(v) => updateEducation(idx, "institution", v)}
+                                placeholder="e.g. University / College name"
+                              />
+                            </div>
+                            <SelectField
                               id={`cf-edu-degree-${edu.id}`}
                               label="Degree"
                               value={edu.degree}
+                              options={DEGREE_OPTIONS}
                               onChange={(v) => updateEducation(idx, "degree", v)}
-                              placeholder="B.Tech in Computer Science & Engineering"
+                              placeholder="Select degree"
                             />
-                            <SelectField
+                            <TextField
+                              id={`cf-edu-major-${edu.id}`}
+                              label="Area of study"
+                              value={edu.areaOfStudy || ""}
+                              onChange={(v) => updateEducation(idx, "areaOfStudy", v)}
+                              placeholder="e.g. Computer Science"
+                            />
+                            <MonthYearPicker
                               id={`cf-edu-start-${edu.id}`}
-                              label="Start year"
+                              label="Start date"
                               value={edu.startYear}
-                              options={YEAR_OPTIONS}
                               onChange={(v) => updateEducation(idx, "startYear", v)}
-                              placeholder="Select start year"
                             />
-                            <SelectField
+                            <MonthYearPicker
                               id={`cf-edu-end-${edu.id}`}
-                              label="End year"
+                              label="End date"
                               value={edu.endYear}
-                              options={YEAR_OPTIONS}
                               onChange={(v) => updateEducation(idx, "endYear", v)}
-                              placeholder="Select end year"
                             />
                             <TextField
                               id={`cf-edu-loc-${edu.id}`}
                               label="Location"
                               value={edu.location}
                               onChange={(v) => updateEducation(idx, "location", v)}
-                              placeholder="Mangaluru"
+                              placeholder="e.g. Bengaluru, India"
                             />
                             <TextField
                               id={`cf-edu-grade-${edu.id}`}
@@ -811,7 +846,7 @@ export function SubmitCandidate({
                               optional
                               value={edu.grade}
                               onChange={(v) => updateEducation(idx, "grade", v)}
-                              placeholder="8.9 CGPA · First Class with Distinction"
+                              placeholder="e.g. 8.5 CGPA or 3.8 GPA"
                             />
                           </div>
                         </div>
@@ -852,20 +887,22 @@ export function SubmitCandidate({
 
                       return (
                         <div key={exp.id} className={styles.repeatableItem}>
-                          <div className={styles.entryHeaderRow}>
-                            <h4 className={styles.entryHeading} title={headingText}>
-                              {headingText}
-                            </h4>
-                            <button
-                              type="button"
-                              className={styles.removeEntryBtn}
-                              onClick={() => removeWorkExperience(idx)}
-                              aria-label={`Remove ${headingText}`}
-                            >
-                              <XCloseIcon size={12} />
-                              <span>Remove</span>
-                            </button>
-                          </div>
+                          {idx > 0 && (
+                            <div className={styles.entryHeaderRow}>
+                              <h4 className={`${styles.entryHeading} text-style-label-1`} title={headingText}>
+                                {headingText}
+                              </h4>
+                              <button
+                                type="button"
+                                className={styles.removeEntryBtn}
+                                onClick={() => removeWorkExperience(idx)}
+                                aria-label={`Remove ${headingText}`}
+                              >
+                                <XCloseIcon size={12} />
+                                <span>Remove</span>
+                              </button>
+                            </div>
+                          )}
 
                           <div className={styles.grid}>
                             <TextField
@@ -873,46 +910,60 @@ export function SubmitCandidate({
                               label="Company"
                               value={exp.company}
                               onChange={(v) => updateWorkExperience(idx, "company", v)}
-                              placeholder="Zeta"
+                              placeholder="e.g. Acme Corp"
                             />
                             <TextField
                               id={`cf-exp-role-${exp.id}`}
                               label="Role"
                               value={exp.role}
                               onChange={(v) => updateWorkExperience(idx, "role", v)}
-                              placeholder="Senior Frontend Engineer"
+                              placeholder="e.g. Senior Software Engineer"
                             />
-                            <TextField
+                            <MonthYearPicker
                               id={`cf-exp-start-${exp.id}`}
                               label="Start date"
                               value={exp.startDate}
                               onChange={(v) => updateWorkExperience(idx, "startDate", v)}
-                              placeholder="Apr 2023"
                             />
-                            <TextField
-                              id={`cf-exp-end-${exp.id}`}
-                              label="End date"
-                              value={exp.endDate}
-                              onChange={(v) => updateWorkExperience(idx, "endDate", v)}
-                              placeholder="Present"
-                            />
-                            <div className={styles.full}>
-                              <TextField
-                                id={`cf-exp-loc-${exp.id}`}
-                                label="Location & work mode"
-                                value={exp.location}
-                                onChange={(v) => updateWorkExperience(idx, "location", v)}
-                                placeholder="Bengaluru · Hybrid"
+                            <div className={styles.endDateWithCheckboxCol}>
+                              <MonthYearPicker
+                                id={`cf-exp-end-${exp.id}`}
+                                label="End date"
+                                value={exp.endDate}
+                                onChange={(v) => updateWorkExperience(idx, "endDate", v)}
+                                disabled={exp.isCurrent ?? exp.endDate.toLowerCase() === "present"}
+                                disabledPlaceholder="Present"
                               />
+                              <div className={styles.endRoleCheckWrap}>
+                                <Checkbox
+                                  label="This is my current role"
+                                  checked={exp.isCurrent ?? exp.endDate.toLowerCase() === "present"}
+                                  onChange={(e) => toggleCurrentRole(idx, e.target.checked)}
+                                />
+                              </div>
                             </div>
+                            <TextField
+                              id={`cf-exp-loc-${exp.id}`}
+                              label="Location"
+                              value={exp.location}
+                              onChange={(v) => updateWorkExperience(idx, "location", v)}
+                              placeholder="e.g. Bengaluru, India"
+                            />
+                            <SelectField
+                              id={`cf-exp-mode-${exp.id}`}
+                              label="Work mode"
+                              value={exp.workMode || "Hybrid"}
+                              options={EXPERIENCE_WORK_MODE_OPTIONS}
+                              onChange={(v) => updateWorkExperience(idx, "workMode", v)}
+                              placeholder="Select work mode"
+                            />
                             <div className={styles.full}>
                               <TextAreaField
                                 id={`cf-exp-highlights-${exp.id}`}
-                                label="Key highlights & achievements (one bullet per line)"
-                                optional
+                                label="Key highlights"
                                 value={exp.highlightsText}
                                 onChange={(v) => updateWorkExperience(idx, "highlightsText", v)}
-                                placeholder="Architected the core card-issuing console in React 18 & TypeScript...&#10;Led migration to a token-driven design system..."
+                                placeholder="Key contributions and achievements, one per line..."
                               />
                             </div>
                           </div>
@@ -950,20 +1001,22 @@ export function SubmitCandidate({
                       const headingText = proj.title.trim() || `Project #${idx + 1}`;
                       return (
                         <div key={proj.id} className={styles.repeatableItem}>
-                          <div className={styles.entryHeaderRow}>
-                            <h4 className={styles.entryHeading} title={headingText}>
-                              {headingText}
-                            </h4>
-                            <button
-                              type="button"
-                              className={styles.removeEntryBtn}
-                              onClick={() => removeProject(idx)}
-                              aria-label={`Remove ${headingText}`}
-                            >
-                              <XCloseIcon size={12} />
-                              <span>Remove</span>
-                            </button>
-                          </div>
+                          {idx > 0 && (
+                            <div className={styles.entryHeaderRow}>
+                              <h4 className={`${styles.entryHeading} text-style-label-1`} title={headingText}>
+                                {headingText}
+                              </h4>
+                              <button
+                                type="button"
+                                className={styles.removeEntryBtn}
+                                onClick={() => removeProject(idx)}
+                                aria-label={`Remove ${headingText}`}
+                              >
+                                <XCloseIcon size={12} />
+                                <span>Remove</span>
+                              </button>
+                            </div>
+                          )}
 
                           <div className={styles.grid}>
                             <TextField
@@ -971,15 +1024,14 @@ export function SubmitCandidate({
                               label="Project title"
                               value={proj.title}
                               onChange={(v) => updateProject(idx, "title", v)}
-                              placeholder="Bolt UI — Multi-Brand Design Token Engine"
+                              placeholder="e.g. Real-Time Analytics Pipeline"
                             />
                             <TextField
                               id={`cf-proj-sub-${proj.id}`}
-                              label="Role & year"
-                              optional
+                              label="Year"
                               value={proj.subtitle}
                               onChange={(v) => updateProject(idx, "subtitle", v)}
-                              placeholder="Lead Author · 2025"
+                              placeholder="e.g. 2025"
                             />
                             <div className={styles.full}>
                               <TextAreaField
@@ -988,7 +1040,7 @@ export function SubmitCandidate({
                                 optional
                                 value={proj.description}
                                 onChange={(v) => updateProject(idx, "description", v)}
-                                placeholder="Zero-runtime CSS token pipeline and accessible React primitive library..."
+                                placeholder="Brief description of the project, architecture, and impact..."
                               />
                             </div>
                           </div>
@@ -1026,20 +1078,22 @@ export function SubmitCandidate({
                       const headingText = cert.name.trim() || `Certification #${idx + 1}`;
                       return (
                         <div key={cert.id} className={styles.repeatableItem}>
-                          <div className={styles.entryHeaderRow}>
-                            <h4 className={styles.entryHeading} title={headingText}>
-                              {headingText}
-                            </h4>
-                            <button
-                              type="button"
-                              className={styles.removeEntryBtn}
-                              onClick={() => removeCertification(idx)}
-                              aria-label={`Remove ${headingText}`}
-                            >
-                              <XCloseIcon size={12} />
-                              <span>Remove</span>
-                            </button>
-                          </div>
+                          {idx > 0 && (
+                            <div className={styles.entryHeaderRow}>
+                              <h4 className={`${styles.entryHeading} text-style-label-1`} title={headingText}>
+                                {headingText}
+                              </h4>
+                              <button
+                                type="button"
+                                className={styles.removeEntryBtn}
+                                onClick={() => removeCertification(idx)}
+                                aria-label={`Remove ${headingText}`}
+                              >
+                                <XCloseIcon size={12} />
+                                <span>Remove</span>
+                              </button>
+                            </div>
+                          )}
 
                           <div className={styles.grid}>
                             <TextField
@@ -1047,21 +1101,21 @@ export function SubmitCandidate({
                               label="Certification name"
                               value={cert.name}
                               onChange={(v) => updateCertification(idx, "name", v)}
-                              placeholder="Google Cloud Certified — Professional Cloud Developer"
+                              placeholder="e.g. AWS Certified Solutions Architect"
                             />
                             <TextField
                               id={`cf-cert-issuer-${cert.id}`}
                               label="Issuing organization"
                               value={cert.issuer}
                               onChange={(v) => updateCertification(idx, "issuer", v)}
-                              placeholder="Google Cloud"
+                              placeholder="e.g. Amazon Web Services"
                             />
                             <TextField
                               id={`cf-cert-date-${cert.id}`}
                               label="Issue date"
                               value={cert.issuedDate}
                               onChange={(v) => updateCertification(idx, "issuedDate", v)}
-                              placeholder="Aug 2025"
+                              placeholder="e.g. Mar 2024"
                             />
                             <TextField
                               id={`cf-cert-id-${cert.id}`}
@@ -1069,7 +1123,7 @@ export function SubmitCandidate({
                               optional
                               value={cert.credentialId}
                               onChange={(v) => updateCertification(idx, "credentialId", v)}
-                              placeholder="GCP-PCD-994182"
+                              placeholder="e.g. AWS-PSA-123456"
                             />
                           </div>
                         </div>
@@ -1097,7 +1151,7 @@ export function SubmitCandidate({
                         label="LinkedIn"
                         type="url"
                         inputMode="url"
-                        placeholder="linkedin.com/in/rohan-mehta"
+                        placeholder="linkedin.com/in/username"
                       />
                     </div>
 
@@ -1111,7 +1165,7 @@ export function SubmitCandidate({
                               type="url"
                               inputMode="url"
                               optional
-                              placeholder="github.com/rohan-mehta"
+                              placeholder="github.com/username"
                             />
                           </div>
                           <button
@@ -1140,7 +1194,7 @@ export function SubmitCandidate({
                               type="url"
                               inputMode="url"
                               optional
-                              placeholder="rohan-mehta.dev"
+                              placeholder="portfolio.dev or yoursite.com"
                             />
                           </div>
                           <button
@@ -1231,7 +1285,7 @@ export function SubmitCandidate({
                           optional
                           value={skillDraft}
                           onChange={setSkillDraft}
-                          placeholder="Type a skill (e.g. TypeScript, System Design) and press Enter"
+                          placeholder="Type a skill and press Enter"
                         />
                       </div>
                       <button
@@ -1278,23 +1332,6 @@ export function SubmitCandidate({
                     <h3 id="sc-requirements" className={`${styles.sectionTitle} text-style-heading-4`}>
                       Must-have requirements
                     </h3>
-                    {requirements.length > 0 && (
-                      <span
-                        className={styles.sectionMetaPill}
-                        data-all-verified={
-                          values.verifiedRequirements.length === requirements.length ? "" : undefined
-                        }
-                      >
-                        {values.verifiedRequirements.length === requirements.length ? (
-                          <>
-                            <CheckIcon size={12} />
-                            All {requirements.length} verified
-                          </>
-                        ) : (
-                          `${values.verifiedRequirements.length}/${requirements.length} verified`
-                        )}
-                      </span>
-                    )}
                   </div>
 
                   {requirements.length > 0 && (
@@ -1304,7 +1341,7 @@ export function SubmitCandidate({
                       values={values.verifiedRequirements}
                       onChange={(v) => set("verifiedRequirements", v)}
                       onBlur={() => touch("verifiedRequirements")}
-                      error={shown("verifiedRequirements")}
+                      error={form.attempted && values.verifiedRequirements.length < requirements.length ? "Confirm all must-have requirements before submitting" : undefined}
                       footer="Confirm the candidate meets all dealbreakers before submitting."
                     />
                   )}
@@ -1395,7 +1432,11 @@ export function SubmitCandidate({
                   {form.status === "submitting" && (
                     <span className={styles.spinner} aria-hidden="true" />
                   )}
-                  {form.status === "submitting" ? "Submitting…" : "Submit candidate"}
+                  {form.status === "submitting"
+                    ? submitLabel === "Edit candidate"
+                      ? "Saving…"
+                      : "Submitting…"
+                    : submitLabel}
                 </button>
               ) : (
                 <button
@@ -1403,7 +1444,7 @@ export function SubmitCandidate({
                   className={`${styles.btn} ${styles.primary}`}
                   onClick={() => setTab("submit")}
                 >
-                  Submit candidate
+                  {submitLabel}
                 </button>
               )}
             </div>

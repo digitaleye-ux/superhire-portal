@@ -51,6 +51,7 @@ export function PageHeader({
                     ? (e) => search.onChange?.(e.target.value)
                     : undefined
                 }
+                onClear={() => search.onChange?.("")}
               />
             )}
             {actions}

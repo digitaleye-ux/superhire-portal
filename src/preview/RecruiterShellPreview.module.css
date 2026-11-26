@@ -12,9 +12,9 @@
   display: flex;
   overflow: hidden;
   background: var(--semantics-surface-primary);
-  /* Hide the scroll bar; content still scrolls. */
   scrollbar-width: none;
 }
+
 .body::-webkit-scrollbar {
   display: none;
 }
@@ -24,8 +24,7 @@
   flex-direction: row;
 }
 
-/* Left column holds header + filter bar (pinned) and the scrolling card body.
-   Fills the full height on its own so header/filters sit only above the list. */
+/* Left column holds header + filter bar (pinned) and the scrolling card body. */
 .leftCol {
   flex: 1;
   min-width: 0;
@@ -51,11 +50,7 @@
   flex-direction: column;
   gap: var(--space-6x);
   background: var(--semantics-surface-primary);
-  /* Hide the scroll bar; content still scrolls. */
   scrollbar-width: none;
-}
-.body::-webkit-scrollbar {
-  display: none;
 }
 
 .cards {
@@ -81,8 +76,35 @@
   flex: 1 1 50%;
   min-width: 0;
   height: 100%;
-  border-left: 1px solid var(--semantics-border-default);
+  border-left: var(--border-width-thin) solid var(--semantics-border-strong);
   overflow: hidden;
+}
+
+/* Empty state block for Explore / Claimed / Track lists */
+.emptyState {
+  padding: var(--space-12x) var(--space-6x);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3x);
+}
+
+.emptyTitle {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-16);
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-primary);
+}
+
+.emptyBody {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  color: var(--semantics-text-tertiary);
 }
 
 /* Focused overlay drawer for Add Candidate to Another Role */
@@ -90,32 +112,40 @@
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: rgba(15, 23, 42, 0.45);
+  background: var(--semantics-surface-overlay);
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   display: flex;
   justify-content: flex-end;
-  animation: overlayFadeIn 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  animation: overlayFadeIn var(--duration-normal) var(--easing-out);
 }
 
 .overlayDrawer {
   width: 100%;
   max-width: 640px;
   height: 100%;
-  background: var(--semantics-background-primary, #ffffff);
-  box-shadow: -12px 0 40px rgba(15, 23, 42, 0.22);
+  background: var(--semantics-surface-primary);
+  box-shadow: var(--elevation-drawer);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  animation: overlaySlideIn 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  animation: overlaySlideIn var(--duration-slow) var(--easing-out);
 }
 
 @keyframes overlayFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes overlaySlideIn {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }

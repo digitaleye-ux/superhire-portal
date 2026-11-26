@@ -29,7 +29,7 @@ export interface JobCardProps {
   mode?: string;
   /** Employment type, e.g. "Full-time". Omit if unknown. */
   jobType?: string;
-  /** Commission amount shown in the footer, e.g. "₹25,000". Footer hides if omitted. */
+  /** Commission amount shown in the footer, e.g. "₹2,000" or "₹50,000". Footer hides if omitted. */
   commission?: string;
   /**
    * Recruiter earning model:

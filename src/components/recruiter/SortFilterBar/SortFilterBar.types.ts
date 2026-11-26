@@ -2,7 +2,7 @@ import type { DropdownOption } from "@/components/shared/Dropdown";
 
 /** The set of active filter selections, keyed by filter id. */
 export interface FilterState {
-  package: string[];
+  commission: string[];
   experience: string[];
   location: string[];
 }
@@ -26,16 +26,11 @@ export const FILTER_OPTIONS: {
   options: DropdownOption[];
 }[] = [
   {
-    id: "package",
-    label: "Package",
+    id: "commission",
+    label: "Commission",
     options: [
-      { value: "lt5", label: "Below ₹5 LPA" },
-      { value: "5-10", label: "₹5–10 LPA" },
-      { value: "11-25", label: "₹11–25 LPA" },
-      { value: "26-50", label: "₹26–50 LPA" },
-      { value: "51-75", label: "₹51–75 LPA" },
-      { value: "75+", label: "₹75+ LPA" },
-      { value: "undisclosed", label: "Not disclosed" },
+      { value: "shortlist", label: "Earn per shortlist" },
+      { value: "closure", label: "Earn per closure" },
     ],
   },
   {

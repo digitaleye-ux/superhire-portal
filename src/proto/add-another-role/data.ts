@@ -31,7 +31,7 @@ export const PROTOTYPE_CLAIMED_JOBS: PrototypeJob[] = [
     location: "Bengaluru, Hybrid",
     mode: "Hybrid",
     jobType: "Full-time",
-    commission: "₹28,000",
+    commission: "₹2,000",
     matchScore: "95% fit",
     matchReason: "Direct experience & notice alignment",
     mustHaves: [
@@ -51,7 +51,7 @@ export const PROTOTYPE_CLAIMED_JOBS: PrototypeJob[] = [
     location: "Remote",
     mode: "Remote",
     jobType: "Full-time",
-    commission: "₹30,000",
+    commission: "₹55,000",
     matchScore: "98% fit",
     matchReason: "Strong React & TypeScript foundations",
     mustHaves: [
@@ -71,7 +71,7 @@ export const PROTOTYPE_CLAIMED_JOBS: PrototypeJob[] = [
     location: "Bengaluru",
     mode: "On-site",
     jobType: "Full-time",
-    commission: "₹27,000",
+    commission: "₹50,000",
     matchScore: "82% fit",
     matchReason: "Requires native Swift/iOS background",
     mustHaves: [
@@ -90,7 +90,7 @@ export const PROTOTYPE_CLAIMED_JOBS: PrototypeJob[] = [
     location: "Remote",
     mode: "Remote",
     jobType: "Full-time",
-    commission: "₹3,50,000",
+    commission: "₹90,000",
     matchScore: "91% fit",
     matchReason: "CTC and seniority stretch opportunity",
     mustHaves: [
@@ -110,7 +110,7 @@ export const PROTOTYPE_CLAIMED_JOBS: PrototypeJob[] = [
     location: "Bengaluru",
     mode: "On-site",
     jobType: "Full-time",
-    commission: "₹25,000",
+    commission: "₹2,000",
     matchScore: "Current Application",
     mustHaves: ["React", "TypeScript", "Performance"],
     badge: "trending",

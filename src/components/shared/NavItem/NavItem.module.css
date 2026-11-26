@@ -1,5 +1,6 @@
 /* Sidebar nav item — Figma node 360:23986.
-   80x80 tile, centered icon + label. Colors/spacing from tokens. */
+   80x80 tile, centered icon + label.
+   States: default | hover | active (pressed) | selected (.active) | focus-visible | disabled. */
 
 .item {
   box-sizing: border-box;
@@ -13,24 +14,40 @@
   border: 0;
   background: transparent;
   cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
   text-decoration: none;
   color: var(--semantics-text-tertiary);
-  transition: background-color 120ms ease, color 120ms ease;
+  transition:
+    background-color var(--duration-fast) var(--easing-standard),
+    color var(--duration-fast) var(--easing-standard);
 }
 
 .item:focus-visible {
-  outline: 2px solid var(--semantics-border-focus);
-  outline-offset: -2px;
+  outline: var(--border-width-thick) solid var(--semantics-border-focus);
+  outline-offset: calc(-1 * var(--border-width-thick));
 }
 
-.item:hover {
+.item:hover:not(:disabled):not(.disabled) {
   background: var(--semantics-interactive-subtle);
+  color: var(--semantics-text-secondary);
+}
+
+.item:active:not(:disabled):not(.disabled) {
+  background: var(--semantics-interactive-subtle-hover);
 }
 
 .active,
-.active:hover {
+.active:hover:not(:disabled):not(.disabled) {
   background: var(--semantics-interactive-subtle-hover);
   color: var(--semantics-text-link);
+}
+
+.item:disabled,
+.disabled {
+  color: var(--semantics-text-disabled);
+  background: transparent;
+  cursor: not-allowed;
 }
 
 .content {
@@ -42,7 +59,6 @@
   width: 100%;
 }
 
-/* Icon inherits color from the item (tertiary, or link when active). */
 .icon {
   color: inherit;
 }

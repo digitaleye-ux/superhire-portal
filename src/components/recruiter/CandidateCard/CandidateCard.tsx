@@ -8,20 +8,21 @@ import {
   HandCoinsIcon,
   IndianRupeeIcon,
   LinkedinIcon,
-  LinkIcon,
   MapPinIcon,
   MoreVerticalIcon,
+  SquarePenIcon,
 } from "@/components/shared/Icon";
 import type { IconBaseProps } from "@/components/shared/Icon";
+import { IconButton } from "@/components/shared/IconButton";
 import type { CandidateCardProps, CandidateStatus } from "./CandidateCard.types";
 import styles from "./CandidateCard.module.css";
 
 const STATUS_LABEL: Record<CandidateStatus, string> = {
   submitted: "Submitted",
-  "under-review": "Under review",
+  "under-review": "Review",
   shortlisted: "Shortlisted",
   interview: "Interview",
-  offered: "Offered",
+  offered: "Offer",
   joined: "Joined",
   "on-hold": "On hold",
   rejected: "Rejected",
@@ -79,7 +80,7 @@ export function CandidateCard({
   ctcRange,
   noticePeriod,
   status,
-  commission = "₹25,000",
+  commission = "₹2,000",
   earningModel = "shortlist",
   linkedinUrl,
   onViewLinkedin,
@@ -88,6 +89,7 @@ export function CandidateCard({
   actionLabel = "Add another role",
   onAction,
   onClick,
+  onEditCandidate,
   onCopyLink,
   onWithdraw,
   className,
@@ -187,18 +189,17 @@ export function CandidateCard({
           </span>
 
           <div className={styles.menuContainer} ref={menuRef}>
-            <button
-              type="button"
-              className={`${styles.kebabBtn} ${menuOpen ? styles.kebabBtnActive : ""}`}
-              aria-label={`Options for ${candidateName}`}
+            <IconButton
+              icon={<MoreVerticalIcon size="sm" />}
+              ariaLabel={`Options for ${candidateName}`}
+              size="sm"
+              active={menuOpen}
               aria-expanded={menuOpen}
               onClick={(e) => {
                 e.stopPropagation();
                 setMenuOpen((prev) => !prev);
               }}
-            >
-              <MoreVerticalIcon size={16} />
-            </button>
+            />
 
             {menuOpen && (
               <div
@@ -241,23 +242,25 @@ export function CandidateCard({
                   </button>
                 )}
 
-                <button
-                  type="button"
-                  role="menuitem"
-                  className={styles.dropdownItem}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setMenuOpen(false);
-                    if (onCopyLink) {
-                      onCopyLink();
-                    } else if (typeof navigator !== "undefined" && navigator.clipboard) {
-                      navigator.clipboard.writeText(window.location.href);
-                    }
-                  }}
-                >
-                  <LinkIcon size={16} />
-                  <span>Copy candidate link</span>
-                </button>
+                {(onEditCandidate || onCopyLink) && (
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className={styles.dropdownItem}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setMenuOpen(false);
+                      if (onEditCandidate) {
+                        onEditCandidate();
+                      } else if (onCopyLink) {
+                        onCopyLink();
+                      }
+                    }}
+                  >
+                    <SquarePenIcon size={16} />
+                    <span>Edit candidate details</span>
+                  </button>
+                )}
 
                 {onWithdraw && (
                   <>

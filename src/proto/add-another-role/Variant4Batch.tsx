@@ -230,7 +230,7 @@ export default function Variant4Batch({
                         gap: 4,
                         fontSize: 13,
                         fontWeight: 600,
-                        color: "var(--semantics-text-interactive, #4f46e5)",
+                        color: "var(--semantics-text-link)",
                       }}
                     >
                       <HandCoinsIcon size={14} />
@@ -261,7 +261,7 @@ export default function Variant4Batch({
                 onClick={() => setCheckedDealbreakers([...mergedDealbreakers])}
                 style={{
                   fontSize: 12,
-                  color: "var(--semantics-text-interactive, #4f46e5)",
+                  color: "var(--semantics-text-link)",
                   background: "none",
                   border: 0,
                   cursor: "pointer",

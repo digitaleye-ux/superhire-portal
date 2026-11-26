@@ -2,6 +2,7 @@ import { Fragment, useState } from "react";
 import type { ComponentType } from "react";
 import { Badge } from "@/components/shared/Badge";
 import { Button } from "@/components/shared/Button";
+import { IconButton } from "@/components/shared/IconButton";
 import { Tab as TabButton } from "@/components/shared/Tab";
 import {
   BriefcaseBusinessIcon,
@@ -57,7 +58,7 @@ export function JobDetail({
     { label: "Employment", value: job.roleExpectations?.employment || job.jobType },
     { label: "Work mode", value: job.roleExpectations?.workMode || job.mode },
     { label: "Location", value: job.roleExpectations?.location || job.locationFull || job.location },
-    { label: "Openings", value: String(job.roleExpectations?.openings ?? job.openings) },
+    { label: "Package", value: job.packageLabel },
     (job.roleExpectations?.noticePeriod || job.noticePeriod)
       ? { label: "Notice period", value: job.roleExpectations?.noticePeriod || job.noticePeriod }
       : null,
@@ -111,9 +112,12 @@ export function JobDetail({
               </span>
             </div>
             {job.badge && <Badge type={job.badge} className={styles.badge} />}
-            <button className={styles.close} aria-label="Close" onClick={onClose}>
-              <XIcon size="md" />
-            </button>
+            <IconButton
+              icon={<XIcon size="md" />}
+              ariaLabel="Close job details"
+              size="md"
+              onClick={onClose}
+            />
           </div>
           <div className={styles.headTitle}>
             <h2 className={styles.role} title={job.role}>
@@ -159,85 +163,94 @@ export function JobDetail({
           <>
             {/* Skills */}
             {skills.length > 0 && (
-              <Block title="Skills">
-                <div className={styles.chips}>
-                  {skills.map((skill, i) => (
-                    <span key={i} className={`${styles.chip} text-style-label-3`}>
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </Block>
+              <>
+                <Block title="Skills">
+                  <div className={styles.chips}>
+                    {skills.map((skill, i) => (
+                      <span key={i} className={`${styles.chip} text-style-label-3`}>
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </Block>
+                <hr className={styles.divider} />
+              </>
             )}
 
             {/* 1. About the role */}
             {aboutRole && (
-              <Block title="About the role">
-                <p className={styles.p}>{aboutRole}</p>
-              </Block>
+              <>
+                <Block title="About the role">
+                  <p className={styles.p}>{aboutRole}</p>
+                </Block>
+                <hr className={styles.divider} />
+              </>
             )}
 
             {/* 2. What you'll do */}
             {responsibilities.length > 0 && (
-              <Block title="What you'll do">
-                <ul className={styles.bullets}>
-                  {responsibilities.map((r, i) => (
-                    <li key={i}>{r}</li>
-                  ))}
-                </ul>
-              </Block>
+              <>
+                <Block title="What you'll do">
+                  <ul className={styles.bullets}>
+                    {responsibilities.map((r, i) => (
+                      <li key={i}>{r}</li>
+                    ))}
+                  </ul>
+                </Block>
+                <hr className={styles.divider} />
+              </>
             )}
 
             {/* 3. What we're looking for */}
             {requirements.length > 0 && (
-              <Block title="What we're looking for">
-                <ul className={styles.bullets}>
-                  {requirements.map((req, i) => (
-                    <li key={i}>{req}</li>
-                  ))}
-                </ul>
-              </Block>
+              <>
+                <Block title="What we're looking for">
+                  <ul className={styles.bullets}>
+                    {requirements.map((req, i) => (
+                      <li key={i}>{req}</li>
+                    ))}
+                  </ul>
+                </Block>
+                <hr className={styles.divider} />
+              </>
             )}
 
             {/* 4. Nice to have (optional) */}
             {niceToHave.length > 0 && (
-              <Block title="Nice to have">
-                <ul className={styles.bullets}>
-                  {niceToHave.map((item, i) => (
-                    <li key={i}>{item}</li>
-                  ))}
-                </ul>
-              </Block>
+              <>
+                <Block title="Nice to have">
+                  <ul className={styles.bullets}>
+                    {niceToHave.map((item, i) => (
+                      <li key={i}>{item}</li>
+                    ))}
+                  </ul>
+                </Block>
+                <hr className={styles.divider} />
+              </>
             )}
 
-            {/* 5. Role expectations */}
+            {/* 5. Role expectations — Spec Sheet layout */}
             <Block title="Role expectations">
-              <div className={styles.grid}>
-                {expectations.map((exp) => (
-                  <Cell
-                    key={exp.label}
-                    label={exp.label}
-                    value={exp.value}
-                    title={exp.value}
-                  />
-                ))}
-              </div>
+              <SpecSheet items={expectations} />
               {disclaimer && <p className={styles.disclaimer}>{disclaimer}</p>}
             </Block>
 
             {/* 6. Compensation and benefits (optional) */}
             {compAndBenefits && (
-              <Block title="Compensation and benefits">
-                {Array.isArray(compAndBenefits) ? (
-                  <ul className={styles.bullets}>
-                    {compAndBenefits.map((item, i) => (
-                      <li key={i}>{item}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className={styles.p}>{compAndBenefits}</p>
-                )}
-              </Block>
+              <>
+                <hr className={styles.divider} />
+                <Block title="Compensation and benefits">
+                  {Array.isArray(compAndBenefits) ? (
+                    <ul className={styles.bullets}>
+                      {compAndBenefits.map((item, i) => (
+                        <li key={i}>{item}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className={styles.p}>{compAndBenefits}</p>
+                  )}
+                </Block>
+              </>
             )}
           </>
         ) : (
@@ -247,39 +260,49 @@ export function JobDetail({
               <p className={styles.p}>{c.about}</p>
             </Block>
 
-            {/* 2. Industry, company size, headquarters, website */}
-            <div className={styles.grid}>
-              <Cell label="Industry" value={c.domain} title={c.domain} />
-              <Cell label="Company size" value={c.employees} />
-              <Cell label="Headquarters" value={c.headquarters || "Global"} />
-              <Cell
-                label="Website"
-                value={c.website || `${job.company.toLowerCase().replace(/\s+/g, "")}.com`}
-              />
-              <Cell label="Open jobs" value={c.openJobs} />
-              <Cell label="Valuation" value={c.valuation} />
-            </div>
+            <hr className={styles.divider} />
+
+            {/* 2. Industry, company size, headquarters, website, open jobs, valuation */}
+            <SpecSheet
+              items={[
+                { label: "Industry", value: c.domain },
+                { label: "Company size", value: c.employees },
+                { label: "Headquarters", value: c.headquarters || "Global" },
+                {
+                  label: "Website",
+                  value: c.website || `${job.company.toLowerCase().replace(/\s+/g, "")}.com`,
+                },
+                { label: "Open jobs", value: c.openJobs },
+                { label: "Valuation", value: c.valuation },
+              ].filter((item) => Boolean(item.value))}
+            />
 
             {/* 3. Company culture */}
             {c.culture && c.culture.length > 0 && (
-              <Block title="Company culture">
-                <ul className={styles.bullets}>
-                  {c.culture.map((x, i) => (
-                    <li key={i}>{x}</li>
-                  ))}
-                </ul>
-              </Block>
+              <>
+                <hr className={styles.divider} />
+                <Block title="Company culture">
+                  <ul className={styles.bullets}>
+                    {c.culture.map((x, i) => (
+                      <li key={i}>{x}</li>
+                    ))}
+                  </ul>
+                </Block>
+              </>
             )}
 
             {/* 4. Company perks & benefits */}
             {c.perks && c.perks.length > 0 && (
-              <Block title="Company perks &amp; benefits">
-                <ul className={styles.bullets}>
-                  {c.perks.map((x, i) => (
-                    <li key={i}>{x}</li>
-                  ))}
-                </ul>
-              </Block>
+              <>
+                <hr className={styles.divider} />
+                <Block title="Company perks &amp; benefits">
+                  <ul className={styles.bullets}>
+                    {c.perks.map((x, i) => (
+                      <li key={i}>{x}</li>
+                    ))}
+                  </ul>
+                </Block>
+              </>
             )}
           </>
         )}
@@ -328,13 +351,38 @@ function Block({ title, children }: { title: string; children: React.ReactNode }
   );
 }
 
-function Cell({ label, value, title }: { label: string; value: string; title?: string }) {
+interface SpecItem {
+  label: string;
+  value: string;
+}
+
+function SpecSheet({ items }: { items: SpecItem[] }) {
+  const mid = Math.ceil(items.length / 2);
+  const col1 = items.slice(0, mid);
+  const col2 = items.slice(mid);
+
   return (
-    <div className={styles.cell}>
-      <span className={styles.cellLabel}>{label}</span>
-      <span className={styles.cellValue} title={title}>
-        {value}
-      </span>
+    <div className={styles.specSheet}>
+      <div className={styles.specColumn}>
+        {col1.map((item) => (
+          <div key={item.label} className={styles.specRow}>
+            <span className={`${styles.specLabel} text-style-label-2`}>{item.label}</span>
+            <span className={`${styles.specValue} text-style-label-2`} title={item.value}>
+              {item.value}
+            </span>
+          </div>
+        ))}
+      </div>
+      <div className={styles.specColumn}>
+        {col2.map((item) => (
+          <div key={item.label} className={styles.specRow}>
+            <span className={`${styles.specLabel} text-style-label-2`}>{item.label}</span>
+            <span className={`${styles.specValue} text-style-label-2`} title={item.value}>
+              {item.value}
+            </span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

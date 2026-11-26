@@ -47,11 +47,20 @@
   border: 0;
   background: transparent;
   cursor: pointer;
+  transition: background-color var(--duration-fast) var(--easing-standard);
+}
+
+.logoTile:hover {
+  background: var(--semantics-surface-secondary);
+}
+
+.logoTile:active {
+  background: var(--semantics-surface-tertiary);
 }
 
 .logoTile:focus-visible {
-  outline: 2px solid var(--semantics-border-focus);
-  outline-offset: -2px;
+  outline: var(--border-width-thick) solid var(--semantics-border-focus);
+  outline-offset: calc(-1 * var(--border-width-thick));
 }
 
 .logo {
@@ -72,11 +81,20 @@
   border: 0;
   background: transparent;
   cursor: pointer;
+  transition: background-color var(--duration-fast) var(--easing-standard);
+}
+
+.userTile:hover {
+  background: var(--semantics-surface-secondary);
+}
+
+.userTile:active {
+  background: var(--semantics-surface-tertiary);
 }
 
 .userTile:focus-visible {
-  outline: 2px solid var(--semantics-border-focus);
-  outline-offset: -2px;
+  outline: var(--border-width-thick) solid var(--semantics-border-focus);
+  outline-offset: calc(-1 * var(--border-width-thick));
 }
 
 .avatar {

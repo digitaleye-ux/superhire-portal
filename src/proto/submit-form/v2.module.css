@@ -48,7 +48,7 @@
   display: flex; flex-direction: column; gap: var(--space-4x);
   padding: var(--space-4x);
   border: 1px solid var(--semantics-border-default);
-  border-radius: var(--radius-xs);
+  border-radius: var(--radius-lg);
   background: var(--semantics-background-primary);
   box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
   transition: border-color 200ms ease-out;
@@ -88,7 +88,7 @@
 .ghost input:hover, .ghost select:hover, .ghost textarea:hover { border-color: var(--semantics-border-strong); background: var(--semantics-background-primary); }
 .ghost input:focus, .ghost textarea:focus { border-color: var(--semantics-border-focus); background: var(--semantics-background-primary); }
 .ghost input::placeholder { color: var(--semantics-text-placeholder); }
-.ghost [data-invalid] input, .ghost input[aria-invalid="true"] { border-color: var(--primitives-error-600); background: var(--semantics-background-primary); }
+.ghost [data-invalid] input, .ghost input[aria-invalid="true"] { border-color: var(--semantics-text-danger); background: var(--semantics-background-primary); }
 
 /* ---------- 4. Purpose-built controls ---------- */
 .stepper {
@@ -98,7 +98,7 @@
   transition: border-color 120ms ease, box-shadow 120ms ease;
 }
 .stepper:focus-within { border-color: var(--semantics-border-focus); box-shadow: 0 0 0 3px var(--primitives-primary-100); }
-.stepper[data-invalid] { border-color: var(--primitives-error-600); }
+.stepper[data-invalid] { border-color: var(--semantics-text-danger); }
 .stepBtn {
   position: relative; flex-shrink: 0; width: 40px; height: 100%; border: 0; background: transparent;
   color: var(--semantics-text-secondary); font-size: 18px; line-height: 1; cursor: pointer;
@@ -129,7 +129,7 @@
 .chip:active { scale: 0.96; }
 .chip[aria-checked="true"] { border-color: var(--semantics-border-interactive); background: var(--primitives-primary-50); color: var(--semantics-text-link); }
 .chip:focus-visible { outline: 2px solid var(--semantics-border-focus); outline-offset: 2px; }
-.chipGroup[data-invalid] .chip { border-color: var(--primitives-error-600); }
+.chipGroup[data-invalid] .chip { border-color: var(--semantics-text-danger); }
 
 .payPair { display: grid; grid-template-columns: minmax(0, 1fr) 20px minmax(0, 1fr); gap: var(--space-2x); align-items: end; }
 .payArrow { height: 40px; display: inline-flex; align-items: center; justify-content: center; color: var(--semantics-text-placeholder); }

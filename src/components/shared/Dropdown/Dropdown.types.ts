@@ -25,11 +25,26 @@ export interface DropdownProps {
    */
   singleShowsValue?: boolean;
   /**
+   * For single-select with an explicit default/all option (e.g. "both"):
+   * value considered default (unfiltered). When selected or cleared, the trigger
+   * stays in the neutral unselected state with the default label.
+   */
+  defaultValue?: string;
+  /**
+   * For single-select: allow clicking the currently selected option in the menu
+   * to deselect/clear it. Defaults to false.
+   */
+  allowDeselect?: boolean;
+  /**
    * Which edge the menu is anchored to. "left" (default) opens rightward;
    * "right" anchors the menu's right edge to the trigger so it opens leftward
    * — use for triggers near the right edge of the screen.
    */
   align?: "left" | "right";
+  /** Disable opening and changing options. */
+  disabled?: boolean;
+  /** Marks the trigger as invalid (error border). */
+  invalid?: boolean;
   className?: string;
   triggerClassName?: string;
   menuClassName?: string;

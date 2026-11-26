@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Badge } from "@/components/shared/Badge";
+import { Button } from "@/components/shared/Button";
+import { IconButton } from "@/components/shared/IconButton";
 import {
   ArrowRightIcon,
   BriefcaseBusinessIcon,
@@ -49,14 +51,12 @@ export function SelectRoleForCandidate({
             <h2 className={styles.title}>{candidate.name}</h2>
             <p className={styles.description}>{subtitle}</p>
           </div>
-          <button
-            type="button"
-            className={styles.close}
-            aria-label="Close"
+          <IconButton
+            icon={<XIcon size="md" />}
+            size="md"
             onClick={onClose}
-          >
-            <XIcon size="md" />
-          </button>
+            ariaLabel="Close select role drawer"
+          />
         </div>
       </header>
 
@@ -74,13 +74,9 @@ export function SelectRoleForCandidate({
             <p className={styles.emptyText}>
               Claim roles from the Explore page to submit {candidate.name} to new opportunities.
             </p>
-            <button
-              type="button"
-              className={styles.exploreBtn}
-              onClick={onExploreJobs}
-            >
+            <Button variant="primary" size="md" onClick={onExploreJobs}>
               Explore open jobs
-            </button>
+            </Button>
           </div>
         ) : (
           <div className={styles.rolesList}>

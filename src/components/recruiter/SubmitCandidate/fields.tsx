@@ -1,8 +1,9 @@
 import { useId, useState } from "react";
 import type { KeyboardEvent, ReactNode, DragEvent } from "react";
 import { Dropdown } from "@/components/shared/Dropdown";
+import { SegmentedControl } from "@/components/shared/SegmentedControl";
 import { CheckIcon, FileIcon, UploadIcon, XIcon } from "./icons";
-import { COUNTRY_CODES } from "./useCandidateForm";
+import { MONTH_OPTIONS, YEAR_OPTIONS } from "./useCandidateForm";
 import styles from "./fields.module.css";
 
 /* ---------- Shell: label above, hint, colocated error ---------- */
@@ -56,10 +57,11 @@ interface TextProps {
   suffix?: string;
   numeric?: boolean;
   autoFocus?: boolean;
+  disabled?: boolean;
 }
 export function TextField({
   id, label, value, onChange, onBlur, error, type = "text", inputMode,
-  autoComplete = "off", placeholder, optional, hint, prefix, suffix, numeric, autoFocus,
+  autoComplete = "off", placeholder, optional, hint, prefix, suffix, numeric, autoFocus, disabled,
 }: TextProps) {
   const isTouch = typeof window !== "undefined" && "ontouchstart" in window;
   return (
@@ -90,6 +92,7 @@ export function TextField({
           aria-invalid={error ? true : undefined}
           aria-describedby={describedBy(id, error, hint)}
           autoFocus={autoFocus && !isTouch}
+          disabled={disabled}
           data-1p-ignore={autoComplete === "off" ? "true" : undefined}
           data-lpignore={autoComplete === "off" ? "true" : undefined}
         />
@@ -99,30 +102,23 @@ export function TextField({
   );
 }
 
-/* ---------- Phone: country-code Dropdown + tel input ---------- */
+/* ---------- Phone: fixed +91 prefix + tel input ---------- */
 export function PhoneField(props: {
-  id: string; label: string; value: string; code: string;
-  onChange: (v: string) => void; onCode: (v: string) => void;
-  onBlur?: () => void; error?: string;
+  id: string;
+  label: string;
+  value: string;
+  code?: string;
+  onChange: (v: string) => void;
+  onCode?: (v: string) => void;
+  onBlur?: () => void;
+  error?: string;
 }) {
-  const { id, label, value, code, onChange, onCode, onBlur, error } = props;
-  const currentCode = code || "+91";
+  const { id, label, value, onChange, onBlur, error } = props;
 
   return (
     <Field id={id} label={label} error={error}>
       <div className={styles.phoneControl} data-invalid={error ? "" : undefined}>
-        <Dropdown
-          label={currentCode}
-          options={COUNTRY_CODES.map((c) => ({ value: c, label: c }))}
-          selected={[currentCode]}
-          onChange={(next) => onCode(next[0] ?? "+91")}
-          multiple={false}
-          singleShowsValue
-          align="left"
-          className={styles.phoneDropdownRoot}
-          triggerClassName={styles.phoneDropdownTrigger}
-          menuClassName={styles.phoneDropdownMenu}
-        />
+        <span className={styles.phoneFixedPrefix}>+91</span>
         <input
           id={id}
           className={styles.phoneInput}
@@ -148,12 +144,13 @@ export function SelectField(props: {
   placeholder?: string; hint?: string;
 }) {
   const { id, label, value, options, onChange, onBlur, error, placeholder = "Select notice period", hint } = props;
+  const allOptions = value && !options.includes(value) ? [value, ...options] : options;
   return (
     <Field id={id} label={label} error={error} hint={hint}>
       <div className={styles.selectDropdownWrap} data-invalid={error ? "" : undefined}>
         <Dropdown
           label={value || placeholder}
-          options={options.map((o) => ({ value: o, label: o }))}
+          options={allOptions.map((o) => ({ value: o, label: o }))}
           selected={value ? [value] : []}
           onChange={(next) => {
             onChange(next[0] ?? "");
@@ -171,6 +168,94 @@ export function SelectField(props: {
   );
 }
 
+/* ---------- Month & Year Picker: side-by-side Dropdown components ---------- */
+const MONTH_MAP: Record<string, string> = {
+  jan: "Jan", january: "Jan",
+  feb: "Feb", february: "Feb",
+  mar: "Mar", march: "Mar",
+  apr: "Apr", april: "Apr",
+  may: "May",
+  jun: "Jun", june: "Jun",
+  jul: "Jul", july: "Jul",
+  aug: "Aug", august: "Aug",
+  sep: "Sep", september: "Sep",
+  oct: "Oct", october: "Oct",
+  nov: "Nov", november: "Nov",
+  dec: "Dec", december: "Dec",
+};
+
+export function MonthYearPicker(props: {
+  id: string;
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  disabled?: boolean;
+  disabledPlaceholder?: string;
+  error?: string;
+  hint?: string;
+}) {
+  const { id, label, value, onChange, disabled, disabledPlaceholder = "Present", error, hint } = props;
+
+  const rawParts = value && value !== "Present" ? value.trim().split(/\s+/) : [];
+  const parsedMonth = rawParts[0] ? (MONTH_MAP[rawParts[0].toLowerCase()] || rawParts[0]) : "";
+  const parsedYear = rawParts.length > 1 ? rawParts[1] : (rawParts.length === 1 && /^\d{4}$/.test(rawParts[0]) ? rawParts[0] : "");
+
+  const handleMonth = (m: string) => {
+    const y = parsedYear || "2024";
+    onChange(`${m} ${y}`);
+  };
+
+  const handleYear = (y: string) => {
+    const m = parsedMonth || "Jan";
+    onChange(`${m} ${y}`);
+  };
+
+  return (
+    <Field id={id} label={label} error={error} hint={hint}>
+      {disabled ? (
+        <div className={styles.control}>
+          <input
+            id={id}
+            className={styles.input}
+            value={disabledPlaceholder}
+            disabled
+            readOnly
+          />
+        </div>
+      ) : (
+        <div className={styles.monthYearRow}>
+          <div className={styles.monthCol}>
+            <Dropdown
+              label={parsedMonth || "Month"}
+              options={MONTH_OPTIONS.map((m) => ({ value: m, label: m }))}
+              selected={parsedMonth ? [parsedMonth] : []}
+              onChange={(next) => handleMonth(next[0] ?? "")}
+              multiple={false}
+              singleShowsValue
+              align="left"
+              className={styles.fullWidthDropdown}
+              triggerClassName={styles.selectDropdownTrigger}
+            />
+          </div>
+          <div className={styles.yearCol}>
+            <Dropdown
+              label={parsedYear || "Year"}
+              options={YEAR_OPTIONS.map((y) => ({ value: y, label: y }))}
+              selected={parsedYear ? [parsedYear] : []}
+              onChange={(next) => handleYear(next[0] ?? "")}
+              multiple={false}
+              singleShowsValue
+              align="left"
+              className={styles.fullWidthDropdown}
+              triggerClassName={styles.selectDropdownTrigger}
+            />
+          </div>
+        </div>
+      )}
+    </Field>
+  );
+}
+
 /* ---------- Yes / No: native radios styled as a segmented control ---------- */
 export function Segmented(props: {
   id: string; label: string; value: string; options?: string[];
@@ -184,22 +269,15 @@ export function Segmented(props: {
       aria-describedby={describedBy(id, error)}
     >
       <legend className={styles.label}>{label}</legend>
-      <div className={styles.segmented} data-invalid={error ? "" : undefined}>
-        {options.map((o) => (
-          <label key={o} className={styles.segment}>
-            <input
-              type="radio"
-              name={id}
-              value={o}
-              checked={value === o}
-              onChange={() => onChange(o)}
-              onBlur={onBlur}
-              className={styles.srOnly}
-            />
-            <span className={styles.segmentFace}>{o}</span>
-          </label>
-        ))}
-      </div>
+      <SegmentedControl
+        size="md"
+        value={value}
+        onChange={(v) => {
+          onChange(v);
+          onBlur?.();
+        }}
+        options={options.map((o) => ({ value: o, label: o }))}
+      />
       <Msg id={`${id}-msg`} error={error} />
     </fieldset>
   );

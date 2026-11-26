@@ -11,6 +11,8 @@ export interface NavItemProps {
   icon: string | ReactNode | ComponentType<any>;
   /** Whether this item is the active/selected one. */
   active?: boolean;
+  /** Disable navigation interaction. */
+  disabled?: boolean;
   /** Click handler. */
   onClick?: () => void;
   /** Optional href — renders an anchor instead of a button when provided. */
@@ -28,12 +30,10 @@ function renderNavIcon(icon: NavItemProps["icon"]) {
     return <Icon name={icon as IconName} size="md" className={styles.icon} />;
   }
 
-  // If already a rendered JSX element (e.g. <Icon ... /> or <svg ... />)
   if (isValidElement(icon)) {
     return icon;
   }
 
-  // Component (function component or forwardRef component object)
   if (
     typeof icon === "function" ||
     (typeof icon === "object" && icon !== null && "$$typeof" in icon)
@@ -47,17 +47,23 @@ function renderNavIcon(icon: NavItemProps["icon"]) {
 
 /**
  * Sidebar navigation item — an 80x80 tile with a centered icon + label.
- * Shared across portals. Figma node 360:23986 (default / active states).
+ * Figma node 360:23986 (Inactive / Hover / Active / Focus / Disabled states).
  */
 export function NavItem({
   label,
   icon,
   active = false,
+  disabled = false,
   onClick,
   href,
   className,
 }: NavItemProps) {
-  const classes = [styles.item, active ? styles.active : "", className]
+  const classes = [
+    styles.item,
+    active ? styles.active : "",
+    disabled ? styles.disabled : "",
+    className,
+  ]
     .filter(Boolean)
     .join(" ");
 
@@ -68,7 +74,7 @@ export function NavItem({
     </span>
   );
 
-  if (href) {
+  if (href && !disabled) {
     return (
       <a
         href={href}
@@ -84,9 +90,10 @@ export function NavItem({
   return (
     <button
       type="button"
+      disabled={disabled}
       className={classes}
       aria-current={active ? "page" : undefined}
-      onClick={onClick}
+      onClick={disabled ? undefined : onClick}
     >
       {content}
     </button>

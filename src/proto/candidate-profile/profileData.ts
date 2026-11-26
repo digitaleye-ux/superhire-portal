@@ -151,7 +151,9 @@ export function saveSubmittedCandidateProfile(
     .filter((e) => e.degree.trim() || e.institution.trim())
     .map((e, idx) => ({
       id: e.id || `edu-${idx + 1}`,
-      degree: e.degree.trim() || "Degree",
+      degree: e.areaOfStudy?.trim()
+        ? `${e.degree.trim()} in ${e.areaOfStudy.trim()}`
+        : e.degree.trim() || "Degree",
       institution: e.institution.trim() || "University",
       duration: [e.startYear.trim(), e.endYear.trim()].filter(Boolean).join(" – ") || "2018 – 2022",
       grade: e.grade.trim() || "First Class",
@@ -171,8 +173,8 @@ export function saveSubmittedCandidateProfile(
         company: w.company.trim() || values.company || "Company",
         duration: [w.startDate.trim(), w.endDate.trim()].filter(Boolean).join(" – ") || "Present",
         tenure: "",
-        location: w.location.trim() || values.location || "Bengaluru",
-        current: idx === 0,
+        location: [w.location.trim(), w.workMode?.trim()].filter(Boolean).join(" · ") || values.location || "Bengaluru",
+        current: Boolean(w.isCurrent) || w.endDate.trim().toLowerCase() === "present" || idx === 0,
         highlights:
           highlights.length > 0
             ? highlights
@@ -221,7 +223,7 @@ export function saveSubmittedCandidateProfile(
     linkedinVerified: true,
     location: values.location?.trim() || "Bengaluru, India",
     preferredLocations: values.location?.trim() || "Bengaluru, Remote",
-    workModePreference: values.workModePreference || "Hybrid / Remote",
+    workModePreference: values.workModePreference || "Any",
     currentCtc: values.currentCtc ? `₹${values.currentCtc} LPA` : "₹30 LPA",
     expectedCtc: values.expectedCtc ? `₹${values.expectedCtc} LPA` : "₹42 LPA",
     noticePeriod: values.notice || "30 days",
@@ -264,7 +266,7 @@ export function buildCandidateProfile(detail: CandidateDetail): CandidateProfile
       linkedinVerified: true,
       location: `${detail.location}, India`,
       preferredLocations: "Bengaluru, Remote",
-      workModePreference: "Hybrid / Remote",
+      workModePreference: "Any",
       currentCtc: detail.currentCtc,
       expectedCtc: detail.expectedCtc,
       noticePeriod: detail.noticePeriod,
@@ -412,7 +414,7 @@ export function buildCandidateProfile(detail: CandidateDetail): CandidateProfile
     linkedinVerified: true,
     location: `${detail.location}, India`,
     preferredLocations: `${detail.location}, Remote`,
-    workModePreference: "Hybrid / Remote",
+    workModePreference: "Any",
     currentCtc: detail.currentCtc,
     expectedCtc: detail.expectedCtc,
     noticePeriod: detail.noticePeriod,

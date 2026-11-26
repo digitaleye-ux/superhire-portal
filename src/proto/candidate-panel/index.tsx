@@ -108,7 +108,7 @@ export default function CandidatePanelProto() {
           <PageHeader
             title="Track candidates"
             search={{
-              placeholder: "Search by candidate, company, or role",
+              placeholder: "Search by name, company, role or keyword",
               value: query,
               onChange: setQuery,
             }}

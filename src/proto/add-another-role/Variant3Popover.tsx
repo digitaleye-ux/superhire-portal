@@ -192,7 +192,7 @@ export default function Variant3Popover({
                           borderRadius: 6,
                           background:
                             verifiedReqs.length === selectedJob.mustHaves.length
-                              ? "var(--color-primary-base, #4f46e5)"
+                              ? "var(--button-primary-background)"
                               : "#e2e8f0",
                           color: verifiedReqs.length === selectedJob.mustHaves.length ? "#fff" : "#94a3b8",
                           border: 0,

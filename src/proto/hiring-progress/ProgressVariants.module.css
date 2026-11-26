@@ -135,7 +135,7 @@
 
 .spineStepUpcoming .spineLabel {
   color: var(--semantics-text-tertiary);
-  font-weight: var(--font-weight-normal);
+  font-weight: var(--font-weight-regular);
 }
 
 .spineActiveBadge {
@@ -162,7 +162,7 @@
 .spineDesc {
   margin: 0;
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-13, 13px);
+  font-size: var(--font-size-12);
   line-height: 1.5;
   color: var(--semantics-text-secondary);
 }
@@ -355,7 +355,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-weight: var(--font-weight-normal);
+  font-weight: var(--font-weight-regular);
 }
 
 .stepperItemDone .stepperLabel {
@@ -496,7 +496,7 @@
 
 .milestoneTitle {
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-13, 13px);
+  font-size: var(--font-size-12);
   line-height: var(--line-height-14);
   font-weight: var(--font-weight-medium);
   color: var(--semantics-text-primary);
@@ -655,7 +655,7 @@
 .phaseHeading {
   margin: 0;
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-13, 13px);
+  font-size: var(--font-size-12);
   line-height: var(--line-height-14);
   font-weight: var(--font-weight-semibold);
   color: var(--semantics-text-primary);
@@ -809,7 +809,7 @@
 
 .phaseTitle {
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-13, 13px);
+  font-size: var(--font-size-12);
   line-height: 18px;
   font-weight: var(--font-weight-medium);
   color: var(--semantics-text-primary);
@@ -817,7 +817,7 @@
 
 .phaseTitleCurrent {
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-13, 13px);
+  font-size: var(--font-size-12);
   line-height: 18px;
   font-weight: var(--font-weight-semibold);
   color: var(--semantics-text-primary);
@@ -825,7 +825,7 @@
 
 .phaseTitleUpcoming {
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-13, 13px);
+  font-size: var(--font-size-12);
   line-height: 18px;
   font-weight: var(--font-weight-regular);
   color: var(--semantics-text-placeholder);
@@ -968,7 +968,7 @@
 
 .segmentCurrent .segmentLabel {
   color: var(--semantics-text-primary);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-semibold);
 }
 
 /* Spotlight Card */
@@ -1003,7 +1003,7 @@
 
 .spotlightStageEyebrow {
   font-size: 10px;
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--semantics-interactive-primary);
@@ -1129,7 +1129,7 @@
 .historyNodeCurrent {
   border-color: var(--semantics-interactive-primary);
   color: var(--semantics-interactive-primary);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-semibold);
 }
 
 .historyNodeAlert {

@@ -19,6 +19,7 @@ import {
   FileText,
   HandCoins,
   IndianRupee,
+  LayoutGrid,
   Link,
   Link2,
   Mail,
@@ -27,6 +28,7 @@ import {
   Pause,
   Search,
   Sparkles,
+  SquarePen,
   Upload,
   UsersRound,
   X,
@@ -111,6 +113,7 @@ export const FileIcon = createIconComponent(File, "FileIcon");
 export const FileTextIcon = createIconComponent(FileText, "FileTextIcon");
 export const HandCoinsIcon = createIconComponent(HandCoins, "HandCoinsIcon");
 export const IndianRupeeIcon = createIconComponent(IndianRupee, "IndianRupeeIcon");
+export const LayoutGridIcon = createIconComponent(LayoutGrid, "LayoutGridIcon");
 export const LinkIcon = createIconComponent(Link, "LinkIcon");
 export const Link2Icon = createIconComponent(Link2, "Link2Icon");
 export const MailIcon = createIconComponent(Mail, "MailIcon");
@@ -119,6 +122,7 @@ export const MoreVerticalIcon = createIconComponent(MoreVertical, "MoreVerticalI
 export const PauseIcon = createIconComponent(Pause, "PauseIcon");
 export const SearchIcon = createIconComponent(Search, "SearchIcon");
 export const SparklesIcon = createIconComponent(Sparkles, "SparklesIcon");
+export const SquarePenIcon = createIconComponent(SquarePen, "SquarePenIcon");
 export const UploadIcon = createIconComponent(Upload, "UploadIcon");
 export const UsersRoundIcon = createIconComponent(UsersRound, "UsersRoundIcon");
 export const XIcon = createIconComponent(X, "XIcon");
@@ -182,6 +186,7 @@ export const LocationIcon = MapPinIcon;
 export const CommissionIcon = HandCoinsIcon;
 export const ResumeIcon = EyeIcon;
 export const CloseIcon = XIcon;
+export const EditIcon = SquarePenIcon;
 export const UnclaimIcon = BookmarkXIcon;
 export const CircleCheckIcon = CircleCheckBigIcon;
 export const UsersIcon = UsersRoundIcon;
@@ -216,6 +221,7 @@ export const ICON_REGISTRY: Record<IconName, ComponentType<IconBaseProps>> = {
   "hand-coins": HandCoinsIcon,
   "help": CircleHelpIcon,
   "indian-rupee": IndianRupeeIcon,
+  "layout-grid": LayoutGridIcon,
   "link": LinkIcon,
   "link-2": Link2Icon,
   "linkedin": LinkedinIcon,
@@ -228,6 +234,8 @@ export const ICON_REGISTRY: Record<IconName, ComponentType<IconBaseProps>> = {
   "rupee": IndianRupeeIcon,
   "search": SearchIcon,
   "sparkles": SparklesIcon,
+  "square-pen": SquarePenIcon,
+  "edit": SquarePenIcon,
   "unclaim": BookmarkXIcon,
   "upload": UploadIcon,
   "users": UsersRoundIcon,
@@ -345,6 +353,7 @@ export const Icons = {
   HandCoins: HandCoinsIcon,
   Help: CircleHelpIcon,
   IndianRupee: IndianRupeeIcon,
+  LayoutGrid: LayoutGridIcon,
   Link: LinkIcon,
   Link2: Link2Icon,
   Linkedin: LinkedinIcon,

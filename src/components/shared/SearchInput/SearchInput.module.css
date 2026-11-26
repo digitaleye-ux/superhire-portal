@@ -1,52 +1,51 @@
-/* Search input — Figma node 443:5544 (438:4962).
-   32px tall, strong border, 8px radius, 12px horizontal padding, 8px gap. */
+.searchRoot {
+  width: 320px;
+  max-width: 100%;
+}
 
-.field {
-  box-sizing: border-box;
-  display: flex;
+.searchIcon {
+  color: var(--semantics-text-placeholder);
+  pointer-events: none;
+}
+
+.clearBtn {
+  display: inline-flex;
   align-items: center;
-  gap: var(--space-2x);
-  height: var(--control-height-sm);
-  padding: 0 var(--space-3x);
-  background: var(--semantics-control-bg);
-  border: 1px solid var(--semantics-control-border);
-  border-radius: var(--radius-md);
-  transition: border-color 120ms ease, box-shadow 120ms ease;
-}
-
-.field:hover {
-  border-color: var(--semantics-control-border-hover);
-}
-
-.field:focus-within {
-  border-color: var(--semantics-control-border-focus);
-  box-shadow: var(--semantics-focus-ring);
-}
-
-.icon {
-  flex-shrink: 0;
-  color: var(--semantics-text-placeholder);
-}
-
-.input {
-  flex: 1 0 0;
-  min-width: 0;
-  border: 0;
+  justify-content: center;
+  width: var(--size-icon-md);
+  height: var(--size-icon-md);
   padding: 0;
-  margin: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
   background: transparent;
-  outline: none;
-  font-family: var(--font-family-sans);
-  font-weight: var(--font-weight-medium);
-  font-size: var(--font-size-12);
-  line-height: var(--line-height-12);
-  color: var(--semantics-text-primary);
+  color: var(--semantics-text-placeholder);
+  cursor: pointer;
+  pointer-events: auto;
+  transition:
+    color var(--duration-fast) var(--easing-standard),
+    background-color var(--duration-fast) var(--easing-standard),
+    transform var(--duration-fast) var(--easing-standard);
 }
 
-.input::placeholder {
-  color: var(--semantics-text-placeholder);
-  /* Keep placeholder weight/size identical to the Figma spec. */
-  opacity: 1;
+@media (hover: hover) and (pointer: fine) {
+  .clearBtn:hover:not(:disabled) {
+    color: var(--semantics-text-primary);
+    background: var(--semantics-surface-tertiary);
+  }
+}
+
+.clearBtn:active:not(:disabled) {
+  transform: scale(0.92);
+}
+
+.clearBtn:focus-visible {
+  outline: var(--border-width-thick) solid var(--semantics-border-focus);
+  outline-offset: var(--space-x-4);
+}
+
+.clearBtn:disabled {
+  color: var(--semantics-text-disabled);
+  cursor: not-allowed;
 }
 
 /* Hide the native clear button so the field matches the design. */

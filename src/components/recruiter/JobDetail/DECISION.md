@@ -22,7 +22,7 @@ Readable paragraphs where context matters; crisp bullet points where recruiters 
 | **2** | **What you'll do** | 4–6 scannable bullet points detailing main responsibilities and deliverables. | Required |
 | **3** | **What we're looking for** | Essential experience, core qualifications, and mandatory technical skills. | Required |
 | **4** | **Nice to have** | Beneficial but non-essential qualifications, bonus competencies, or tools. | Optional |
-| **5** | **Role expectations** | 3-column structured metadata grid (Experience, Employment, Work mode, Location, Openings, Notice period) identical in styling to the Company details grid, followed by an illustrative disclaimer footnote. | Required |
+| **5** | **Role expectations** | 2-column Spec Sheet with subtle hairlines (Experience, Employment, Work mode, Location, Package range, Notice period), followed by an optional disclaimer footnote. | Required |
 | **6** | **Compensation and benefits** | Role-specific compensation breakdown, equity/bonus details, and perks. | Optional |
 
 > **Key Rule**: Avoid separate card containers or tag clouds for responsibilities, skills, or qualifications. Present them as cleanly titled content sections using consistent typography and spatial tokens.
@@ -30,7 +30,7 @@ Readable paragraphs where context matters; crisp bullet points where recruiters 
 ### Tab 2: Company details
 Company-level information maintained once on the employer's profile:
 1. **About the company** — Overview paragraph describing company mission, scale, and customer base.
-2. **Snapshot Grid** — 3-column structured facts: Industry, Company size, Headquarters, Website, Open jobs, and Valuation.
+2. **Snapshot Spec Sheet** — 2-column structured facts: Industry, Company size, Headquarters, Website, Open jobs, and Valuation (rendered using the Spec Sheet component).
 3. **Company culture** — Core operating values and work principles.
 4. **Company perks & benefits** — Company-wide benefits (health, insurance, leave, wellness).
 
@@ -53,3 +53,20 @@ Company-level information maintained once on the employer's profile:
 | Company-wide perks | Employer profile | Universal default |
 | Role-specific compensation & perks | Individual job | Optional job override |
 | Recruiter commission | SuperHire config | Platform-governed |
+
+---
+
+## 3. Component Decisions
+
+### Role Expectations Layout (decided via `/emil-prototype`)
+- **Direction:** Spec Sheet (Variant 3) — Density & Information Hierarchy
+- **Architecture:** 2-column key-value rows separated by delicate hairline dividers (`var(--semantics-divider-subtle)`), with `gap: 0 var(--space-8x)`.
+- **Typography:**
+  - Label: `text-style-label-2` (14px / 20px, Medium), `var(--semantics-text-tertiary)`
+  - Value: `text-style-label-2` (14px / 20px, Medium), `var(--semantics-text-primary)`, `font-variant-numeric: tabular-nums`
+- **Why it won:** Minimal vertical footprint, removes redundant card borders inside the panel, aligns metrics into an effortless scan path.
+- **Rejected Alternatives:**
+  - *Variant 1 (Enclosed Grid):* Heavy visual box inside an already bordered panel; created unnecessary visual boundaries.
+  - *Variant 2 (Inset Tiles):* Tinted micro-tiles looked modern but introduced too much surface contrast across 6 elements.
+  - *Variant 4 (Icon Chips):* Fluid badges lacked structured tabular alignment and took more vertical space.
+

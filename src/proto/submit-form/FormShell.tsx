@@ -1,6 +1,7 @@
 import { Fragment, useRef, useState } from "react";
 import type { ComponentType, FormEvent, ReactNode } from "react";
 import { Badge } from "@/components/shared/Badge";
+import { IconButton } from "@/components/shared/IconButton";
 import { Tab as TabButton } from "@/components/shared/Tab";
 import {
   BriefcaseBusinessIcon,
@@ -106,9 +107,12 @@ export function FormShell({
               <span className={panel.company}>{job.company}</span>
             </div>
             {job.badge && <Badge type={job.badge} className={panel.badge} />}
-            <button type="button" className={panel.close} aria-label="Close" onClick={onClose}>
-              <XIcon size="md" />
-            </button>
+            <IconButton
+              icon={<XIcon size="md" />}
+              ariaLabel="Close submission panel"
+              size="md"
+              onClick={onClose}
+            />
           </div>
           <div className={panel.headTitle}>
             <h2 className={panel.role} title={job.role}>

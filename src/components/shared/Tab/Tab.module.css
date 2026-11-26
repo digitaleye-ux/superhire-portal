@@ -1,8 +1,12 @@
+/* Tab — Figma node 486:3426.
+   States: default | hover | active (pressed) | selected (.active) | focus-visible | disabled. */
+
 .root {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-2x) var(--space-4x);
+  gap: var(--space-2x);
+  padding: var(--space-3x) var(--space-4x);
   position: relative;
   border: 0;
   background: transparent;
@@ -13,29 +17,81 @@
   white-space: nowrap;
   color: var(--semantics-text-tertiary);
   cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  transition:
+    color var(--duration-fast) var(--easing-standard),
+    background-color var(--duration-fast) var(--easing-standard);
 }
+
 .root::after {
   content: "";
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 0;
-  height: 2px;
+  bottom: calc(-1 * var(--border-width-thin));
+  height: var(--border-width-thick);
   border-radius: var(--radius-pill);
   background: transparent;
+  transition: background-color var(--duration-fast) var(--easing-standard);
 }
-.root:hover::after {
+
+.root:hover:not(:disabled) {
+  color: var(--semantics-text-primary);
+}
+
+.root:hover:not(:disabled)::after {
   background: var(--semantics-border-strong);
 }
-.root:focus-visible {
-  outline: 2px solid var(--semantics-border-focus);
-  outline-offset: 2px;
+
+.root:active:not(:disabled) {
+  background: var(--semantics-surface-hover-subtle);
 }
+
+.root:focus-visible {
+  outline: var(--border-width-thick) solid var(--semantics-border-focus);
+  outline-offset: var(--space-x-2);
+}
+
 .active,
-.active:hover {
+.active:hover:not(:disabled) {
   color: var(--semantics-text-link);
 }
+
 .active::after,
-.active:hover::after {
+.active:hover:not(:disabled)::after {
   background: var(--semantics-border-interactive);
+}
+
+.root:disabled {
+  color: var(--semantics-text-disabled);
+  cursor: not-allowed;
+}
+
+.label {
+  display: inline-block;
+}
+
+.count {
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: tabular-nums;
+  padding: var(--space-x-2) var(--space-2x);
+  border-radius: var(--radius-pill);
+  background: var(--semantics-surface-secondary);
+  color: var(--semantics-text-tertiary);
+  transition:
+    background-color var(--duration-fast) var(--easing-standard),
+    color var(--duration-fast) var(--easing-standard);
+}
+
+.active .count {
+  background: var(--semantics-surface-brand-subtle);
+  color: var(--semantics-text-link);
+}
+
+.root:disabled .count {
+  background: var(--semantics-surface-disabled);
+  color: var(--semantics-text-disabled);
 }

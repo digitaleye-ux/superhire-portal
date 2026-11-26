@@ -122,7 +122,7 @@ export default function CandidateCardsProto() {
           <PageHeader
             title="Track candidates"
             search={{
-              placeholder: "Search by candidate, company, role, or status",
+              placeholder: "Search by name, company, role or keyword",
               value: query,
               onChange: setQuery,
             }}

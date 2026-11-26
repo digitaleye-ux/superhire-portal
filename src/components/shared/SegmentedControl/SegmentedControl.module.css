@@ -1,0 +1,163 @@
+/* ==========================================================================
+   SegmentedControl — Bolt Design System
+   Compact, mutually-exclusive parameter and mode switchers.
+   States: default | hover | active (pressed) | selected (.active) | focus-visible | disabled.
+   ========================================================================== */
+
+.track {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-x-2);
+  border-radius: var(--radius-md);
+  background: var(--segmented-track-bg);
+  border: var(--border-width-thin) solid var(--segmented-track-border);
+  gap: var(--space-x-2);
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.fullWidth {
+  display: flex;
+  width: 100%;
+}
+
+/* ---- Size Variants ---- */
+
+.sm {
+  min-height: var(--control-height-sm);
+}
+
+.sm .segment {
+  height: calc(var(--control-height-sm) - var(--space-1x) - calc(2 * var(--border-width-thin)));
+  padding: 0 var(--space-2x);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  gap: var(--space-1x);
+}
+
+.md {
+  min-height: var(--control-height-md);
+}
+
+.md .segment {
+  height: calc(var(--control-height-md) - var(--space-1x) - calc(2 * var(--border-width-thin)));
+  padding: 0 var(--space-3x);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  gap: var(--space-2x);
+}
+
+.lg {
+  min-height: var(--control-height-lg);
+}
+
+.lg .segment {
+  height: calc(var(--control-height-lg) - var(--space-1x) - calc(2 * var(--border-width-thin)));
+  padding: 0 var(--space-4x);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  gap: var(--space-2x);
+}
+
+/* ---- Segment Button ---- */
+
+.segment {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: var(--radius-4);
+  background: transparent;
+  color: var(--segmented-item-text);
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    background-color var(--duration-fast) var(--easing-standard),
+    color var(--duration-fast) var(--easing-standard),
+    box-shadow var(--duration-fast) var(--easing-standard);
+}
+
+.fullWidth .segment {
+  flex: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .segment:not(.active):not(:disabled):hover {
+    color: var(--segmented-item-text-hover);
+    background: var(--segmented-item-bg-hover);
+  }
+}
+
+.segment:not(.active):not(:disabled):active {
+  background: var(--semantics-surface-tertiary);
+}
+
+.segment:focus-visible {
+  outline: var(--border-width-thick) solid var(--semantics-border-focus);
+  outline-offset: var(--space-x-4);
+  z-index: 2;
+}
+
+.active {
+  background: var(--segmented-item-bg-active);
+  color: var(--segmented-item-text-active);
+  box-shadow: var(--segmented-item-shadow-active);
+  z-index: 1;
+}
+
+.active:focus-visible {
+  outline: var(--border-width-thick) solid var(--semantics-border-focus);
+  outline-offset: var(--space-x-4);
+}
+
+.segment:disabled {
+  color: var(--segmented-item-text-disabled);
+  cursor: not-allowed;
+}
+
+.active:disabled {
+  background: var(--semantics-surface-disabled);
+  box-shadow: none;
+}
+
+/* ---- Icon Slot ---- */
+
+.iconSlot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ---- Count Chip ---- */
+
+.count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-variant-numeric: tabular-nums;
+  padding: var(--space-x-2) var(--space-1x);
+  border-radius: var(--radius-pill);
+  background: var(--semantics-surface-secondary);
+  color: var(--semantics-text-tertiary);
+  font-size: var(--font-size-10);
+  line-height: var(--line-height-10);
+  font-weight: var(--font-weight-medium);
+  min-width: var(--space-4x);
+  transition:
+    background-color var(--duration-fast) var(--easing-standard),
+    color var(--duration-fast) var(--easing-standard);
+}
+
+.active .count {
+  background: var(--semantics-surface-brand-subtle);
+  color: var(--semantics-text-link);
+}
+
+.segment:disabled .count {
+  background: var(--semantics-surface-disabled);
+  color: var(--semantics-text-disabled);
+}

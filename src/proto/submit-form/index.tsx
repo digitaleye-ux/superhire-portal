@@ -31,7 +31,7 @@ const SAMPLE_JOB: JobDetailData = {
   companyLogoUrl: "https://www.google.com/s2/favicons?domain=google.com&sz=64",
   role: "Senior Frontend Engineer",
   packageLabel: "₹32–48 L",
-  commission: "₹25,000",
+  commission: "₹2,000",
   jobType: "Full-time",
   mode: "On-site",
   location: "Bengaluru",

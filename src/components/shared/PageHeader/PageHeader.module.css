@@ -26,8 +26,9 @@
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-24);
   line-height: var(--line-height-24);
-  letter-spacing: var(--letter-spacing-heading-2);
+  letter-spacing: var(--letter-spacing-heading);
   color: var(--semantics-text-primary);
+  white-space: nowrap;
 }
 
 .right {
@@ -37,7 +38,8 @@
   flex-shrink: 0;
 }
 
-/* Search field — fixed 320px per the design. */
+/* Search field — standardized to 320px matching Figma node 443:5544 */
 .search {
   width: 320px;
+  max-width: 100%;
 }

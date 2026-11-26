@@ -1,14 +1,14 @@
 /* Button component set — Figma node 97:563 (Bolt | Design System).
    Variants: primary | secondary | tertiary
    Sizes:    xs (28px) | sm (32px) | md (36px) | lg (40px)
-   States:   default | hover | focus | disabled */
+   States:   default | hover | active | focus | disabled */
 
 .button {
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid transparent;
+  border: var(--button-border-width-default) solid transparent;
   font-family: var(--font-family-sans);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-none);
@@ -16,12 +16,13 @@
   white-space: nowrap;
   cursor: pointer;
   user-select: none;
+  touch-action: manipulation;
   outline: none;
   transition:
-    background-color 120ms ease,
-    border-color 120ms ease,
-    color 120ms ease,
-    box-shadow 120ms ease;
+    background-color var(--duration-fast) var(--easing-standard),
+    border-color var(--duration-fast) var(--easing-standard),
+    color var(--duration-fast) var(--easing-standard),
+    box-shadow var(--duration-fast) var(--easing-standard);
 }
 
 /* ---- Sizes ---- */
@@ -77,6 +78,10 @@
   background: var(--button-primary-background-hover);
 }
 
+.primary:active:not(:disabled):not([data-state="default"]) {
+  background: var(--button-primary-background-active);
+}
+
 .primary:focus-visible:not(:disabled),
 .primary[data-state="focus"] {
   background: var(--button-primary-background-hover);
@@ -105,11 +110,16 @@
   border-color: var(--button-secondary-border-hover);
 }
 
+.secondary:active:not(:disabled):not([data-state="default"]) {
+  background: var(--button-secondary-background-active);
+  border-color: var(--button-secondary-border-hover);
+}
+
 .secondary:focus-visible:not(:disabled),
 .secondary[data-state="focus"] {
   background: var(--button-secondary-background);
   border-color: var(--button-secondary-border);
-  outline: var(--button-focus-ring-width) solid var(--button-primary-focus-ring);
+  outline: var(--button-focus-ring-width) solid var(--button-secondary-focus-ring);
   outline-offset: var(--button-focus-ring-offset);
 }
 
@@ -133,10 +143,14 @@
   background: var(--button-tertiary-background-hover);
 }
 
+.tertiary:active:not(:disabled):not([data-state="default"]) {
+  background: var(--button-tertiary-background-active);
+}
+
 .tertiary:focus-visible:not(:disabled),
 .tertiary[data-state="focus"] {
   background: var(--button-tertiary-background);
-  outline: var(--button-focus-ring-width) solid var(--button-primary-focus-ring);
+  outline: var(--button-focus-ring-width) solid var(--button-tertiary-focus-ring);
   outline-offset: var(--button-focus-ring-offset);
 }
 
@@ -157,7 +171,11 @@
   color: currentColor;
 }
 
-.xs .iconSlot,
+.xs .iconSlot {
+  width: var(--button-icon-size-xs);
+  height: var(--button-icon-size-xs);
+}
+
 .sm .iconSlot {
   width: var(--button-icon-size-sm);
   height: var(--button-icon-size-sm);

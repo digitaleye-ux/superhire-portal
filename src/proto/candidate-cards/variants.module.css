@@ -5,19 +5,13 @@
 .card {
   box-sizing: border-box;
   width: 100%;
-  height: calc(
-    var(--spacing-3x) + var(--line-height-16) + var(--spacing-2x) +
-      var(--spacing-2x) + (2 * var(--line-height-16)) +
-      var(--spacing-2x) + var(--line-height-14) + var(--spacing-6x) + 1px +
-      var(--spacing-3x) + var(--line-height-14) + var(--spacing-3x) +
-      2px
-  );
+  height: calc(var(--spacing-3x) + var(--line-height-16) + var(--spacing-2x) + var(--spacing-2x) + (2 * var(--line-height-16)) + var(--spacing-2x) + var(--line-height-14) + var(--spacing-6x) + 1px + var(--spacing-3x) + var(--line-height-14) + var(--spacing-3x) + 2px);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   overflow: clip;
   background: var(--semantics-background-primary);
-  border: 1px solid var(--semantics-border-strong);
+  border: 1px solid var(--semantics-border-default);
   border-radius: var(--radius-md);
   transition: border-color 120ms ease, box-shadow 120ms ease;
   cursor: pointer;
@@ -53,8 +47,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--spacing-8x); /* 32px */
-  height: var(--spacing-8x); /* 32px */
+  width: var(--spacing-8x);
+  /* 32px */
+  height: var(--spacing-8x);
+  /* 32px */
   padding: var(--spacing-1x);
   border-radius: var(--radius-pill);
   background: var(--semantics-surface-brand-subtle);
@@ -154,22 +150,27 @@
   background: var(--semantics-badge-neutral-bg);
   color: var(--semantics-badge-neutral-text);
 }
+
 .statusInfo {
   background: var(--semantics-badge-info-bg);
   color: var(--semantics-badge-info-text);
 }
+
 .statusBrand {
   background: var(--semantics-badge-spotlight-bg);
   color: var(--semantics-badge-spotlight-text);
 }
+
 .statusWarning {
   background: var(--semantics-badge-urgent-bg);
   color: var(--semantics-badge-urgent-text);
 }
+
 .statusSuccess {
   background: var(--semantics-badge-success-bg);
   color: var(--semantics-badge-success-text);
 }
+
 .statusDanger {
   background: var(--semantics-badge-trending-bg);
   color: var(--semantics-badge-trending-text);
@@ -188,7 +189,8 @@
 .main {
   display: flex;
   flex-direction: column;
-  gap: var(--semantics-spacing-gap-stack-sm); /* 8px gap */
+  gap: var(--semantics-spacing-gap-stack-sm);
+  /* 8px gap */
   width: 100%;
   margin-bottom: var(--semantics-spacing-gap-stack-lg);
 }
@@ -281,6 +283,7 @@
   width: 100%;
   height: 1px;
   border: 0;
+  border-top: 1px solid var(--semantics-border-default);
   margin: auto 0 0;
   background: var(--semantics-border-default);
 }

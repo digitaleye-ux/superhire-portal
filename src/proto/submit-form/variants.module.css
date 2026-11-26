@@ -24,7 +24,7 @@
   gap: var(--space-4x);
   padding: var(--space-4x);
   border: 1px solid var(--semantics-border-default);
-  border-radius: var(--radius-xs);
+  border-radius: var(--radius-lg);
   background: var(--primitives-neutral-50);
 }
 .cardTitle {

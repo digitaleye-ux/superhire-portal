@@ -8,7 +8,7 @@
   height: 100%;
   min-height: 0;
   background: var(--semantics-background-primary);
-  border: 1px solid var(--semantics-border-strong);
+  border: none;
   overflow: hidden;
   outline: none;
   animation: panel-in 200ms cubic-bezier(0.23, 1, 0.32, 1) both;
@@ -185,7 +185,7 @@
 }
 
 .conjunction {
-  font-weight: var(--font-weight-normal);
+  font-weight: var(--font-weight-regular);
   color: var(--semantics-text-tertiary);
 }
 
@@ -830,8 +830,8 @@
 }
 
 .noteAuthor {
-  font-size: var(--font-size-13);
-  line-height: var(--line-height-13);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
   font-weight: var(--font-weight-medium);
   color: var(--semantics-text-primary);
 }
@@ -847,7 +847,7 @@
 .noteBody {
   margin: 0;
   max-width: 65ch;
-  font-size: var(--font-size-13);
+  font-size: var(--font-size-12);
   line-height: 1.55;
   color: var(--semantics-text-secondary);
   text-wrap: pretty;

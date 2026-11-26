@@ -5,9 +5,9 @@ import { DUMMY_CANDIDATE_ITEMS } from "@/proto/candidate-cards/data";
  * Candidate Details Side Panel — Clean, Essential Data Model
  * 6-stage lifecycle:
  *   1. Candidate submitted (Recruiter submitted the candidate)
- *   2. Profile approved (SuperHire second-level review & approval)
+ *   2. SuperHire approved (SuperHire second-level review & approval)
  *   3. Employer shortlisted (Employer selected the profile)
- *   4. Interview (Interview rounds: scheduled, ongoing, or completed)
+ *   4. Interview scheduled (Interview rounds: scheduled, ongoing, or completed)
  *   5. Offer extended (Employer extended an offer)
  *   6. Candidate joined (Placement confirmed & verified by SuperHire)
  * ------------------------------------------------------------------ */
@@ -40,7 +40,7 @@ export interface MilestoneNextStep {
 export interface TimelineStage {
   step: number; // 1 to 6
   key: StageKey;
-  label: string; // "Candidate submitted" | "Profile approved" | "Employer shortlisted" | "Interview" | "Offer extended" | "Candidate joined"
+  label: string; // "Candidate submitted" | "SuperHire approved" | "Employer shortlisted" | "Interview scheduled" | "Offer extended" | "Candidate joined"
   state: StageState;
   date?: string; // e.g. "17 Nov", "25 November · 11:00 AM"
   outcome?: string; // e.g. "Submitted by you", "Approved by SuperHire", "Shortlisted by employer"
@@ -178,7 +178,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 2,
         key: "approved",
-        label: "Profile approved",
+        label: "SuperHire approved",
         state: "done",
         date: "14 Nov",
         outcome: "SuperHire completed its second-level review and approved the candidate for employer consideration.",
@@ -194,7 +194,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 4,
         key: "interview",
-        label: "Interview",
+        label: "Interview scheduled",
         state: "current",
         badgeLabel: "Round 2 scheduled",
         date: "25 Nov · 11:00 AM",
@@ -237,7 +237,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
         id: "a4",
         date: "14 Nov",
         time: "5:40 PM",
-        title: "Profile approved",
+        title: "SuperHire approved",
         detail: "SuperHire completed second-level vetting and forwarded profile to Google.",
       },
       {
@@ -291,7 +291,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 2,
         key: "approved",
-        label: "Profile approved",
+        label: "SuperHire approved",
         state: "done",
         date: "11 Nov",
         outcome: "SuperHire completed its second-level review and approved the candidate for employer consideration.",
@@ -307,7 +307,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 4,
         key: "interview",
-        label: "Interview",
+        label: "Interview scheduled",
         state: "current",
         badgeLabel: "Feedback in review",
         date: "13 Nov · Employer",
@@ -391,7 +391,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 2,
         key: "approved",
-        label: "Profile approved",
+        label: "SuperHire approved",
         state: "done",
         date: "15 Nov",
         outcome: "SuperHire completed its second-level review and approved the candidate for employer consideration.",
@@ -407,7 +407,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 4,
         key: "interview",
-        label: "Interview",
+        label: "Interview scheduled",
         state: "current",
         badgeLabel: "Scheduling directly",
         date: "17 Nov · Employer",
@@ -436,7 +436,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
         id: "a2",
         date: "15 Nov",
         time: "1:20 PM",
-        title: "Profile approved",
+        title: "SuperHire approved",
         detail: "SuperHire validated Go, Kafka, and high-throughput payments experience.",
       },
       {
@@ -468,7 +468,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       },
     ];
   } else if (item.status === "under-review") {
-    // Arjun Kapoor — Stripe (Profile approved by SuperHire -> waiting for employer shortlist)
+    // Arjun Kapoor — Stripe (SuperHire approved by SuperHire -> waiting for employer shortlist)
     progressHeadline = "2 of 6 milestones reached";
     milestonesReached = 2;
     stages = [
@@ -483,7 +483,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 2,
         key: "approved",
-        label: "Profile approved",
+        label: "SuperHire approved",
         state: "done",
         date: "17 Nov",
         outcome: "SuperHire completed its second-level review and approved the candidate for employer consideration.",
@@ -496,13 +496,13 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
         date: "17 Nov · 3:30 PM",
         updateText: "Stripe reviewed the candidate's profile and is evaluating selection to move forward in the hiring process.",
       },
-      { step: 4, key: "interview", label: "Interview", state: "upcoming" },
+      { step: 4, key: "interview", label: "Interview scheduled", state: "upcoming" },
       { step: 5, key: "offer", label: "Offer extended", state: "upcoming" },
       { step: 6, key: "joined", label: "Candidate joined", state: "upcoming" },
     ];
 
     latest = {
-      statusLabel: "Profile approved · Sent to employer",
+      statusLabel: "SuperHire approved · Sent to employer",
       waitingDuration: "17 Nov · 3:30 PM",
       updateText: "Candidate passed SuperHire's review and was forwarded to the employer.",
       nextAction: "Waiting for the employer's shortlist decision.",
@@ -513,7 +513,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
         id: "a1",
         date: "17 Nov",
         time: "3:30 PM",
-        title: "Profile approved by SuperHire",
+        title: "SuperHire approved by SuperHire",
         detail: "Profile passed completeness check (98% fit) and shared with Stripe Platform hiring team.",
       },
       {
@@ -560,7 +560,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 2,
         key: "approved",
-        label: "Profile approved",
+        label: "SuperHire approved",
         state: "done",
         date: "5 Nov",
         outcome: "SuperHire completed its second-level review and approved the candidate for employer consideration.",
@@ -576,7 +576,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 4,
         key: "interview",
-        label: "Interview",
+        label: "Interview scheduled",
         state: "done",
         date: "12 Nov · Employer",
         outcome: "Candidate progressed through the employer's interview process. 3 interview rounds completed.",
@@ -667,7 +667,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 2,
         key: "approved",
-        label: "Profile approved",
+        label: "SuperHire approved",
         state: "done",
         date: "5 Oct",
         outcome: "SuperHire completed its second-level review and approved the candidate for employer consideration.",
@@ -683,7 +683,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 4,
         key: "interview",
-        label: "Interview",
+        label: "Interview scheduled",
         state: "done",
         date: "18 Oct · Employer",
         outcome: "Candidate progressed through the employer's interview process. 3 interview rounds completed.",
@@ -718,7 +718,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
         date: "18 Nov",
         time: "10:30 AM",
         title: "Commission payout settled",
-        detail: "₹3,00,000 transferred via NEFT following 15-day retention confirmation.",
+        detail: "₹55,000 transferred via NEFT following 30-day retention confirmation.",
       },
       {
         id: "a2",
@@ -778,7 +778,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 2,
         key: "approved",
-        label: "Profile approved",
+        label: "SuperHire approved",
         state: "done",
         date: "9 Nov",
         outcome: "SuperHire completed its second-level review and approved the candidate for employer consideration.",
@@ -792,7 +792,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
         date: "13 Nov · Employer",
         updateText: "Notion reviewed the candidate's profile and selected them to move forward. Hiring is temporarily paused during Q3 headcount review.",
       },
-      { step: 4, key: "interview", label: "Interview", state: "upcoming" },
+      { step: 4, key: "interview", label: "Interview scheduled", state: "upcoming" },
       { step: 5, key: "offer", label: "Offer extended", state: "upcoming" },
       { step: 6, key: "joined", label: "Candidate joined", state: "upcoming" },
     ];
@@ -817,7 +817,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
         date: "11 Nov",
         time: "11:20 AM",
         title: "Shortlisted by Notion",
-        detail: "Profile approved by Core Product Analytics lead.",
+        detail: "SuperHire approved by Core Product Analytics lead.",
       },
       {
         id: "a3",
@@ -864,7 +864,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 2,
         key: "approved",
-        label: "Profile approved",
+        label: "SuperHire approved",
         state: "done",
         date: "8 Nov",
         outcome: "SuperHire completed its second-level review and approved the candidate for employer consideration.",
@@ -880,7 +880,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 4,
         key: "interview",
-        label: "Interview",
+        label: "Interview scheduled",
         state: "interview-unsuccessful",
         badgeLabel: "Application closed",
         date: "15 Nov · Employer",
@@ -948,7 +948,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       },
     ];
   } else {
-    // Vikram Singh — Swiggy (Candidate submitted -> Profile approved in review)
+    // Vikram Singh — Swiggy (Candidate submitted -> SuperHire approved in review)
     progressHeadline = "1 of 6 milestones reached";
     milestonesReached = 1;
     stages = [
@@ -963,13 +963,13 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 2,
         key: "approved",
-        label: "Profile approved",
+        label: "SuperHire approved",
         state: "current",
         date: "Today · 9:15 AM",
         updateText: "SuperHire is conducting its second-level review to approve the candidate for employer consideration.",
       },
       { step: 3, key: "shortlisted", label: "Employer shortlisted", state: "upcoming" },
-      { step: 4, key: "interview", label: "Interview", state: "upcoming" },
+      { step: 4, key: "interview", label: "Interview scheduled", state: "upcoming" },
       { step: 5, key: "offer", label: "Offer extended", state: "upcoming" },
       { step: 6, key: "joined", label: "Candidate joined", state: "upcoming" },
     ];

@@ -17,6 +17,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     leadingIcon,
     trailingIcon,
     suffix,
+    size = "lg",
     className,
     style,
     ...inputProps
@@ -49,7 +50,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         <input
           ref={ref}
           id={inputId}
-          className={styles.input}
+          className={[
+            styles.input,
+            size === "sm" ? styles.inputSm : "",
+            size === "md" ? styles.inputMd : "",
+          ].filter(Boolean).join(" ")}
           style={{
             ...style,
             paddingLeft,

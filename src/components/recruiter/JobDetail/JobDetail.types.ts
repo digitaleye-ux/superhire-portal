@@ -32,7 +32,7 @@ export interface JobDetailData {
   role: string;
   /** Display-ready package label, e.g. "₹55–80 L". */
   packageLabel: string;
-  /** Commission, e.g. "₹45,000". */
+  /** Commission, e.g. "₹2,000" or "₹50,000". */
   commission: string;
   /** Recruiter earning model: "shortlist" | "closure" */
   earningModel?: "shortlist" | "closure";

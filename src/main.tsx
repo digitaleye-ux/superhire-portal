@@ -28,6 +28,11 @@ if (import.meta.env.DEV && proto === "form") {
   (proto === "add-role" || proto === "another-role" || proto === "role")
 ) {
   import("./proto/add-another-role").then(({ default: Proto }) => root.render(<Proto />));
+} else if (
+  import.meta.env.DEV &&
+  (proto === "actions" || proto === "action" || proto === "action-required")
+) {
+  import("./proto/actions-required").then(({ default: Proto }) => root.render(<Proto />));
 } else {
   root.render(app);
 }

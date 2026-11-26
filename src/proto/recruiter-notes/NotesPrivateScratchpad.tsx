@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import type { CandidateDetail } from "@/proto/candidate-panel/data";
+import { IconButton } from "@/components/shared/IconButton";
 import { MoreVerticalIcon } from "@/components/shared/Icon";
 import {
   useRecruiterNotes,
@@ -208,12 +209,11 @@ export function NotesPrivateScratchpad({ detail }: { detail: CandidateDetail }) 
                         className={s.kebabContainer}
                         ref={isMenuOpen ? menuRef : undefined}
                       >
-                        <button
-                          type="button"
-                          className={`${s.kebabBtn} ${
-                            isMenuOpen ? s.kebabBtnActive : ""
-                          }`}
-                          aria-label={`Options for note: ${note.text.slice(0, 24)}...`}
+                        <IconButton
+                          icon={<MoreVerticalIcon size="sm" />}
+                          ariaLabel={`Options for note: ${note.text.slice(0, 24)}...`}
+                          size="sm"
+                          active={isMenuOpen}
                           aria-haspopup="menu"
                           aria-expanded={isMenuOpen}
                           onClick={(e) => {
@@ -222,9 +222,7 @@ export function NotesPrivateScratchpad({ detail }: { detail: CandidateDetail }) 
                               prev === note.id ? null : note.id
                             );
                           }}
-                        >
-                          <MoreVerticalIcon size={16} />
-                        </button>
+                        />
 
                         {isMenuOpen && (
                           <div className={s.dropdown} role="menu">

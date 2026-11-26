@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { toast } from "sonner";
+import { IconButton } from "@/components/shared/IconButton";
 import { Tab as TabButton } from "@/components/shared/Tab";
 import {
   BriefcaseBusinessIcon,
@@ -38,10 +39,10 @@ export function Ic({ name, size = 16 }: { name: "x" | "check" | "file" | "pause"
 
 export const STATUS_LABEL: Record<CandidateStatus, string> = {
   submitted: "Submitted",
-  "under-review": "Under review",
+  "under-review": "Review",
   shortlisted: "Shortlisted",
   interview: "Interview",
-  offered: "Offered",
+  offered: "Offer",
   joined: "Joined",
   "on-hold": "On hold",
   rejected: "Rejected",
@@ -128,14 +129,12 @@ export function CandidateOverviewHeader({
 
           <div className={s.topRowRight}>
             <StatusTag status={detail.item.status} />
-            <button
-              type="button"
-              className={s.close}
-              aria-label="Close candidate panel"
+            <IconButton
+              icon={<XIcon size="md" />}
+              ariaLabel="Close candidate panel"
+              size="md"
               onClick={onClose}
-            >
-              <XIcon size="md" />
-            </button>
+            />
           </div>
         </div>
 

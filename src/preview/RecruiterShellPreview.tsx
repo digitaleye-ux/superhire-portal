@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { SideNavbar } from "@/components/shared/SideNavbar";
 import type { NavEntry } from "@/components/shared/SideNavbar";
+import { Button } from "@/components/shared/Button";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { JobCard } from "@/components/recruiter/JobCard";
 import { JobDetail } from "@/components/recruiter/JobDetail";
@@ -37,13 +38,20 @@ import {
   UsersRoundIcon,
   BookOpenIcon,
   CircleHelpIcon,
+  LayoutGridIcon,
+  HandCoinsIcon,
 } from "@/components/shared/Icon";
 import avatar from "@/components/shared/SideNavbar/assets/avatar-sample.png";
+import { RecruiterDashboard } from "@/components/recruiter/RecruiterDashboard";
+import { RecruiterEarnings } from "@/components/recruiter/RecruiterEarnings";
+import type { EarningsNavigationPreset } from "@/components/recruiter/RecruiterEarnings";
 
 const navItems: NavEntry[] = [
+  { id: "dashboard", label: "Overview", icon: LayoutGridIcon },
   { id: "explore", label: "Explore", icon: BriefcaseBusinessIcon },
   { id: "claimed", label: "Claimed", icon: CircleCheckBigIcon },
   { id: "track", label: "Track", icon: UsersRoundIcon },
+  { id: "earnings", label: "Earnings", icon: HandCoinsIcon },
 ];
 
 const footerItems: NavEntry[] = [
@@ -52,7 +60,7 @@ const footerItems: NavEntry[] = [
 ];
 
 const emptyFilters: FilterState = {
-  package: [],
+  commission: [],
   experience: [],
   location: [],
 };
@@ -114,29 +122,29 @@ function logoUrl(domain: string): string {
 /** Dummy jobs to fill the Explore grid. */
 const DUMMY_JOBS: DummyJob[] = [
   // 1-line title
-  { id: 1, company: "Google", domain: "google.com", role: "Senior Frontend Engineer", pkg: { min: 3200000, max: 4800000 }, experience: "5–8 yrs", locations: ["Bengaluru"], mode: "On-site", jobType: "Full-time", commission: "₹2,20,000", earningModel: "closure", badge: "trending" },
+  { id: 1, company: "Google", domain: "google.com", role: "Senior Frontend Engineer", pkg: { min: 3200000, max: 4800000 }, experience: "5–8 yrs", locations: ["Bengaluru"], mode: "On-site", jobType: "Full-time", commission: "₹2,000", earningModel: "shortlist", badge: "trending" },
   // 2-line title
-  { id: 2, company: "Razorpay", domain: "razorpay.com", role: "Senior Backend Engineer, Payments Platform", pkg: { min: 2800000, max: 4200000 }, experience: "5–8 yrs", locations: ["Bengaluru", "Hyderabad", "Pune", "Remote"], mode: "Hybrid", jobType: "Full-time", commission: "₹28,000", earningModel: "shortlist", badge: "spotlight" },
+  { id: 2, company: "Razorpay", domain: "razorpay.com", role: "Senior Backend Engineer, Payments Platform", pkg: { min: 2800000, max: 4200000 }, experience: "5–8 yrs", locations: ["Bengaluru", "Hyderabad", "Pune", "Remote"], mode: "Hybrid", jobType: "Full-time", commission: "₹2,000", earningModel: "shortlist", badge: "spotlight" },
   // long title — overflows 2 lines, should truncate with ellipsis
-  { id: 3, company: "Stripe", domain: "stripe.com", role: "Staff Software Engineer, Payments Reliability & Developer Experience Platform", pkg: { min: 12000000, max: 18000000 }, experience: "9+ yrs", locations: ["Remote"], mode: "Remote", jobType: "Full-time", commission: "₹3,50,000", earningModel: "closure", badge: "priority" },
-  { id: 4, company: "Atlassian", domain: "atlassian.com", role: "Product Designer", pkg: { min: 1800000, max: 2400000 }, experience: "3–5 yrs", locations: ["Remote"], mode: "Remote", jobType: "Contract", commission: "₹15,000", earningModel: "shortlist" },
+  { id: 3, company: "Stripe", domain: "stripe.com", role: "Staff Software Engineer, Payments Reliability & Developer Experience Platform", pkg: { min: 6000000, max: 8000000 }, experience: "9+ yrs", locations: ["Remote"], mode: "Remote", jobType: "Full-time", commission: "₹90,000", earningModel: "closure", badge: "priority" },
+  { id: 4, company: "Atlassian", domain: "atlassian.com", role: "Product Designer, Design Systems & Core Workflows", pkg: { min: 2400000, max: 3600000 }, experience: "3–5 yrs", locations: ["Remote"], mode: "Remote", jobType: "Contract", commission: "₹39,000", earningModel: "closure" },
   // 2-line title
-  { id: 5, company: "Swiggy", domain: "swiggy.com", role: "Engineering Manager, Consumer Growth", pkg: { min: 6000000, max: 8500000 }, experience: "9+ yrs", locations: ["Bengaluru"], mode: "On-site", jobType: "Full-time", commission: "₹2,75,000", earningModel: "closure", badge: "just-in" },
-  { id: 6, company: "Zerodha", domain: "zerodha.com", role: "DevOps Engineer", pkg: { min: 2000000, max: 2800000 }, experience: "3–5 yrs", locations: ["Bengaluru", "Remote"], mode: "Hybrid", jobType: "Full-time", commission: "₹18,000", earningModel: "shortlist" },
-  { id: 7, company: "Notion", domain: "notion.so", role: "Data Analyst", pkg: { min: 1400000, max: 2000000 }, experience: "1–2 yrs", locations: ["Hyderabad"], mode: "On-site", jobType: "Full-time", commission: "₹12,000", earningModel: "shortlist" },
-  { id: 8, company: "Figma", domain: "figma.com", role: "Design Systems Engineer", pkg: { min: 3500000, max: 5000000 }, experience: "6–8 yrs", locations: ["Remote"], mode: "Remote", jobType: "Full-time", commission: "₹1,80,000", earningModel: "closure", badge: "trending" },
+  { id: 5, company: "Swiggy", domain: "swiggy.com", role: "Engineering Manager, Consumer Growth", pkg: { min: 5500000, max: 7500000 }, experience: "9+ yrs", locations: ["Bengaluru"], mode: "On-site", jobType: "Full-time", commission: "₹2,500", earningModel: "shortlist", badge: "just-in" },
+  { id: 6, company: "Zerodha", domain: "zerodha.com", role: "DevOps Engineer", pkg: { min: 2000000, max: 2800000 }, experience: "3–5 yrs", locations: ["Bengaluru", "Remote"], mode: "Hybrid", jobType: "Full-time", commission: "₹2,000", earningModel: "shortlist" },
+  { id: 7, company: "Notion", domain: "notion.so", role: "Data Analyst, Core Product", pkg: { min: 1400000, max: 2000000 }, experience: "1–2 yrs", locations: ["Hyderabad"], mode: "On-site", jobType: "Full-time", commission: "₹1,800", earningModel: "shortlist" },
+  { id: 8, company: "Figma", domain: "figma.com", role: "Design Systems Engineer", pkg: { min: 3500000, max: 5000000 }, experience: "6–8 yrs", locations: ["Remote"], mode: "Remote", jobType: "Full-time", commission: "₹55,000", earningModel: "closure", badge: "trending" },
   // 2-line title
-  { id: 9, company: "Linear", domain: "linear.app", role: "Senior Full-Stack Product Engineer", pkg: { min: 2600000, max: 3800000 }, experience: "3–5 yrs", locations: ["Remote", "Bengaluru"], mode: "Hybrid", jobType: "Full-time", commission: "₹2,10,000", earningModel: "closure", badge: "spotlight" },
-  { id: 10, company: "Freshworks", domain: "freshworks.com", role: "QA Automation Engineer", pkg: { min: 1200000, max: 1800000 }, experience: "1–2 yrs", locations: ["Chennai"], mode: "On-site", jobType: "Full-time", commission: "₹10,000", earningModel: "shortlist" },
-  { id: 11, company: "Postman", domain: "postman.com", role: "Developer Advocate", pkg: { min: 2200000, max: 3000000 }, experience: "3–5 yrs", locations: ["Bengaluru", "Remote"], mode: "Hybrid", jobType: "Full-time", commission: "₹20,000", earningModel: "shortlist" },
-  { id: 12, company: "Cred", domain: "cred.club", role: "iOS Engineer", pkg: { min: 3000000, max: 4500000 }, experience: "5–8 yrs", locations: ["Bengaluru"], mode: "On-site", jobType: "Full-time", commission: "₹1,90,000", earningModel: "closure", badge: "priority" },
+  { id: 9, company: "Linear", domain: "linear.app", role: "Senior Full-Stack Product Engineer", pkg: { min: 2600000, max: 3800000 }, experience: "3–5 yrs", locations: ["Remote", "Bengaluru"], mode: "Hybrid", jobType: "Full-time", commission: "₹42,000", earningModel: "closure", badge: "spotlight" },
+  { id: 10, company: "Freshworks", domain: "freshworks.com", role: "QA Automation Engineer", pkg: { min: 1200000, max: 1800000 }, experience: "1–2 yrs", locations: ["Chennai"], mode: "On-site", jobType: "Full-time", commission: "₹1,500", earningModel: "shortlist" },
+  { id: 11, company: "Postman", domain: "postman.com", role: "Developer Advocate", pkg: { min: 2200000, max: 3000000 }, experience: "3–5 yrs", locations: ["Bengaluru", "Remote"], mode: "Hybrid", jobType: "Full-time", commission: "₹2,000", earningModel: "shortlist" },
+  { id: 12, company: "Cred", domain: "cred.club", role: "iOS Engineer", pkg: { min: 3000000, max: 4500000 }, experience: "5–8 yrs", locations: ["Bengaluru"], mode: "On-site", jobType: "Full-time", commission: "₹50,000", earningModel: "closure", badge: "priority" },
   // 2-line title
-  { id: 13, company: "Meesho", domain: "meesho.com", role: "Machine Learning Engineer, Recommendations", pkg: { min: 2800000, max: 4200000 }, experience: "4–7 yrs", locations: ["Bengaluru", "Remote"], mode: "Hybrid", jobType: "Full-time", commission: "₹24,000", earningModel: "shortlist", badge: "just-in" },
-  { id: 14, company: "Groww", domain: "groww.in", role: "Backend Engineer", pkg: { min: 2400000, max: 3400000 }, experience: "3–5 yrs", locations: ["Bengaluru"], mode: "On-site", jobType: "Full-time", commission: "₹21,000", earningModel: "shortlist" },
-  { id: 15, company: "Zomato", domain: "zomato.com", role: "Product Manager", pkg: { min: 4000000, max: 6000000 }, experience: "6–8 yrs", locations: ["Gurugram"], mode: "On-site", jobType: "Full-time", commission: "₹2,50,000", earningModel: "closure" },
-  { id: 16, company: "PhonePe", domain: "phonepe.com", role: "Site Reliability Engineer", pkg: { min: 3200000, max: 4600000 }, experience: "5–8 yrs", locations: ["Bengaluru", "Pune"], mode: "Hybrid", jobType: "Full-time", commission: "₹29,000", earningModel: "shortlist", badge: "trending" },
-  { id: 17, company: "Dunzo", domain: "dunzo.in", role: "Frontend Engineer", pkg: { min: 1600000, max: 2400000 }, experience: "1–2 yrs", locations: ["Remote"], mode: "Remote", jobType: "Contract", commission: "₹14,000", earningModel: "shortlist" },
-  { id: 18, company: "BrowserStack", domain: "browserstack.com", role: "Technical Writer", pkg: { min: 1200000, max: 1600000 }, experience: "1–2 yrs", locations: ["Remote"], mode: "Remote", jobType: "Part-time", commission: "₹9,000", earningModel: "shortlist", badge: "closed" },
+  { id: 13, company: "Meesho", domain: "meesho.com", role: "Machine Learning Engineer, Recommendations", pkg: { min: 2800000, max: 4200000 }, experience: "4–7 yrs", locations: ["Bengaluru", "Remote"], mode: "Hybrid", jobType: "Full-time", commission: "₹2,000", earningModel: "shortlist", badge: "just-in" },
+  { id: 14, company: "Groww", domain: "groww.in", role: "Backend Engineer", pkg: { min: 2400000, max: 3400000 }, experience: "3–5 yrs", locations: ["Bengaluru"], mode: "On-site", jobType: "Full-time", commission: "₹2,000", earningModel: "shortlist" },
+  { id: 15, company: "Zomato", domain: "zomato.com", role: "Product Manager", pkg: { min: 4000000, max: 6000000 }, experience: "6–8 yrs", locations: ["Gurugram"], mode: "On-site", jobType: "Full-time", commission: "₹65,000", earningModel: "closure" },
+  { id: 16, company: "PhonePe", domain: "phonepe.com", role: "Site Reliability Engineer", pkg: { min: 3200000, max: 4600000 }, experience: "5–8 yrs", locations: ["Bengaluru", "Pune"], mode: "Hybrid", jobType: "Full-time", commission: "₹2,000", earningModel: "shortlist", badge: "trending" },
+  { id: 17, company: "Dunzo", domain: "dunzo.in", role: "Frontend Engineer", pkg: { min: 1600000, max: 2400000 }, experience: "1–2 yrs", locations: ["Remote"], mode: "Remote", jobType: "Contract", commission: "₹1,800", earningModel: "shortlist" },
+  { id: 18, company: "BrowserStack", domain: "browserstack.com", role: "Technical Writer", pkg: { min: 1200000, max: 1600000 }, experience: "1–2 yrs", locations: ["Remote"], mode: "Remote", jobType: "Part-time", commission: "₹1,500", earningModel: "shortlist", badge: "closed" },
 ];
 
 function defaultSkillsForRole(role: string): string[] {
@@ -446,7 +454,7 @@ function buildInitialCandidateValues(c: CandidateItem): Partial<CandidateFormVal
     phoneCode: "+91",
     phone: detail.phone.replace(/[^\d]/g, "").slice(-10) || "9845061834",
     location: profile.location || `${c.location}, India`,
-    workModePreference: profile.workModePreference || "Hybrid / Remote",
+    workModePreference: profile.workModePreference || "Any",
     experience: expMatch ? expMatch[0] : "5",
     working: "Yes",
     company: detail.designation.includes(" at ") ? detail.designation.split(" at ")[1] : "Zeta",
@@ -476,6 +484,8 @@ function buildInitialCandidateValues(c: CandidateItem): Partial<CandidateFormVal
         startDate: startDate.trim(),
         endDate: endDate.trim(),
         location: exp.location,
+        workMode: "Hybrid",
+        isCurrent: Boolean(exp.current) || endDate.trim().toLowerCase() === "present",
         highlightsText: exp.highlights.join("\n"),
       };
     }),
@@ -504,17 +514,39 @@ function buildInitialCandidateValues(c: CandidateItem): Partial<CandidateFormVal
 
 const DEFAULT_CLAIMED_JOB_IDS = [2, 4, 8, 12];
 
-export function RecruiterShellPreview() {
+export function RecruiterShellPreview({
+  initialTab,
+}: {
+  initialTab?:
+    | "dashboard"
+    | "overview"
+    | "explore"
+    | "claimed"
+    | "track"
+    | "earnings";
+} = {}) {
   const [candidates, setCandidates] = useState<CandidateItem[]>(DUMMY_CANDIDATE_ITEMS);
   const [addRoleCandidate, setAddRoleCandidate] = useState<CandidateItem | null>(null);
   const [addRoleJob, setAddRoleJob] = useState<DummyJob | null>(null);
-  const [active, setActive] = useState(() => {
+  const [editingCandidate, setEditingCandidate] = useState<CandidateItem | null>(null);
+  const [earningsPreset, setEarningsPreset] =
+    useState<EarningsNavigationPreset | null>(null);
+  const [active, setActive] = useState<string>(() => {
+    if (initialTab) return initialTab === "overview" ? "dashboard" : initialTab;
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const tab = params.get("tab") || params.get("page");
-      if (tab === "claimed" || tab === "explore" || tab === "track") return tab;
+      if (
+        tab === "dashboard" ||
+        tab === "overview" ||
+        tab === "claimed" ||
+        tab === "explore" ||
+        tab === "track" ||
+        tab === "earnings"
+      )
+        return tab === "overview" ? "dashboard" : tab;
     }
-    return "explore";
+    return "dashboard";
   });
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState<FilterState>(emptyFilters);
@@ -578,6 +610,8 @@ export function RecruiterShellPreview() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [addRoleCandidate]);
 
+  const isDashboard = active === "dashboard";
+  const isEarnings = active === "earnings";
   const isClaimed = active === "claimed";
   const isTrack = active === "track";
 
@@ -589,6 +623,7 @@ export function RecruiterShellPreview() {
     setSelectedId(null);
     setAddRoleCandidate(null);
     setAddRoleJob(null);
+    setEditingCandidate(null);
     setPanelMode("detail");
     if (typeof window !== "undefined") {
       const url = new URL(window.location.href);
@@ -597,9 +632,127 @@ export function RecruiterShellPreview() {
     }
   };
 
-  const isSplit = selectedId !== null;
-  const selectedJob = !isTrack ? (DUMMY_JOBS.find((j) => j.id === selectedId) ?? null) : null;
-  const selectedCandidate = isTrack ? (candidates.find((c) => c.id === selectedId) ?? null) : null;
+  const navigateToEarnings = (preset?: EarningsNavigationPreset) => {
+    setEarningsPreset(preset ?? null);
+    setActive("earnings");
+    setSelectedId(null);
+    setAddRoleCandidate(null);
+    setAddRoleJob(null);
+    setEditingCandidate(null);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("tab", "earnings");
+      window.history.replaceState({}, "", url.toString());
+    }
+  };
+
+  /** Never open side panel on overview; always route directly to relevant section */
+  const navigateToCandidate = (
+    candidateId: number,
+    editCand: CandidateItem | null = null
+  ) => {
+    setActive("track");
+    setSelectedId(candidateId);
+    setEditingCandidate(editCand);
+    setAddRoleCandidate(null);
+    setAddRoleJob(null);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("tab", "track");
+      window.history.replaceState({}, "", url.toString());
+    }
+  };
+
+  const navigateToJob = (jobId: number) => {
+    setActive("explore");
+    setSelectedId(jobId);
+    setPanelMode("detail");
+    setEditingCandidate(null);
+    setAddRoleCandidate(null);
+    setAddRoleJob(null);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("tab", "explore");
+      window.history.replaceState({}, "", url.toString());
+    }
+  };
+
+  function findJobForCandidate(candidate: CandidateItem): DummyJob {
+    const byExact = DUMMY_JOBS.find(
+      (j) =>
+        j.company.toLowerCase() === candidate.company.toLowerCase() &&
+        j.role.toLowerCase() === candidate.role.toLowerCase()
+    );
+    if (byExact) return byExact;
+    const byCompany = DUMMY_JOBS.find(
+      (j) => j.company.toLowerCase() === candidate.company.toLowerCase()
+    );
+    if (byCompany) return byCompany;
+    return DUMMY_JOBS[0];
+  }
+
+  const handleEditCandidate = (c: CandidateItem) => {
+    setEditingCandidate(c);
+    setSelectedId(c.id);
+    setAddRoleCandidate(null);
+    setAddRoleJob(null);
+  };
+
+  const handleUpdateCandidate = (
+    candidateId: number,
+    values: CandidateFormValues
+  ) => {
+    const expClean = values.experience?.trim() || "5";
+    const expFormatted = expClean.includes("yr") ? expClean : `${expClean} yrs`;
+    const candidateName = values.name?.trim() || "Candidate";
+    const initials =
+      candidateName
+        .split(/\s+/)
+        .map((w) => w[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase();
+
+    setCandidates((prev) =>
+      prev.map((item) => {
+        if (item.id !== candidateId) return item;
+        return {
+          ...item,
+          name: candidateName,
+          initials,
+          experience: expFormatted,
+          noticePeriod: values.notice || item.noticePeriod,
+          location: values.location?.split(",")[0]?.trim() || item.location,
+          currentCtc: values.currentCtc ? `₹${values.currentCtc} LPA` : item.currentCtc,
+          expectedCtc: values.expectedCtc ? `₹${values.expectedCtc} LPA` : item.expectedCtc,
+          topSkills:
+            values.skillsList && values.skillsList.length > 0
+              ? values.skillsList.slice(0, 4)
+              : item.topSkills,
+          github: values.github
+            ? values.github.startsWith("http")
+              ? values.github
+              : `https://${values.github}`
+            : item.github,
+        };
+      })
+    );
+
+    saveSubmittedCandidateProfile(candidateId, values);
+    toast.success(`Candidate details updated`, {
+      description: `Saved changes to ${candidateName}'s profile.`,
+    });
+  };
+
+  const isSplit = !isDashboard && !isEarnings && selectedId !== null;
+  const selectedJob =
+    !isDashboard && !isEarnings && !isTrack
+      ? DUMMY_JOBS.find((j) => j.id === selectedId) ?? null
+      : null;
+  const selectedCandidate =
+    !isDashboard && !isEarnings && isTrack
+      ? candidates.find((c) => c.id === selectedId) ?? null
+      : null;
 
   // In "claimed" mode, filter to only show jobs that have been claimed
   const claimedJobsList: ClaimedRoleItem[] = DUMMY_JOBS
@@ -689,27 +842,73 @@ export function RecruiterShellPreview() {
     if (isClaimed) {
       // Only show jobs in the claimed list
       if (!claimedJobIds.includes(job.id)) return false;
-      if (!query.trim()) return true;
+    } else {
+      // In explore mode, exclude jobs that have already been claimed
+      if (claimedJobIds.includes(job.id)) return false;
+    }
+
+    if (query.trim()) {
       const q = query.toLowerCase();
-      return (
+      const matches =
         job.role.toLowerCase().includes(q) ||
         job.company.toLowerCase().includes(q) ||
         job.locations.some((l) => l.toLowerCase().includes(q)) ||
-        job.mode.toLowerCase().includes(q)
-      );
+        job.mode.toLowerCase().includes(q);
+      if (!matches) return false;
     }
 
-    // In explore mode, exclude jobs that have already been claimed and apply search query filtering
-    if (claimedJobIds.includes(job.id)) return false;
+    // Commission filter: empty = all models; "shortlist" or "closure" isolates model
+    if (filters.commission.length > 0) {
+      const wantShortlist = filters.commission.includes("shortlist");
+      const wantClosure = filters.commission.includes("closure");
+      const model = job.earningModel || "shortlist";
+      if (wantShortlist && model !== "shortlist") return false;
+      if (wantClosure && model !== "closure") return false;
+    }
 
-    if (!query.trim()) return true;
-    const q = query.toLowerCase();
-    return (
-      job.role.toLowerCase().includes(q) ||
-      job.company.toLowerCase().includes(q) ||
-      job.locations.some((l) => l.toLowerCase().includes(q)) ||
-      job.mode.toLowerCase().includes(q)
-    );
+    // Experience filter
+    if (filters.experience.length > 0) {
+      const expYears = parseExperienceYears(job.experience);
+      const matchesExp = filters.experience.some((range) => {
+        if (range === "0") return expYears === 0;
+        if (range === "1-2") return expYears >= 1 && expYears <= 2;
+        if (range === "3-5") return expYears >= 3 && expYears <= 5;
+        if (range === "6-8") return expYears >= 6 && expYears <= 8;
+        if (range === "9+") return expYears >= 9;
+        return true;
+      });
+      if (!matchesExp) return false;
+    }
+
+    // Location filter
+    if (filters.location.length > 0) {
+      const matchesLoc = filters.location.some((loc) => {
+        if (loc === "remote") {
+          return (
+            job.mode.toLowerCase() === "remote" ||
+            job.locations.some((l) => l.toLowerCase() === "remote")
+          );
+        }
+        return job.locations.some((l) => l.toLowerCase().includes(loc));
+      });
+      if (!matchesLoc) return false;
+    }
+
+    return true;
+  }).sort((a, b) => {
+    switch (sort) {
+      case "newest":
+        return b.id - a.id;
+      case "oldest":
+        return a.id - b.id;
+      case "highest-commission":
+        return parseCommissionAmount(b.commission) - parseCommissionAmount(a.commission);
+      case "highest-salary":
+        return b.pkg.max - a.pkg.max;
+      case "recommended":
+      default:
+        return 0;
+    }
   });
 
   // Visible candidates filtered by query and candidateFilters, sorted by candidateSort
@@ -871,12 +1070,63 @@ export function RecruiterShellPreview() {
         {/* Left column: header + filter bar + card list. In split view this
             column narrows; the detail panel sits beside it at full height. */}
         <div className={styles.leftCol}>
+          {isDashboard ? (
+            <RecruiterDashboard
+              liveCandidates={candidates}
+              selectedCandidateId={null}
+              onNavigateToCandidates={(statuses, label) => {
+                setCandidateFilters({
+                  status: statuses ?? [],
+                  company: [],
+                });
+                handleNavSelect("track");
+                if (label) {
+                  toast.info(`Filtered candidate list: ${label}`);
+                }
+              }}
+              onSelectCandidate={(candidateId) => {
+                navigateToCandidate(candidateId);
+              }}
+              onEditCandidate={(candidateId, reason) => {
+                const cand =
+                  candidates.find((c) => c.id === candidateId) ?? candidates[0];
+                navigateToCandidate(cand.id, cand);
+                if (reason) {
+                  toast.info(`Editing ${cand.name}`, {
+                    description: reason,
+                  });
+                }
+              }}
+              onSelectRole={(jobId) => {
+                navigateToJob(jobId);
+              }}
+              onExploreJobs={() => {
+                handleNavSelect("explore");
+              }}
+              onNavigateToEarnings={(preset) => {
+                navigateToEarnings(preset);
+              }}
+            />
+          ) : isEarnings ? (
+            <RecruiterEarnings
+              liveCandidates={candidates}
+              initialPreset={earningsPreset}
+              onConsumePreset={() => setEarningsPreset(null)}
+              onNavigateToCandidate={(candidateId) => {
+                navigateToCandidate(candidateId);
+              }}
+              onNavigateToJob={(jobId) => {
+                navigateToJob(jobId);
+              }}
+            />
+          ) : (
+            <>
           <PageHeader
             title={pageTitle}
             search={{
               placeholder: isTrack
-                ? "Search by candidate, company, or role"
-                : "Search by job role, company, or a keyword",
+                ? "Search by candidate, role, or company"
+                : "Search by role, company, or keyword",
               value: query,
               onChange: setQuery,
             }}
@@ -901,55 +1151,21 @@ export function RecruiterShellPreview() {
           <div className={styles.body}>
             {isTrack ? (
               visibleCandidates.length === 0 ? (
-                <div
-                  style={{
-                    padding: "var(--space-12x) var(--space-6x)",
-                    textAlign: "center",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: "var(--space-3x)",
-                  }}
-                >
-                  <p
-                    style={{
-                      margin: 0,
-                      fontSize: "var(--font-size-base)",
-                      fontWeight: "var(--font-weight-medium)",
-                      color: "var(--semantics-text-primary)",
-                    }}
-                  >
-                    No candidates found
-                  </p>
-                  <p
-                    style={{
-                      margin: 0,
-                      fontSize: "var(--font-size-sm)",
-                      color: "var(--semantics-text-tertiary)",
-                    }}
-                  >
+                <div className={styles.emptyState}>
+                  <p className={styles.emptyTitle}>No candidates found</p>
+                  <p className={styles.emptyBody}>
                     Try adjusting your filters or search query to find candidates.
                   </p>
-                  <button
-                    type="button"
+                  <Button
+                    variant="secondary"
+                    size="sm"
                     onClick={() => {
                       setCandidateFilters(emptyCandidateFilters);
                       setQuery("");
                     }}
-                    style={{
-                      marginTop: "var(--space-2x)",
-                      padding: "var(--space-2x) var(--space-4x)",
-                      background: "var(--semantics-surface-secondary)",
-                      border: "1px solid var(--semantics-border-default)",
-                      borderRadius: "var(--radius-button)",
-                      fontSize: "var(--font-size-sm)",
-                      fontWeight: "var(--font-weight-medium)",
-                      color: "var(--semantics-text-primary)",
-                      cursor: "pointer",
-                    }}
                   >
                     Clear all filters
-                  </button>
+                  </Button>
                 </div>
               ) : (
                 <section className={`${styles.cards} ${isSplit ? styles.cardsColumn : ""}`}>
@@ -992,11 +1208,7 @@ export function RecruiterShellPreview() {
                           description: `Viewing submitted resume for ${c.role}.`,
                         });
                       }}
-                      onCopyLink={() => {
-                        toast.success("Link copied", {
-                          description: `${c.name}'s candidate profile link copied to clipboard.`,
-                        });
-                      }}
+                      onEditCandidate={() => handleEditCandidate(c)}
                       onWithdraw={() => {
                         toast.warning(`Candidate withdrawn`, {
                           description: `${c.name} (${c.role}) submission has been withdrawn.`,
@@ -1004,6 +1216,7 @@ export function RecruiterShellPreview() {
                       }}
                       onClick={() => {
                         setSelectedId(c.id);
+                        setEditingCandidate(null);
                         setAddRoleCandidate(null);
                         setAddRoleJob(null);
                       }}
@@ -1021,55 +1234,23 @@ export function RecruiterShellPreview() {
                 </section>
               )
             ) : visibleJobs.length === 0 ? (
-              <div
-                style={{
-                  padding: "var(--space-12x) var(--space-6x)",
-                  textAlign: "center",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: "var(--space-3x)",
-                }}
-              >
-                <p
-                  style={{
-                    margin: 0,
-                    fontSize: "var(--font-size-base)",
-                    fontWeight: "var(--font-weight-medium)",
-                    color: "var(--semantics-text-primary)",
-                  }}
-                >
+              <div className={styles.emptyState}>
+                <p className={styles.emptyTitle}>
                   {isClaimed ? "No claimed roles yet" : "No roles found"}
                 </p>
-                <p
-                  style={{
-                    margin: 0,
-                    fontSize: "var(--font-size-sm)",
-                    color: "var(--semantics-text-tertiary)",
-                  }}
-                >
+                <p className={styles.emptyBody}>
                   {isClaimed
                     ? "Claim roles from the Explore page to start submitting candidates and earning commissions."
                     : "Try adjusting your search keywords or filters to find openings."}
                 </p>
                 {isClaimed && (
-                  <button
-                    type="button"
+                  <Button
+                    variant="primary"
+                    size="md"
                     onClick={() => handleNavSelect("explore")}
-                    style={{
-                      marginTop: "var(--space-2x)",
-                      padding: "var(--space-2x) var(--space-4x)",
-                      background: "var(--color-primary-base, #4f46e5)",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "var(--radius-button)",
-                      fontSize: "var(--font-size-sm)",
-                      fontWeight: "var(--font-weight-medium)",
-                      cursor: "pointer",
-                    }}
                   >
                     Explore open roles
-                  </button>
+                  </Button>
                 )}
               </div>
             ) : (
@@ -1121,15 +1302,37 @@ export function RecruiterShellPreview() {
               </section>
             )}
           </div>
+            </>
+          )}
         </div>
 
         {isSplit && selectedCandidate && (
           <aside className={styles.detail}>
-            <VariantIntegratedSpine
-              key={selectedCandidate.id}
-              detail={buildDetail(selectedCandidate)}
-              onClose={() => setSelectedId(null)}
-            />
+            {editingCandidate && editingCandidate.id === selectedCandidate.id ? (
+              <SubmitCandidate
+                key={`edit-${editingCandidate.id}`}
+                job={detailFor(findJobForCandidate(editingCandidate))}
+                initialValues={buildInitialCandidateValues(editingCandidate)}
+                submitLabel="Edit candidate"
+                onClose={() => {
+                  setEditingCandidate(null);
+                  setSelectedId(null);
+                }}
+                onSubmit={async (values) => {
+                  handleUpdateCandidate(editingCandidate.id, values);
+                  setEditingCandidate(null);
+                }}
+              />
+            ) : (
+              <VariantIntegratedSpine
+                key={selectedCandidate.id}
+                detail={buildDetail(selectedCandidate)}
+                onClose={() => {
+                  setSelectedId(null);
+                  setEditingCandidate(null);
+                }}
+              />
+            )}
           </aside>
         )}
 
@@ -1156,7 +1359,8 @@ export function RecruiterShellPreview() {
                     setPanelMode("submit");
                   } else {
                     claimJob(selectedJob);
-                    setPanelMode("submit");
+                    setSelectedId(null);
+                    setPanelMode("detail");
                   }
                 }}
               />

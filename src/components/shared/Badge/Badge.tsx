@@ -1,3 +1,5 @@
+import { forwardRef } from "react";
+import type { HTMLAttributes, ReactNode } from "react";
 import styles from "./Badge.module.css";
 
 export type BadgeType =
@@ -5,14 +7,21 @@ export type BadgeType =
   | "priority"
   | "spotlight"
   | "just-in"
-  | "closed";
+  | "closed"
+  | "success"
+  | "warning"
+  | "error"
+  | "info"
+  | "neutral";
 
-export interface BadgeProps {
+export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   /** Which badge variant to render. */
   type: BadgeType;
   /** Override the default label text for the variant. */
-  children?: string;
+  children?: ReactNode;
   className?: string;
+  /** Optional leading status dot */
+  dot?: boolean;
 }
 
 const DEFAULT_LABEL: Record<BadgeType, string> = {
@@ -21,6 +30,11 @@ const DEFAULT_LABEL: Record<BadgeType, string> = {
   spotlight: "Spotlight",
   "just-in": "Just In",
   closed: "Closed",
+  success: "Success",
+  warning: "Warning",
+  error: "Error",
+  info: "Info",
+  neutral: "Neutral",
 };
 
 const TYPE_CLASS: Record<BadgeType, string> = {
@@ -29,22 +43,33 @@ const TYPE_CLASS: Record<BadgeType, string> = {
   spotlight: styles.spotlight,
   "just-in": styles.justIn,
   closed: styles.closed,
+  success: styles.success,
+  warning: styles.warning,
+  error: styles.error,
+  info: styles.info,
+  neutral: styles.neutral,
 };
 
 /**
- * Badge — Figma node 374:1871. A small status pill in one of five semantic
- * colors. Shared primitive, used on the Job Card and reusable elsewhere.
+ * Badge — Figma node 374:1871. A small status pill in semantic colors.
+ * Non-interactive display indicator.
  */
-export function Badge({ type, children, className }: BadgeProps) {
+export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(function Badge(
+  { type, children, className, dot = false, ...rest },
+  ref
+) {
   return (
     <span
+      ref={ref}
       className={[styles.badge, TYPE_CLASS[type], className]
         .filter(Boolean)
         .join(" ")}
+      {...rest}
     >
+      {dot && <span className={styles.dot} aria-hidden="true" />}
       {children ?? DEFAULT_LABEL[type]}
     </span>
   );
-}
+});
 
 export default Badge;

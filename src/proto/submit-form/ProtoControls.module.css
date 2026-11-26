@@ -39,7 +39,7 @@
 }
 
 .error {
-  color: var(--primitives-error-600);
+  color: var(--semantics-text-danger);
 }
 
 .count {
@@ -90,7 +90,7 @@
 
 .control[data-invalid] .input,
 .control[data-invalid] .input:focus {
-  border-color: var(--primitives-error-600);
+  border-color: var(--semantics-text-danger);
 }
 
 .control[data-invalid] .input:focus {
@@ -230,7 +230,7 @@
 }
 
 .dropdownFull[data-invalid]>div>div:first-child {
-  border-color: var(--primitives-error-600);
+  border-color: var(--semantics-text-danger);
 }
 
 .dropdownFull [role="listbox"] {
@@ -274,7 +274,7 @@
 }
 
 .radioCardGroup[data-invalid] .radioCard {
-  border-color: var(--primitives-error-600);
+  border-color: var(--semantics-text-danger);
 }
 
 /* ---- Designed Checkbox layouts ---- */
@@ -317,7 +317,7 @@
 }
 
 .checkListBoxed[data-invalid] .checkCard:not([data-on]) {
-  border-color: var(--primitives-error-600);
+  border-color: var(--semantics-text-danger);
 }
 
 .legendRow {

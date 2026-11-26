@@ -87,7 +87,7 @@
 
 .tocPillActive,
 .tocPillActive:hover {
-  background: var(--semantics-primary-50, var(--semantics-surface-brand-subtle, var(--primitives-primary-50, #FAFAFF)));
+  background: var(--semantics-surface-brand-subtle);
   border: 1px solid transparent;
   color: var(--semantics-text-link);
   font-weight: var(--font-weight-medium);
@@ -616,7 +616,7 @@
   gap: var(--space-2x);
 }
 
-/* Skill Tags: Rounded (pill) without fill, matching Job Details panel */
+/* Skill Tags: Rounded (pill) without fill, matching Job Details panel (static, no hover) */
 .skillChip {
   display: inline-flex;
   align-items: center;
@@ -631,14 +631,4 @@
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-none);
   white-space: nowrap;
-  transition:
-    border-color 120ms ease,
-    background-color 120ms ease,
-    color 120ms ease;
-}
-
-.skillChip:hover {
-  border-color: var(--semantics-border-strong);
-  background: var(--semantics-surface-secondary);
-  color: var(--semantics-text-primary);
 }

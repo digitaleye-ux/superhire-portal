@@ -1,5 +1,6 @@
 /* Input component — Figma node 438:5522.
-   40px tall, var(--semantics-control-border), 8px radius, 12px padding, 8px gap with label. */
+   Sizes: sm (32px) | md (36px) | lg (40px, default).
+   States: default | hover | focus | invalid/error | disabled. */
 
 .root {
   display: flex;
@@ -18,6 +19,11 @@
   cursor: pointer;
 }
 
+.root:has(.input:disabled) .label {
+  color: var(--semantics-text-disabled);
+  cursor: not-allowed;
+}
+
 .control {
   position: relative;
   display: flex;
@@ -31,7 +37,7 @@
   height: var(--control-height-lg);
   padding: 0 var(--space-3x);
   background: var(--semantics-control-bg);
-  border: 1px solid var(--semantics-control-border);
+  border: var(--border-width-thin) solid var(--semantics-control-border);
   border-radius: var(--radius-md);
   font-family: var(--font-family-sans);
   font-weight: var(--font-weight-regular);
@@ -39,9 +45,48 @@
   line-height: var(--line-height-16);
   color: var(--semantics-text-primary);
   outline: none;
-  transition: border-color 120ms ease, box-shadow 120ms ease;
+  transition:
+    border-color var(--duration-fast) var(--easing-standard),
+    box-shadow var(--duration-fast) var(--easing-standard),
+    background-color var(--duration-fast) var(--easing-standard);
   appearance: none;
   -webkit-appearance: none;
+}
+
+.inputMd {
+  height: var(--control-height-md);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  letter-spacing: var(--letter-spacing-none);
+}
+
+.inputSm {
+  height: var(--control-height-sm);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-none);
+}
+
+.inputSm::placeholder,
+.inputMd::placeholder {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-none);
+  color: var(--semantics-text-placeholder);
+  opacity: 1;
+}
+
+.input[type="search"]::-webkit-search-cancel-button,
+.input[type="search"]::-webkit-search-decoration,
+.input[type="search"]::-webkit-search-results-button,
+.input[type="search"]::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
 }
 
 .input::placeholder {
@@ -50,23 +95,30 @@
   opacity: 1;
 }
 
-.input:hover {
+.input:hover:not(:disabled) {
   border-color: var(--semantics-control-border-hover);
 }
 
-.input:focus-visible,
-.input:focus {
+.input:focus-visible:not(:disabled),
+.input:focus:not(:disabled) {
   border-color: var(--semantics-control-border-focus);
   box-shadow: var(--semantics-focus-ring);
 }
 
-.control[data-invalid] .input,
-.control[data-invalid] .input:focus {
+.control[data-invalid] .input:not(:disabled),
+.control[data-invalid] .input:focus:not(:disabled) {
   border-color: var(--semantics-control-border-error);
 }
 
-.control[data-invalid] .input:focus {
+.control[data-invalid] .input:focus:not(:disabled) {
   box-shadow: var(--semantics-focus-ring-danger);
+}
+
+.input:disabled {
+  background: var(--semantics-control-bg-disabled);
+  color: var(--semantics-text-disabled);
+  border-color: var(--semantics-border-disabled);
+  cursor: not-allowed;
 }
 
 .leadingIcon {
@@ -83,8 +135,19 @@
   right: var(--space-3x);
   display: inline-flex;
   align-items: center;
-  pointer-events: none;
   color: var(--semantics-text-placeholder);
+  pointer-events: none;
+}
+
+.control:has(.input:disabled) .leadingIcon,
+.control:has(.input:disabled) .trailingIcon,
+.control:has(.input:disabled) .suffix {
+  color: var(--semantics-text-disabled);
+}
+
+.trailingIcon button,
+.trailingIcon [role="button"] {
+  pointer-events: auto;
 }
 
 .suffix {

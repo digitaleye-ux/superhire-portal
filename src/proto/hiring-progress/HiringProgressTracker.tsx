@@ -19,25 +19,6 @@ export function HiringProgressTracker({ detail }: HiringProgressTrackerProps) {
     state === "withdrawn" ||
     state === "on-hold";
 
-  const getCardBadgeClass = (stage: TimelineStage) => {
-    const label = (stage.badgeLabel ?? "").toLowerCase();
-    if (
-      stage.state === "on-hold" ||
-      label.includes("action needed") ||
-      label.includes("pending") ||
-      label.includes("hold")
-    ) {
-      return s.badgeWarning;
-    }
-    if (isTerminalOrHold(stage.state) || label.includes("closed")) {
-      return s.badgeDanger;
-    }
-    if (label.includes("completed") || stage.state === "done") {
-      return s.badgeSuccess;
-    }
-    return s.badgeBrand;
-  };
-
   return (
     <div className={s.tracker} aria-label="Candidate hiring journey progress">
       {/* Tracker Header */}
@@ -92,7 +73,7 @@ export function HiringProgressTracker({ detail }: HiringProgressTrackerProps) {
 
               {/* Milestone content */}
               <div className={s.content}>
-                {/* 1. Milestone Header (Title + Date/Badge) */}
+                {/* 1. Milestone Header (Title + Date) */}
                 <div className={s.milestoneHeader}>
                   <span
                     className={
@@ -108,15 +89,8 @@ export function HiringProgressTracker({ detail }: HiringProgressTrackerProps) {
 
                   <div className={s.milestoneRight}>
                     {/* Date / timestamp when available */}
-                    {stage.date && !stage.badgeLabel && (
+                    {stage.date && (
                       <span className={s.stepDate}>{stage.date}</span>
-                    )}
-
-                    {/* Status badge when action, alert, or state label present */}
-                    {stage.badgeLabel && (
-                      <span className={`${s.badge} ${getCardBadgeClass(stage)}`}>
-                        {stage.badgeLabel}
-                      </span>
                     )}
                   </div>
                 </div>

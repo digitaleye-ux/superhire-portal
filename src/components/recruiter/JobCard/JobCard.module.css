@@ -11,15 +11,15 @@
      exact height regardless of its row or its own title length. Derived from
      the tokens that make up the card:
 
-       header  = 12 (pt) + 24 (kebab button / header row) + 8 (pb) = 44
+       header  = 12 (pt) + 32 (kebab button / header row) + 8 (pb) = 52
        body    = 8 (pt) + 48 (title 2 lines) + 8 (main gap)
                  + 20 (meta) + 24 (gap) + 1 (divider) + 12 (gap)
                  + 20 (footer) + 12 (pb)                         = 153
        borders = 1 + 1                                           = 2
-                                                           total ≈ 199px        */
+                                                           total = 207px        */
   height: calc(
-      /* header */
-      var(--space-3x) + var(--line-height-16) + var(--space-2x) +
+      /* header: 12px pt + 32px kebab button + 8px pb */
+      var(--space-3x) + var(--icon-button-size-sm) + var(--space-2x) +
       /* body */
       var(--space-2x) + (2 * var(--line-height-16)) + var(--space-2x) + var(--line-height-14) + var(--space-6x) + 1px + var(--space-3x) + var(--line-height-14) + var(--space-3x) +
       /* borders */
@@ -29,7 +29,7 @@
   align-items: flex-start;
   overflow: clip;
   background: var(--semantics-background-primary);
-  border: 1px solid var(--semantics-border-strong);
+  border: 1px solid var(--semantics-border-default);
   border-radius: var(--radius-md);
   transition: border-color 120ms ease, box-shadow 120ms ease;
 }
@@ -126,21 +126,27 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: var(--size-icon-lg);
+  height: var(--size-icon-lg);
   padding: 0;
   border: 0;
   background: transparent;
-  border-radius: var(--radius-4, 4px);
+  border-radius: var(--radius-4);
   color: var(--semantics-text-tertiary);
   cursor: pointer;
-  transition: background-color 150ms ease, color 150ms ease;
+  transition:
+    background-color var(--duration-fast) var(--easing-standard),
+    color var(--duration-fast) var(--easing-standard);
 }
 
 .kebabBtn:hover,
 .kebabBtnActive {
-  background: var(--semantics-surface-secondary, #f4f4f5);
+  background: var(--semantics-surface-secondary);
   color: var(--semantics-text-primary);
+}
+
+.kebabBtn:active {
+  background: var(--semantics-surface-tertiary);
 }
 
 .kebabBtn:focus-visible {
@@ -171,6 +177,7 @@
     opacity: 0;
     transform: translateY(-4px) scale(0.98);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -221,20 +228,20 @@
 }
 
 .dropdownItemDanger {
-  color: var(--semantics-text-danger, #ef4444);
+  color: var(--semantics-text-danger);
 }
 
 .dropdownItemDanger svg {
-  color: var(--semantics-text-danger, #ef4444);
+  color: var(--semantics-text-danger);
 }
 
 .dropdownItemDanger:hover {
-  background: var(--semantics-surface-danger-subtle, #fef2f2);
-  color: var(--semantics-text-danger, #dc2626);
+  background: var(--semantics-surface-danger-subtle);
+  color: var(--semantics-interactive-danger-hover);
 }
 
 .dropdownItemDanger:hover svg {
-  color: var(--semantics-text-danger, #dc2626);
+  color: var(--semantics-interactive-danger-hover);
 }
 
 /* ---- Body ---- */
@@ -348,6 +355,7 @@
   width: 100%;
   height: 1px;
   border: 0;
+  border-top: 1px solid var(--semantics-border-default);
   /* Push the divider + footer to the bottom. Combined with .main's 24px
      margin-bottom, the meta→divider gap is 24px at minimum and grows on
      shorter cards so footers align and all cards are equal height. */

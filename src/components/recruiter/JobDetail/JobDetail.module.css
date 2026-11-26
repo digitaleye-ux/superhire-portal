@@ -7,7 +7,7 @@
   height: 100%;
   min-height: 0;
   background: var(--semantics-background-primary);
-  border: 1px solid var(--semantics-border-strong);
+  border: none;
   overflow: hidden;
 }
 
@@ -91,7 +91,7 @@
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-20);
   line-height: var(--line-height-20);
-  letter-spacing: -0.1px;
+  letter-spacing: var(--letter-spacing-heading);
   color: var(--semantics-text-primary);
 }
 
@@ -200,7 +200,7 @@
   padding: var(--space-6x) var(--space-8x);
   display: flex;
   flex-direction: column;
-  gap: var(--space-6x);
+  gap: var(--space-8x);
   /* Hide the scroll bar; content still scrolls. */
   scrollbar-width: none;
 }
@@ -213,6 +213,16 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-2x);
+}
+
+/* ---- Subtle divider between sections ---- */
+.divider {
+  display: block;
+  width: 100%;
+  height: 0;
+  border: 0;
+  border-top: 1px solid var(--semantics-divider-subtle);
+  margin: 0;
 }
 
 /* Section heading: text-style-heading-4 (16px / 24px, Semibold, -0.5% tracking) */
@@ -266,9 +276,9 @@
 .chip {
   display: inline-flex;
   align-items: center;
-  padding: 4px var(--space-3x);
+  padding: var(--space-1x) var(--space-3x);
   border-radius: var(--radius-pill);
-  border: 1px solid var(--semantics-border-default);
+  border: var(--border-width-thin) solid var(--semantics-border-default);
   background: var(--semantics-surface-primary);
   color: var(--semantics-text-secondary);
   font-family: var(--font-family-sans);
@@ -277,12 +287,55 @@
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-none);
   white-space: nowrap;
-  transition: border-color 120ms ease, background-color 120ms ease;
 }
 
-.chip:hover {
-  border-color: var(--semantics-border-hover, #cbd5e1);
-  background: var(--semantics-surface-secondary);
+/* ---- Spec Sheet (Role expectations) ---- */
+.specSheet {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 var(--space-8x);
+}
+
+.specColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.specRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: var(--space-2x) 0;
+  border-bottom: 1px solid var(--semantics-divider-subtle);
+  gap: var(--space-3x);
+}
+
+.specRow:last-child {
+  border-bottom: none;
+}
+
+.specLabel {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+  color: var(--semantics-text-tertiary);
+  flex-shrink: 0;
+}
+
+.specValue {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+  color: var(--semantics-text-primary);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ---- Company grid ---- */
@@ -354,6 +407,6 @@
 .footerActions {
   display: flex;
   align-items: center;
-  gap: var(--spacing-4x);
+  gap: var(--space-4x);
   flex-shrink: 0;
 }

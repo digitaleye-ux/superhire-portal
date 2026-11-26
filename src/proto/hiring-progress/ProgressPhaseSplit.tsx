@@ -85,12 +85,8 @@ export function ProgressPhaseSplit({ detail }: { detail: CandidateDetail }) {
               {stage.step}. {stage.label}
             </span>
 
-            {stage.badgeLabel ? (
-              <span className={s.phaseBadge}>{stage.badgeLabel}</span>
-            ) : stage.date ? (
+            {stage.date ? (
               <span className={s.phaseDate}>{stage.date}</span>
-            ) : isUpcoming ? (
-              <span className={s.phaseUpcomingTag}>Upcoming</span>
             ) : null}
           </div>
 

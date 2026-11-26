@@ -21,16 +21,35 @@ export function SortFilterBar({
   return (
     <div className={[styles.bar, className].filter(Boolean).join(" ")}>
       <div className={styles.filters}>
-        {FILTER_OPTIONS.map(({ id, label, options }) => (
-          <Dropdown
-            key={id}
-            label={label}
-            options={options}
-            selected={filters[id]}
-            onChange={(next) => onFiltersChange({ ...filters, [id]: next })}
-            multiple
-          />
-        ))}
+        {FILTER_OPTIONS.map(({ id, label, options }) => {
+          if (id === "commission") {
+            return (
+              <Dropdown
+                key={id}
+                label={label}
+                options={options}
+                selected={filters.commission}
+                onChange={(next) =>
+                  onFiltersChange({ ...filters, commission: next })
+                }
+                multiple={false}
+                singleShowsValue
+                allowDeselect
+              />
+            );
+          }
+
+          return (
+            <Dropdown
+              key={id}
+              label={label}
+              options={options}
+              selected={filters[id]}
+              onChange={(next) => onFiltersChange({ ...filters, [id]: next })}
+              multiple
+            />
+          );
+        })}
       </div>
 
       <div className={styles.sort}>

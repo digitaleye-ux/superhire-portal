@@ -85,9 +85,6 @@ export function ProgressFocusStepper({ detail }: { detail: CandidateDetail }) {
           </div>
 
           <div className={s.spotlightMeta}>
-            {activeStage.badgeLabel && (
-              <span className={s.spotlightBadge}>{activeStage.badgeLabel}</span>
-            )}
             {activeStage.date && (
               <span className={s.spotlightDate}>{activeStage.date}</span>
             )}
