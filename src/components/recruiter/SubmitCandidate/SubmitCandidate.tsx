@@ -4,6 +4,7 @@ import { Badge } from "@/components/shared/Badge";
 import { IconButton } from "@/components/shared/IconButton";
 import { Checkbox } from "@/components/shared/Checkbox";
 import { Tab as TabButton } from "@/components/shared/Tab";
+import { Tag } from "@/components/shared/Tag";
 import {
   ArrowLeftIcon,
   BriefcaseBusinessIcon,
@@ -1368,9 +1369,7 @@ export function SubmitCandidate({
                   <Block title="Skills">
                     <div className={styles.chips}>
                       {skills.map((skill, i) => (
-                        <span key={i} className={`${styles.chip} text-style-label-3`}>
-                          {skill}
-                        </span>
+                        <Tag key={i}>{skill}</Tag>
                       ))}
                     </div>
                   </Block>

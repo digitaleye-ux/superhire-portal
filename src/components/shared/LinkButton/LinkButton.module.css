@@ -1,0 +1,121 @@
+.linkButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--link-button-gap, var(--space-1x));
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+  border-radius: var(--link-button-radius, var(--radius-2));
+  transition:
+    color var(--duration-fast) var(--easing-standard),
+    transform var(--duration-fast) var(--easing-standard);
+  user-select: none;
+  vertical-align: middle;
+  line-height: inherit;
+}
+
+/* ---- Sizes ---- */
+.sm {
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+}
+
+.md {
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+}
+
+.lg {
+  font-size: var(--font-size-16);
+  line-height: var(--line-height-16);
+}
+
+/* ---- Variants ---- */
+.brand {
+  color: var(--semantics-text-link);
+}
+.brand:hover:not(:disabled):not([aria-disabled="true"]) {
+  color: var(--semantics-text-link-hover);
+}
+.brand:active:not(:disabled):not([aria-disabled="true"]) {
+  color: var(--primitives-primary-900);
+}
+
+.neutral {
+  color: var(--semantics-text-secondary);
+}
+.neutral:hover:not(:disabled):not([aria-disabled="true"]) {
+  color: var(--semantics-text-primary);
+}
+.neutral:active:not(:disabled):not([aria-disabled="true"]) {
+  color: var(--primitives-neutral-900);
+}
+
+.danger {
+  color: var(--semantics-text-error);
+}
+.danger:hover:not(:disabled):not([aria-disabled="true"]) {
+  color: var(--primitives-error-700);
+}
+.danger:active:not(:disabled):not([aria-disabled="true"]) {
+  color: var(--primitives-error-800);
+}
+
+/* ---- Underline styles ---- */
+.underlineHover:hover:not(:disabled):not([aria-disabled="true"]) .label {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.underlineAlways .label {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ---- Label slot ---- */
+.label {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* ---- Icon slot & micro-interaction ---- */
+.iconSlot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.trailingIcon {
+  will-change: transform;
+  transition: transform var(--duration-normal) var(--easing-out);
+}
+
+.linkButton:hover:not(:disabled):not([aria-disabled="true"]) .trailingIcon {
+  transform: translate3d(3px, 0, 0);
+}
+
+/* ---- Focus visible ---- */
+.linkButton:focus-visible {
+  outline: var(--border-width-thick) solid var(--link-button-focus-ring, var(--semantics-border-focus));
+  outline-offset: 2px;
+}
+
+/* ---- Disabled ---- */
+.linkButton:disabled,
+.linkButton[aria-disabled="true"] {
+  color: var(--semantics-text-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.linkButton:disabled .iconSlot,
+.linkButton[aria-disabled="true"] .iconSlot {
+  color: var(--semantics-text-disabled);
+}

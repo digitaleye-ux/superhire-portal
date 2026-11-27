@@ -27,8 +27,8 @@ export const CANDIDATE_FILTER_OPTIONS: {
     label: "Status",
     options: [
       { value: "submitted", label: "Submitted" },
-      { value: "under-review", label: "Review" },
-      { value: "shortlisted", label: "Shortlisted" },
+      { value: "superhire-review", label: "SuperHire review" },
+      { value: "employer-review", label: "Employer review" },
       { value: "interview", label: "Interview" },
       { value: "offered", label: "Offer" },
       { value: "joined", label: "Joined" },

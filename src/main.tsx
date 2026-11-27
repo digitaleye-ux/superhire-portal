@@ -33,6 +33,16 @@ if (import.meta.env.DEV && proto === "form") {
   (proto === "actions" || proto === "action" || proto === "action-required")
 ) {
   import("./proto/actions-required").then(({ default: Proto }) => root.render(<Proto />));
+} else if (
+  import.meta.env.DEV &&
+  (proto === "cards" || proto === "card" || proto === "card-showcase")
+) {
+  import("./proto/card-showcase").then(({ default: Proto }) => root.render(<Proto />));
+} else if (
+  import.meta.env.DEV &&
+  (proto === "milestone" || proto === "milestones")
+) {
+  import("./proto/milestone-showcase").then(({ default: Proto }) => root.render(<Proto />));
 } else {
   root.render(app);
 }

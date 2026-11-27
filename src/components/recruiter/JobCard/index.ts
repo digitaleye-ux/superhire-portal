@@ -1,2 +1,2 @@
 export { JobCard, default } from "./JobCard";
-export type { JobCardProps } from "./JobCard.types";
+export type { JobCardProps, JobCardVariant, EarningModel } from "./JobCard.types";

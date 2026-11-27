@@ -77,7 +77,13 @@ export default function CandidatePanelProto() {
         c.status.toLowerCase().includes(q);
       if (!hit) return false;
     }
-    if (filters.status.length > 0 && !filters.status.includes(c.status)) return false;
+    if (filters.status.length > 0) {
+      const match = filters.status.some((st) => {
+        if (st === "employer-review" && (c.status === "employer-review" || c.status === "under-review")) return true;
+        return c.status === st;
+      });
+      if (!match) return false;
+    }
     if (filters.company.length > 0 && !filters.company.includes(c.company)) return false;
     return true;
   });

@@ -10,12 +10,14 @@ import styles from "./variants.module.css";
 
 const STATUS_CLASS: Record<string, string> = {
   submitted: styles.statusNeutral,
+  "superhire-review": styles.statusBrand,
+  "employer-review": styles.statusInfo,
   "under-review": styles.statusInfo,
-  shortlisted: styles.statusBrand,
-  interview: styles.statusWarning,
+  shortlisted: styles.statusInfo,
+  interview: styles.statusInfo,
   offered: styles.statusSuccess,
   joined: styles.statusSuccess,
-  "on-hold": styles.statusNeutral,
+  "on-hold": styles.statusWarning,
   rejected: styles.statusDanger,
 };
 

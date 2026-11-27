@@ -3,13 +3,13 @@ import { toast } from "sonner";
 import { Badge } from "@/components/shared/Badge";
 import { Button } from "@/components/shared/Button";
 import { Checkbox } from "@/components/shared/Checkbox";
+import { IconButton } from "@/components/shared/IconButton";
 import {
   BriefcaseBusinessIcon,
   CheckIcon,
   HandCoinsIcon,
   IndianRupeeIcon,
   MapPinIcon,
-  SparklesIcon,
   XIcon,
 } from "@/components/shared/Icon";
 import type { CandidateItem } from "@/proto/candidate-cards/data";
@@ -25,16 +25,17 @@ export default function Variant4Batch({
   onClose?: () => void;
   onComplete?: (count: number, roles: string[]) => void;
 }) {
-  // Candidate's current claimed role (exclude or mark applied)
   const availableJobs = PROTOTYPE_CLAIMED_JOBS.filter(
     (j) => !(j.company === candidate.company && j.role === candidate.role)
   );
 
-  const [selectedJobIds, setSelectedJobIds] = useState<number[]>([availableJobs[0]?.id].filter(Boolean));
+  const [selectedJobIds, setSelectedJobIds] = useState<number[]>([
+    availableJobs[0]?.id,
+    availableJobs[1]?.id,
+  ].filter(Boolean));
   const [checkedDealbreakers, setCheckedDealbreakers] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
 
-  // Compute union of must-haves across selected jobs
   const selectedJobs = useMemo(
     () => availableJobs.filter((j) => selectedJobIds.includes(j.id)),
     [availableJobs, selectedJobIds]
@@ -48,7 +49,6 @@ export default function Variant4Batch({
     return Array.from(set);
   }, [selectedJobs]);
 
-  // Calculate total potential bounty across selected jobs
   const totalBounty = useMemo(() => {
     return selectedJobs.reduce((acc, j) => {
       const num = parseInt(j.commission.replace(/[^0-9]/g, ""), 10) || 0;
@@ -76,6 +76,10 @@ export default function Variant4Batch({
     );
   };
 
+  const verifyAll = () => {
+    setCheckedDealbreakers([...mergedDealbreakers]);
+  };
+
   const handleBatchSubmit = () => {
     if (selectedJobs.length === 0) {
       toast.error("Please select at least one role.");
@@ -100,234 +104,235 @@ export default function Variant4Batch({
   };
 
   return (
-    <div className={s.batchDrawer}>
-      {/* Header */}
-      <div className={s.batchHeader}>
-        <div>
-          <h2 className={s.batchTitle}>Batch Syndicate Candidate</h2>
-          <p className={s.batchSubtitle}>
-            Submit {candidate.name} to multiple claimed mandates in 1 single action
-          </p>
-        </div>
-        {onClose && (
-          <button
-            onClick={onClose}
-            className={s.closeButton}
-            aria-label="Close batch drawer"
-          >
-            <XIcon size={18} />
-          </button>
-        )}
-      </div>
-
-      {/* Scrollable Content */}
-      <div className={s.batchScrollArea}>
-        {/* Candidate Summary Card */}
-        <div className={s.candidatePill}>
-          <div className={s.candidateInfo}>
-            <span className={s.candidateName}>{candidate.name}</span>
-            <div className={s.candidateMeta}>
-              <span className={s.metaItem}>
-                <BriefcaseBusinessIcon size={13} /> {candidate.experience}
-              </span>
-              <span className={s.metaItem}>
-                <IndianRupeeIcon size={13} /> {candidate.currentCtc}
-              </span>
-              <span className={s.metaItem}>
-                <MapPinIcon size={13} /> {candidate.location}
-              </span>
-              <span className={s.metaItem}>{candidate.noticePeriod}</span>
-            </div>
+    <div className={s.drawerBackdrop} onClick={onClose}>
+      <div
+        className={s.drawerPanel}
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Batch Syndicate ${candidate.name}`}
+      >
+        {/* Header */}
+        <div className={s.batchHeader}>
+          <div>
+            <h2 className={s.batchTitle}>Multi-Role Batch Syndicate</h2>
+            <p className={s.batchSubtitle}>
+              Submit {candidate.name} to multiple claimed mandates simultaneously
+            </p>
           </div>
-          <div className={s.resumeAttachedBadge}>
-            <CheckIcon size={12} />
-            <span>Resume attached ({`${candidate.name.replace(/\s+/g, "_")}_Resume.pdf`})</span>
-          </div>
+          {onClose && (
+            <IconButton
+              icon={<XIcon size="md" />}
+              ariaLabel="Close batch drawer"
+              size="md"
+              onClick={onClose}
+            />
+          )}
         </div>
 
-        {/* Roles List */}
-        <div>
-          <div className={s.batchSectionHeading}>
-            <span>Select Roles to Target ({selectedJobIds.length}/{availableJobs.length})</span>
-            <button type="button" onClick={selectAll}>
-              {selectedJobIds.length === availableJobs.length ? "Deselect all" : "Select all eligible"}
-            </button>
-          </div>
-
-          <div className={s.batchRolesList}>
-            {availableJobs.map((job) => {
-              const isSelected = selectedJobIds.includes(job.id);
-              return (
-                <div
-                  key={job.id}
-                  className={s.batchRoleRow}
-                  data-checked={isSelected}
-                  onClick={() => toggleJob(job.id)}
-                  role="checkbox"
-                  aria-checked={isSelected}
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === " " || e.key === "Enter") {
-                      e.preventDefault();
-                      toggleJob(job.id);
-                    }
-                  }}
-                >
-                  <Checkbox
-                    checked={isSelected}
-                    onChange={() => toggleJob(job.id)}
-                    label=""
-                    aria-label={`Select ${job.role}`}
-                  />
-
-                  <img
-                    src={`https://www.google.com/s2/favicons?domain=${job.domain}&sz=64`}
-                    alt={job.company}
-                    style={{ width: 32, height: 32, borderRadius: 6, objectFit: "cover" }}
-                    onError={(e) => {
-                      (e.currentTarget as HTMLElement).style.display = "none";
-                    }}
-                  />
-
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                      <span style={{ fontWeight: 600, fontSize: 14 }}>{job.role}</span>
-                      <span style={{ fontSize: 13, color: "var(--semantics-text-tertiary)" }}>
-                        at {job.company}
-                      </span>
-                      {job.badge && (
-                        <Badge type={job.badge}>
-                          {job.badge}
-                        </Badge>
-                      )}
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 12,
-                        marginTop: 4,
-                        fontSize: 12,
-                        color: "var(--semantics-text-secondary)",
-                      }}
-                    >
-                      <span>{job.experience}</span>
-                      <span>•</span>
-                      <span>{job.packageLabel}</span>
-                      <span>•</span>
-                      <span style={{ display: "inline-flex", alignItems: "center", gap: 3 }}>
-                        <MapPinIcon size={12} /> {job.location} ({job.mode})
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Bounty Pill */}
-                  <div style={{ textAlign: "right", flexShrink: 0 }}>
-                    <div
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 4,
-                        fontSize: 13,
-                        fontWeight: 600,
-                        color: "var(--semantics-text-link)",
-                      }}
-                    >
-                      <HandCoinsIcon size={14} />
-                      {job.commission}
-                    </div>
-                    <div style={{ fontSize: 11, color: "var(--semantics-text-tertiary)" }}>
-                      per shortlist
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Consolidated Dealbreakers Checklist */}
-        {selectedJobs.length > 0 && (
-          <div className={s.batchDealbreakersBox}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <SparklesIcon size={15} style={{ color: "var(--semantics-text-brand, #4f46e5)" }} />
-                <span style={{ fontSize: 13, fontWeight: 600 }}>
-                  Consolidated Must-Haves Checklist ({checkedDealbreakers.length}/{mergedDealbreakers.length} Verified)
+        {/* Scrollable Content */}
+        <div className={s.batchScrollArea}>
+          {/* Candidate Summary Card */}
+          <div className={s.candidatePill}>
+            <div className={s.candidateInfo}>
+              <span className={s.candidateName}>{candidate.name}</span>
+              <div className={s.candidateMeta}>
+                <span className={s.metaItem}>
+                  <IndianRupeeIcon size="xs" />
+                  <span>{candidate.expectedCtc.replace(/^₹\s*/, "")}</span>
+                </span>
+                <span>·</span>
+                <span className={s.metaItem}>
+                  <BriefcaseBusinessIcon size="xs" />
+                  <span>{candidate.experience}</span>
+                </span>
+                <span>·</span>
+                <span>{candidate.noticePeriod} notice</span>
+                <span>·</span>
+                <span className={s.metaItem}>
+                  <MapPinIcon size="xs" />
+                  <span>{candidate.location}</span>
                 </span>
               </div>
-              <button
-                type="button"
-                onClick={() => setCheckedDealbreakers([...mergedDealbreakers])}
-                style={{
-                  fontSize: 12,
-                  color: "var(--semantics-text-link)",
-                  background: "none",
-                  border: 0,
-                  cursor: "pointer",
-                }}
-              >
-                Verify all ({mergedDealbreakers.length})
+            </div>
+            <div className={s.resumeAttachedBadge}>
+              <CheckIcon size="xs" />
+              <span>Resume attached</span>
+            </div>
+          </div>
+
+          {/* Roles Selection */}
+          <div>
+            <div className={s.batchSectionHeading}>
+              <span>Select Claimed Roles ({selectedJobIds.length}/{availableJobs.length})</span>
+              <button type="button" onClick={selectAll}>
+                {selectedJobIds.length === availableJobs.length ? "Deselect all" : "Select all"}
               </button>
             </div>
 
-            <p style={{ margin: 0, fontSize: 12, color: "var(--semantics-text-secondary)" }}>
-              Ensure {candidate.name} satisfies these mandatory qualifications across the selected {selectedJobs.length} roles:
-            </p>
-
-            <div className={s.batchReqList}>
-              {mergedDealbreakers.map((req) => {
-                const isChecked = checkedDealbreakers.includes(req);
+            <div className={s.batchRolesList}>
+              {availableJobs.map((job) => {
+                const isSelected = selectedJobIds.includes(job.id);
                 return (
-                  <label
-                    key={req}
-                    className={s.batchReqItem}
-                    onClick={() => toggleDealbreaker(req)}
+                  <div
+                    key={job.id}
+                    className={s.batchRoleRow}
+                    data-checked={isSelected}
+                    onClick={() => toggleJob(job.id)}
+                    role="checkbox"
+                    aria-checked={isSelected}
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === " " || e.key === "Enter") {
+                        e.preventDefault();
+                        toggleJob(job.id);
+                      }
+                    }}
                   >
                     <Checkbox
-                      checked={isChecked}
-                      onChange={() => toggleDealbreaker(req)}
+                      checked={isSelected}
+                      onChange={() => toggleJob(job.id)}
                       label=""
-                      aria-label={req}
+                      aria-label={`Select ${job.role}`}
                     />
-                    <span
-                      style={{
-                        color: isChecked
-                          ? "var(--semantics-text-primary)"
-                          : "var(--semantics-text-secondary)",
+
+                    <img
+                      src={`https://www.google.com/s2/favicons?domain=${job.domain}&sz=64`}
+                      alt={job.company}
+                      style={{ width: 28, height: 28, borderRadius: 6, objectFit: "contain" }}
+                      onError={(e) => {
+                        (e.currentTarget as HTMLElement).style.display = "none";
                       }}
-                    >
-                      {req}
-                    </span>
-                  </label>
+                    />
+
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                        <span style={{ fontWeight: 600, fontSize: 14, color: "var(--semantics-text-primary)" }}>
+                          {job.role}
+                        </span>
+                        <span style={{ fontSize: 13, color: "var(--semantics-text-tertiary)" }}>
+                          at {job.company}
+                        </span>
+                        {job.badge && <Badge type={job.badge} />}
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 8,
+                          marginTop: 4,
+                          fontSize: 12,
+                          color: "var(--semantics-text-tertiary)",
+                        }}
+                      >
+                        <span>{job.packageLabel}</span>
+                        <span>·</span>
+                        <span>{job.experience}</span>
+                        <span>·</span>
+                        <span>{job.location}</span>
+                      </div>
+                    </div>
+
+                    {/* Bounty Pill */}
+                    <div style={{ textAlign: "right", flexShrink: 0 }}>
+                      <div
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 4,
+                          fontSize: 13,
+                          fontWeight: 600,
+                          color: "var(--semantics-text-primary)",
+                        }}
+                      >
+                        <HandCoinsIcon size="sm" />
+                        <span>{job.commission}</span>
+                      </div>
+                      <div style={{ fontSize: 11, color: "var(--semantics-text-tertiary)" }}>
+                        per shortlist
+                      </div>
+                    </div>
+                  </div>
                 );
               })}
             </div>
           </div>
-        )}
-      </div>
 
-      {/* Sticky Bottom Footer */}
-      <div className={s.batchFooter}>
-        <div className={s.batchTotal}>
-          <span className={s.batchTotalLabel}>Total Bounty Potential</span>
-          <span className={s.batchTotalAmount}>
-            ₹{totalBounty.toLocaleString("en-IN")} / shortlists
-          </span>
+          {/* Consolidated Dealbreakers Checklist */}
+          {selectedJobs.length > 0 && (
+            <div className={s.batchDealbreakersBox}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <CheckIcon size="sm" style={{ color: "var(--semantics-text-brand)" }} />
+                  <span style={{ fontSize: 13, fontWeight: 600, color: "var(--semantics-text-primary)" }}>
+                    Consolidated Must-Haves ({checkedDealbreakers.length}/{mergedDealbreakers.length} verified)
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={verifyAll}
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 500,
+                    color: "var(--semantics-text-brand)",
+                    background: "none",
+                    border: 0,
+                    cursor: "pointer",
+                    padding: 0,
+                  }}
+                >
+                  Verify all
+                </button>
+              </div>
+
+              <p style={{ margin: 0, fontSize: 12, color: "var(--semantics-text-secondary)" }}>
+                Ensure {candidate.name} satisfies these mandatory qualifications across the selected {selectedJobs.length} roles:
+              </p>
+
+              <div className={s.batchReqList}>
+                {mergedDealbreakers.map((req) => {
+                  const isChecked = checkedDealbreakers.includes(req);
+                  return (
+                    <label key={req} className={s.batchReqItem}>
+                      <Checkbox
+                        checked={isChecked}
+                        onChange={() => toggleDealbreaker(req)}
+                        label=""
+                        aria-label={req}
+                      />
+                      <span>{req}</span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          {onClose && (
-            <Button variant="secondary" onClick={onClose} disabled={submitting}>
-              Cancel
-            </Button>
-          )}
+        {/* Footer with Aggregated Bounty */}
+        <div className={s.batchFooter}>
+          <div className={s.batchTotal}>
+            <span className={s.batchTotalLabel}>
+              Selected {selectedJobs.length} {selectedJobs.length === 1 ? "role" : "roles"}
+            </span>
+            <span className={s.batchTotalAmount}>
+              ₹{totalBounty.toLocaleString("en-IN")} potential bounty
+            </span>
+          </div>
+
           <Button
             variant="primary"
+            size="md"
+            disabled={
+              selectedJobs.length === 0 ||
+              checkedDealbreakers.length < mergedDealbreakers.length ||
+              submitting
+            }
             onClick={handleBatchSubmit}
-            disabled={submitting || selectedJobs.length === 0}
           >
-            {submitting ? "Submitting..." : `Submit to ${selectedJobs.length} ${selectedJobs.length === 1 ? "Role" : "Roles"}`}
+            {submitting
+              ? "Submitting…"
+              : `Submit ${candidate.name} to ${selectedJobs.length} roles`}
           </Button>
         </div>
       </div>

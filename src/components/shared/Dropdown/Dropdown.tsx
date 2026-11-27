@@ -1,15 +1,37 @@
 import { forwardRef, useEffect, useId, useRef, useState } from "react";
-import { ChevronDownIcon, ChevronUpIcon, XIcon } from "@/components/shared/Icon";
+import { ChevronDownIcon, XIcon } from "@/components/shared/Icon";
 import { Checkbox } from "@/components/shared/Checkbox";
 import { Radio } from "@/components/shared/Radio";
 import type { DropdownProps } from "./Dropdown.types";
 import styles from "./Dropdown.module.css";
 
+const VARIANT_CLASS_MAP = {
+  filter: styles.variantFilter,
+  form: styles.variantForm,
+  plain: styles.variantPlain,
+} as const;
+
+const SIZE_CLASS_MAP = {
+  sm: styles.sm,
+  md: styles.md,
+  lg: styles.lg,
+} as const;
+
 /**
- * Dropdown — Figma nodes 422:2570 (container), 422:2468 (item).
- * A filter/sort control: a trigger button that opens a menu of checkbox
- * (multi-select) or radio (single-select) options. Controlled via
- * `selected` / `onChange`.
+ * Dropdown — SuperHire Design System (Figma nodes 422:2570 container, 422:2468 item).
+ *
+ * Variants:
+ * - `filter`: Toolbar filter button with active brand tint, counter pill, and clear button.
+ * - `form`: Standard input field selector with clean border, placeholder, and chevron.
+ * - `plain`: Borderless compact dropdown for dense table headers and inline actions.
+ *
+ * Sizes:
+ * - `sm` (32px, default)
+ * - `md` (36px)
+ * - `lg` (40px)
+ *
+ * Supports all 6 interactive states, keyboard navigation, outside click dismiss,
+ * and custom leading icons.
  */
 export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
   function Dropdown(
@@ -18,13 +40,19 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       options,
       selected,
       onChange,
+      variant = "filter",
+      size = "sm",
       multiple = true,
       singleShowsValue = false,
       defaultValue,
       allowDeselect = false,
+      placeholder,
+      leadingIcon,
+      fullWidth = false,
       align = "left",
       disabled = false,
       invalid = false,
+      error,
       className,
       triggerClassName,
       menuClassName,
@@ -35,6 +63,8 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
     const localRef = useRef<HTMLDivElement | null>(null);
     const menuId = useId();
     const radioName = useId();
+
+    const isInvalid = Boolean(invalid || error);
 
     const setRefs = (node: HTMLDivElement | null) => {
       localRef.current = node;
@@ -55,7 +85,7 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       if (disabled && open) setOpen(false);
     }, [disabled, open]);
 
-    // Close on outside click.
+    // Close on outside pointer click.
     useEffect(() => {
       if (!open) return;
       const onPointerDown = (e: PointerEvent) => {
@@ -77,8 +107,8 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       return () => document.removeEventListener("keydown", onKey);
     }, [open]);
 
-    const toggleValue = (value: string) => {
-      if (disabled) return;
+    const toggleValue = (value: string, optDisabled?: boolean) => {
+      if (disabled || optDisabled) return;
       if (multiple) {
         onChange(
           selected.includes(value)
@@ -103,35 +133,65 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
 
     const isFilterSelection = multiple || !singleShowsValue || allowDeselect;
     const selectedState = isEffectivelySelected && isFilterSelection;
-    const triggerLabel =
-      !multiple && singleShowsValue && isEffectivelySelected
-        ? options.find((o) => o.value === selected[0])?.label ?? label
-        : label;
+
+    // Resolve trigger text
+    const selectedOption = !multiple
+      ? options.find((o) => o.value === selected[0])
+      : undefined;
+
+    let triggerText = label;
+    let isShowingPlaceholder = false;
+
+    if (variant === "form") {
+      if (selectedOption) {
+        triggerText = selectedOption.label;
+      } else if (placeholder) {
+        triggerText = placeholder;
+        isShowingPlaceholder = true;
+      } else {
+        triggerText = label;
+      }
+    } else {
+      // Filter & plain variants
+      if (!multiple && singleShowsValue && isEffectivelySelected && selectedOption) {
+        triggerText = selectedOption.label;
+      } else {
+        triggerText = label;
+      }
+    }
 
     const wrapperClass = [
       styles.wrapper,
+      SIZE_CLASS_MAP[size],
+      VARIANT_CLASS_MAP[variant],
       open ? styles.open : "",
       selectedState ? styles.selected : "",
+      isShowingPlaceholder ? styles.isPlaceholder : "",
       disabled ? styles.disabled : "",
-      invalid ? styles.invalid : "",
+      isInvalid ? styles.invalid : "",
       triggerClassName,
     ]
       .filter(Boolean)
       .join(" ");
 
+    const rootClass = [
+      styles.root,
+      fullWidth ? styles.fullWidth : "",
+      className,
+    ]
+      .filter(Boolean)
+      .join(" ");
+
     return (
-      <div
-        className={[styles.root, className].filter(Boolean).join(" ")}
-        ref={setRefs}
-      >
+      <div className={rootClass} ref={setRefs}>
         <div
           className={wrapperClass}
           data-empty={!hasSelection ? "" : undefined}
-          data-invalid={invalid ? "" : undefined}
+          data-invalid={isInvalid ? "" : undefined}
           role="button"
           tabIndex={disabled ? -1 : 0}
           aria-disabled={disabled || undefined}
-          aria-invalid={invalid || undefined}
+          aria-invalid={isInvalid || undefined}
           aria-haspopup="listbox"
           aria-expanded={open}
           aria-controls={menuId}
@@ -146,27 +206,34 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
             }
           }}
         >
-          <span className={styles.label}>{triggerLabel}</span>
+          <div className={styles.triggerBody}>
+            {leadingIcon && (
+              <span className={styles.leadingIcon}>{leadingIcon}</span>
+            )}
+            <span className={styles.label}>{triggerText}</span>
+          </div>
 
-          {selectedState && selected.length >= 2 && (
-            <span className={styles.counter}>{selected.length}</span>
-          )}
+          <div className={styles.trailingControls}>
+            {variant === "filter" && selectedState && selected.length >= 2 && (
+              <span className={styles.counter}>{selected.length}</span>
+            )}
 
-          {selectedState && !disabled ? (
-            <button
-              type="button"
-              className={styles.clear}
-              aria-label={`Clear ${label}`}
-              onClick={clear}
-            >
-              <XIcon size="sm" className={styles.chevron} />
-            </button>
-          ) : open ? (
-            <ChevronUpIcon size="sm" className={styles.chevron} />
-          ) : (
-            <ChevronDownIcon size="sm" className={styles.chevron} />
-          )}
+            {variant === "filter" && selectedState && !disabled ? (
+              <button
+                type="button"
+                className={styles.clear}
+                aria-label={`Clear ${label}`}
+                onClick={clear}
+              >
+                <XIcon size="sm" />
+              </button>
+            ) : (
+              <ChevronDownIcon size="sm" className={styles.chevron} />
+            )}
+          </div>
         </div>
+
+        {error && <span className={styles.errorText}>{error}</span>}
 
         {open && !disabled && (
           <div
@@ -185,21 +252,42 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
                 selected.length > 0
                   ? selected.includes(opt.value)
                   : defaultValue === opt.value;
+              const isOptDisabled = Boolean(opt.disabled);
+
               return (
-                <div key={opt.value} className={styles.item}>
+                <div
+                  key={opt.value}
+                  className={[
+                    styles.item,
+                    isOptDisabled ? styles.itemDisabled : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
+                  onClick={() => toggleValue(opt.value, isOptDisabled)}
+                >
                   {multiple ? (
                     <Checkbox
                       label={opt.label}
                       checked={isChecked}
-                      onChange={() => toggleValue(opt.value)}
+                      disabled={isOptDisabled}
+                      onChange={() => toggleValue(opt.value, isOptDisabled)}
                     />
                   ) : (
                     <Radio
                       name={radioName}
                       label={opt.label}
                       checked={isChecked}
-                      onChange={() => toggleValue(opt.value)}
+                      disabled={isOptDisabled}
+                      onChange={() => toggleValue(opt.value, isOptDisabled)}
                     />
+                  )}
+
+                  {(opt.badge || opt.description) && (
+                    <div className={styles.itemMeta}>
+                      {opt.badge && (
+                        <span className={styles.itemBadge}>{opt.badge}</span>
+                      )}
+                    </div>
                   )}
                 </div>
               );

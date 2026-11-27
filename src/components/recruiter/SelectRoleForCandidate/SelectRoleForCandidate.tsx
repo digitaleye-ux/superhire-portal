@@ -1,15 +1,11 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Badge } from "@/components/shared/Badge";
 import { Button } from "@/components/shared/Button";
 import { IconButton } from "@/components/shared/IconButton";
-import {
-  ArrowRightIcon,
-  BriefcaseBusinessIcon,
-  HandCoinsIcon,
-  IndianRupeeIcon,
-  MapPinIcon,
-  XIcon,
-} from "@/components/shared/Icon";
+import { LinkButton } from "@/components/shared/LinkButton";
+import { SearchInput } from "@/components/shared/SearchInput";
+import { Tag } from "@/components/shared/Tag";
+import { HandCoinsIcon, XIcon } from "@/components/shared/Icon";
 import type { ClaimedRoleItem, SelectRoleForCandidateProps } from "./SelectRoleForCandidate.types";
 import styles from "./SelectRoleForCandidate.module.css";
 
@@ -28,9 +24,10 @@ export function SelectRoleForCandidate({
   className,
 }: SelectRoleForCandidateProps) {
   const [logoErrors, setLogoErrors] = useState<Record<number, boolean>>({});
+  const [searchQuery, setSearchQuery] = useState("");
 
   const subtitle =
-    description || `Select an active claimed role to submit ${candidate.name}.`;
+    description || `Select a claimed role to submit ${candidate.name} with their existing profile.`;
 
   const isAlreadySubmitted = (job: ClaimedRoleItem) =>
     existingSubmissions.some(
@@ -38,6 +35,18 @@ export function SelectRoleForCandidate({
         s.company.toLowerCase() === job.company.toLowerCase() &&
         s.role.toLowerCase() === job.role.toLowerCase()
     );
+
+  const filteredJobs = useMemo(() => {
+    if (!searchQuery.trim()) return claimedJobs;
+    const q = searchQuery.toLowerCase();
+    return claimedJobs.filter((job) => {
+      return (
+        job.role.toLowerCase().includes(q) ||
+        job.company.toLowerCase().includes(q) ||
+        job.location.toLowerCase().includes(q)
+      );
+    });
+  }, [claimedJobs, searchQuery]);
 
   return (
     <section
@@ -47,9 +56,14 @@ export function SelectRoleForCandidate({
       {/* Header */}
       <header className={styles.header}>
         <div className={styles.topRow}>
-          <div className={styles.titleGroup}>
-            <h2 className={styles.title}>{candidate.name}</h2>
-            <p className={styles.description}>{subtitle}</p>
+          <div className={styles.candidateIdentity}>
+            <div className={styles.avatar} aria-hidden="true">
+              {candidate.initials || candidate.name.slice(0, 2).toUpperCase()}
+            </div>
+            <div className={styles.titleBlock}>
+              <h2 className={styles.title}>Submit {candidate.name}</h2>
+              <p className={styles.subtitle}>{subtitle}</p>
+            </div>
           </div>
           <IconButton
             icon={<XIcon size="md" />}
@@ -58,13 +72,48 @@ export function SelectRoleForCandidate({
             ariaLabel="Close select role drawer"
           />
         </div>
+
+        {/* Candidate Context Meta */}
+        <div className={styles.candidateMetaStrip}>
+          <span className={styles.metaHighlight}>
+            Applied for {candidate.role} at {candidate.company}
+          </span>
+          {candidate.experience && (
+            <>
+              <span className={styles.metaSeparator} aria-hidden="true">·</span>
+              <span>{candidate.experience}</span>
+            </>
+          )}
+          {candidate.location && (
+            <>
+              <span className={styles.metaSeparator} aria-hidden="true">·</span>
+              <span>{candidate.location}</span>
+            </>
+          )}
+          {candidate.noticePeriod && (
+            <>
+              <span className={styles.metaSeparator} aria-hidden="true">·</span>
+              <span>Notice: {candidate.noticePeriod}</span>
+            </>
+          )}
+        </div>
       </header>
 
-      {/* Content Scroll Area */}
+      {/* Search Input */}
+      <div className={styles.searchSection}>
+        <SearchInput
+          placeholder="Search claimed roles by role, company, location..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onClear={() => setSearchQuery("")}
+        />
+      </div>
+
+      {/* Roles List */}
       <div className={styles.scroll}>
         <div className={styles.sectionHeader}>
           <span className={styles.roleCount}>
-            {claimedJobs.length} {claimedJobs.length === 1 ? "claimed role" : "claimed roles"}
+            {filteredJobs.length} {filteredJobs.length === 1 ? "claimed role" : "claimed roles"}
           </span>
         </div>
 
@@ -78,9 +127,23 @@ export function SelectRoleForCandidate({
               Explore open jobs
             </Button>
           </div>
+        ) : filteredJobs.length === 0 ? (
+          <div className={styles.emptyState}>
+            <p className={styles.emptyTitle}>No roles match your search</p>
+            <p className={styles.emptyText}>
+              Try searching with a different keyword or clear the search field.
+            </p>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setSearchQuery("")}
+            >
+              Clear search
+            </Button>
+          </div>
         ) : (
           <div className={styles.rolesList}>
-            {claimedJobs.map((job) => {
+            {filteredJobs.map((job) => {
               const submitted = isAlreadySubmitted(job);
               const closed = job.badge === "closed";
               const disabled = submitted || closed;
@@ -125,34 +188,27 @@ export function SelectRoleForCandidate({
                     </div>
 
                     {submitted ? (
-                      <span className={styles.alreadyBadge}>Already submitted</span>
+                      <Tag variant="neutral" size="sm">
+                        Already submitted
+                      </Tag>
                     ) : job.badge ? (
                       <Badge type={job.badge} />
                     ) : null}
                   </div>
 
-                  <h4 className={styles.roleTitle} title={job.role}>
-                    {job.role}
-                  </h4>
+                  <div className={styles.roleCardBody}>
+                    <h4 className={styles.roleTitle} title={job.role}>
+                      {job.role}
+                    </h4>
 
-                  <div className={styles.cardMeta}>
-                    <span className={styles.metaItem}>
-                      <IndianRupeeIcon size="sm" className={styles.icon} />
+                    <div className={styles.cardMeta}>
                       <span>{job.packageLabel.replace(/^₹\s*/, "")}</span>
-                    </span>
-                    <span className={styles.metaSeparator}>·</span>
-                    <span className={styles.metaItem}>
-                      <BriefcaseBusinessIcon size="sm" className={styles.icon} />
+                      <span className={styles.metaSeparator} aria-hidden="true">·</span>
                       <span>{job.experience}</span>
-                    </span>
-                    <span className={styles.metaSeparator}>·</span>
-                    <span className={styles.metaItem}>
-                      <MapPinIcon size="sm" className={styles.icon} />
+                      <span className={styles.metaSeparator} aria-hidden="true">·</span>
                       <span>{job.location}</span>
-                    </span>
+                    </div>
                   </div>
-
-                  <hr className={styles.cardDivider} />
 
                   <div className={styles.cardFooter}>
                     <span
@@ -163,20 +219,17 @@ export function SelectRoleForCandidate({
                           : "Earn per shortlist · Paid when candidate is shortlisted by employer"
                       }
                     >
-                      <HandCoinsIcon size="sm" className={styles.icon} />
-                      <span className={styles.commissionAmount}>
-                        {job.commission}
-                      </span>
+                      <HandCoinsIcon size="sm" />
+                      <span className={styles.commissionAmount}>{job.commission}</span>
                       <span className={styles.commissionUnit}>
                         {job.earningModel === "closure" ? " per closure" : " per shortlist"}
                       </span>
                     </span>
 
                     {!disabled && (
-                      <span className={styles.selectAction}>
-                        <span>Select role</span>
-                        <ArrowRightIcon size="sm" />
-                      </span>
+                      <LinkButton variant="brand" arrow>
+                        Select role
+                      </LinkButton>
                     )}
                   </div>
                 </div>

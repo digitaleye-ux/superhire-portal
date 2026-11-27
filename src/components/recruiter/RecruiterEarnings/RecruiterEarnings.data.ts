@@ -476,7 +476,7 @@ export const BASE_COMMISSION_RECORDS: CommissionRecord[] = [
       {
         id: "m2",
         label: "Employer hiring process",
-        dateLabel: "Under review at Linear",
+        dateLabel: "Review at Linear",
         state: "current",
       },
       {

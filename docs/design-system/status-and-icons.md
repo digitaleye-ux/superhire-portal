@@ -34,12 +34,61 @@ Which semantic Badge type?
 
 ---
 
-## Skill Tags & Informational Chips
+## Tag (`@/components/shared/Tag`)
 
-Skill tags (e.g. role criteria, candidate profile competencies, job skills) display non-interactive informational metadata.
+Tags display non-interactive informational metadata, taxonomies (e.g. skills), and pipeline statuses across cards.
 
-- **Appearance:** `border-radius: var(--radius-pill)`, `border: var(--border-width-thin) solid var(--semantics-border-default)`, `background: var(--semantics-surface-primary)` (or `transparent`), font `.text-style-label-3` (`12px/12px`, medium), color `--semantics-text-secondary`.
-- **Strict Rule — No Hover State:** Skill tags are static metadata, not buttons. Never add `:hover`, `:active`, or cursor changes to skill tags; hover styling falsely suggests interactivity. (In editable forms where tags can be deleted, only the embedded remove button has an active/hover state, not the chip face itself).
+- **Appearance:** Borderless pill with soft tinted surface fill and high-contrast text:
+  - `border: none` (borderless by design)
+  - `border-radius: var(--tag-radius)` (`var(--radius-pill)`)
+  - Typography: `.text-style-label-3` (`12px / 12px`, Medium) for `size="md"` (default); `.text-style-label-4` (`10px`) for `size="sm"`.
+- **Strict Rule — No Hover State on Body:** Tags are static informational metadata, not buttons. Never add `:hover`, `:active`, or cursor changes to the tag body; hover styling falsely suggests button interactivity.
+
+### Semantic Status Variants
+
+All status variants are **borderless** and consume the design system's subtle surface tints paired with high-contrast text tokens:
+
+| Variant | Surface Token | Text Token | Candidate Card Status | Job Card Equivalent |
+| :--- | :--- | :--- | :--- | :--- |
+| `neutral` | `--semantics-surface-secondary` | `--semantics-text-secondary` | `Submitted` | `Closed` |
+| `brand` | `--semantics-surface-brand-subtle` | `--semantics-text-brand` | `SuperHire review` | `Spotlight` |
+| `info` | `--semantics-surface-info-subtle` | `--semantics-text-info` | `Employer review`, `Shortlisted`, `Interview` | `Just In` |
+| `warning` | `--semantics-surface-warning-subtle` | `--semantics-text-warning` | `On hold` | `Priority`, `Trending` |
+| `success` | `--semantics-surface-success-subtle` | `--semantics-text-success` | `Offer`, `Joined` | Completed / Active |
+| `danger` | `--semantics-surface-danger-subtle` | `--semantics-text-danger` | `Rejected` | Expired |
+
+### Features & Props
+
+- `variant`: `"neutral" | "brand" | "info" | "warning" | "success" | "danger"` (default `"neutral"`)
+- `size`: `"sm" | "md"` (default `"md"`)
+- `dot`: Optional status dot (`boolean`) rendered in `currentColor`
+- `icon`: Optional leading icon component
+- `onRemove`: Optional dismiss handler for editable forms (renders an embedded accessible `(×)` button)
+
+```tsx
+import { Tag } from "@/components/shared/Tag";
+
+// Standard Skill Tag (neutral)
+<Tag>React</Tag>
+
+// Candidate Card Pipeline Statuses
+<Tag variant="neutral">Submitted</Tag>
+<Tag variant="info">Review</Tag>
+<Tag variant="brand">Shortlisted</Tag>
+<Tag variant="warning">Interview</Tag>
+<Tag variant="success">Offered</Tag>
+<Tag variant="success">Joined</Tag>
+<Tag variant="danger">Rejected</Tag>
+
+// With leading status dot
+<Tag variant="success" dot>Joined</Tag>
+
+// With leading icon
+<Tag icon={CodeIcon}>GraphQL</Tag>
+
+// Editable / Removable in form builder
+<Tag onRemove={() => removeSkill("Python")}>Python</Tag>
+```
 
 ---
 

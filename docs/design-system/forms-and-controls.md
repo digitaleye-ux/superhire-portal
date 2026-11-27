@@ -65,23 +65,49 @@ Use for live keyword filtering in `PageHeader` or table toolbars. Built on `Inpu
 
 ## Dropdown (`@/components/shared/Dropdown`)
 
-Use for toolbar filters (`multiple={true}`, default) and single-select sort/period pickers (`multiple={false} singleShowsValue`).
+Use for toolbar filters (`variant="filter"`, default), input-style form selectors (`variant="form"`), and borderless table triggers (`variant="plain"`).
 
+### Visual Variants (`DropdownVariant`)
+- `filter` (default): Secondary button style with active brand tint (`--semantics-surface-brand-subtle`), selected counter badge, and clear `×` button.
+- `form`: Standard form field style matching `Input` (`--semantics-control-bg`, `--semantics-control-border`). Displays active selection or `placeholder` with rotating chevron indicator.
+- `plain`: Borderless resting frame with hover highlight, ideal for compact table header sorting.
+
+### Sizes (`DropdownSize`)
+- `sm` (`32px`, height `--dropdown-height-sm`, default): Compact toolbars, filter bars, table headers.
+- `md` (`36px`, height `--dropdown-height-md`): Dialogs, drawers, standard forms.
+- `lg` (`40px`, height `--dropdown-height-lg`): Primary form layouts matching `Input` `size="lg"`.
+
+### Features & State Coverage
 - `multiple={true}` (default) — renders `Checkbox` items, shows selected count pill (`2+`) and inline clear (`×`) button on the trigger.
 - `multiple={false}` with `singleShowsValue` — renders `Radio` items and displays the active option label on the trigger. Pass `defaultValue` when an `"all"` option should keep the trigger in its neutral resting state.
-- Pass `align="right"` when the trigger sits near the right edge of a toolbar or viewport.
+- `leadingIcon?: ReactNode` — leading icon slot before the label.
+- `fullWidth?: boolean` — stretches root and trigger to 100% width.
+- `align?: "left" | "right"` — anchors menu to left or right edge.
+- **Full 6-state coverage:** `default`, `hover`, `active`, `open`, `focus-visible`, `disabled`, and `invalid` (with optional `error` message).
 
 ```tsx
-// Correct — single-select sort/period control anchored right
+// Correct — toolbar multi-select filter
 <Dropdown
-  label="Period"
-  options={DATE_RANGE_OPTIONS}
-  selected={[datePreset]}
+  label="Location"
+  options={LOCATION_OPTIONS}
+  selected={selectedLocations}
+  multiple={true}
+  onChange={setSelectedLocations}
+/>
+
+// Correct — full-width form selector with leading icon
+<Dropdown
+  variant="form"
+  size="lg"
+  fullWidth
+  label="Notice period"
+  placeholder="Select notice period"
+  leadingIcon={<CalendarIcon size="sm" />}
+  options={NOTICE_OPTIONS}
+  selected={[notice]}
   multiple={false}
   singleShowsValue
-  defaultValue="all-time"
-  align="right"
-  onChange={(vals) => setDatePreset((vals[0] as EarningsDateRangePreset) || "this-year")}
+  onChange={(vals) => setNotice(vals[0] || "")}
 />
 
 // Incorrect — native <select> element inside a filter toolbar

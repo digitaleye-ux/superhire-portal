@@ -24,6 +24,8 @@ export function CandidateSortFilterBar({
         {CANDIDATE_FILTER_OPTIONS.map(({ id, label, options }) => (
           <Dropdown
             key={id}
+            variant="filter"
+            size="sm"
             label={label}
             options={options}
             selected={filters[id]}
@@ -35,6 +37,8 @@ export function CandidateSortFilterBar({
 
       <div className={styles.sort}>
         <Dropdown
+          variant="filter"
+          size="sm"
           label="Recently submitted"
           options={CANDIDATE_SORT_OPTIONS}
           selected={sort ? [sort] : ["newest"]}

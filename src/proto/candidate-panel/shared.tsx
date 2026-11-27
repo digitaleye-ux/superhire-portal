@@ -1,13 +1,18 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { IconButton } from "@/components/shared/IconButton";
 import { Tab as TabButton } from "@/components/shared/Tab";
+import { Tag } from "@/components/shared/Tag";
+import type { TagVariant } from "@/components/shared/Tag";
 import {
+  BookmarkXIcon,
   BriefcaseBusinessIcon,
   Icon,
   IndianRupeeIcon,
   LinkedinIcon,
   MapPinIcon,
+  MoreVerticalIcon,
+  SquarePenIcon,
   XIcon,
 } from "@/components/shared/Icon";
 import type { IconName } from "@/components/shared/Icon";
@@ -39,7 +44,9 @@ export function Ic({ name, size = 16 }: { name: "x" | "check" | "file" | "pause"
 
 export const STATUS_LABEL: Record<CandidateStatus, string> = {
   submitted: "Submitted",
-  "under-review": "Review",
+  "superhire-review": "SuperHire review",
+  "employer-review": "Employer review",
+  "under-review": "Employer review",
   shortlisted: "Shortlisted",
   interview: "Interview",
   offered: "Offer",
@@ -48,19 +55,21 @@ export const STATUS_LABEL: Record<CandidateStatus, string> = {
   rejected: "Rejected",
 };
 
-const STATUS_CLASS: Record<CandidateStatus, string> = {
-  submitted: s.statusNeutral,
-  "under-review": s.statusInfo,
-  shortlisted: s.statusBrand,
-  interview: s.statusWarning,
-  offered: s.statusSuccess,
-  joined: s.statusSuccess,
-  "on-hold": s.statusNeutral,
-  rejected: s.statusDanger,
+export const STATUS_TAG_VARIANT: Record<CandidateStatus, TagVariant> = {
+  submitted: "neutral",
+  "superhire-review": "brand",
+  "employer-review": "info",
+  "under-review": "info",
+  shortlisted: "info",
+  interview: "info",
+  offered: "success",
+  joined: "success",
+  "on-hold": "warning",
+  rejected: "danger",
 };
 
 export function StatusTag({ status, label }: { status: CandidateStatus; label?: string }) {
-  return <span className={`${s.status} ${STATUS_CLASS[status]}`}>{label ?? STATUS_LABEL[status]}</span>;
+  return <Tag variant={STATUS_TAG_VARIANT[status]}>{label ?? STATUS_LABEL[status]}</Tag>;
 }
 
 /* ------------------------------ 1. Candidate Overview Header ------------------------------ */
@@ -73,13 +82,46 @@ export function CandidateOverviewHeader({
   showJobInline = true,
   activeTab,
   onTabChange,
+  onEditCandidate,
+  onWithdraw,
+  onAddAnotherRole,
 }: {
   detail: CandidateDetail;
   onClose: () => void;
   showJobInline?: boolean;
   activeTab?: CandidatePanelTab;
   onTabChange?: (tab: CandidatePanelTab) => void;
+  onEditCandidate?: () => void;
+  onWithdraw?: () => void;
+  onAddAnotherRole?: () => void;
 }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Close kebab dropdown when clicking outside or pressing Escape
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    }
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setMenuOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [menuOpen]);
+
   const ctcText = formatCandidateCtc(
     detail.item.ctcRange,
     detail.currentCtc,
@@ -129,9 +171,93 @@ export function CandidateOverviewHeader({
 
           <div className={s.topRowRight}>
             <StatusTag status={detail.item.status} />
+            <div className={s.menuContainer} ref={menuRef}>
+              <IconButton
+                icon={<MoreVerticalIcon size="md" />}
+                ariaLabel={`Options for ${detail.name}`}
+                title="More options"
+                size="md"
+                active={menuOpen}
+                aria-expanded={menuOpen}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setMenuOpen((prev) => !prev);
+                }}
+              />
+
+              {menuOpen && (
+                <div
+                  className={s.dropdown}
+                  role="menu"
+                  aria-orientation="vertical"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className={s.dropdownItem}
+                    onClick={() => {
+                      setMenuOpen(false);
+                      if (onEditCandidate) {
+                        onEditCandidate();
+                      } else {
+                        toast("Edit candidate", {
+                          description: `Editing details for ${detail.name}`,
+                        });
+                      }
+                    }}
+                  >
+                    <SquarePenIcon size={16} />
+                    <span>Edit candidate details</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className={s.dropdownItem}
+                    onClick={() => {
+                      setMenuOpen(false);
+                      if (onAddAnotherRole) {
+                        onAddAnotherRole();
+                      } else {
+                        toast("Add to another role", {
+                          description: `Submitting ${detail.name} for another position`,
+                        });
+                      }
+                    }}
+                  >
+                    <BriefcaseBusinessIcon size={16} />
+                    <span>Add to another role</span>
+                  </button>
+
+                  <hr className={s.dropdownDivider} />
+
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className={`${s.dropdownItem} ${s.dropdownItemDanger}`}
+                    onClick={() => {
+                      setMenuOpen(false);
+                      if (onWithdraw) {
+                        onWithdraw();
+                      } else {
+                        toast.error("Candidate withdrawn", {
+                          description: `${detail.name}'s application withdrawn`,
+                        });
+                      }
+                    }}
+                  >
+                    <BookmarkXIcon size={16} />
+                    <span>Withdraw candidate</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
             <IconButton
               icon={<XIcon size="md" />}
               ariaLabel="Close candidate panel"
+              title="Close"
               size="md"
               onClick={onClose}
             />

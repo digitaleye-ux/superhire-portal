@@ -77,7 +77,7 @@ export function mapStageToTrackStatuses(
     case "submitted":
       return ["submitted"];
     case "profile-approved":
-      return ["under-review"];
+      return ["superhire-review", "employer-review", "under-review"];
     case "shortlisted":
       return ["shortlisted"];
     case "interview":

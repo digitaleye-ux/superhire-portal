@@ -1,0 +1,243 @@
+/* ==========================================================================
+   Milestone Component — Bolt Design System
+   Vertical progression spine with semantic node variants, connectors,
+   and typography hierarchy.
+   ========================================================================== */
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3x);
+  padding-bottom: var(--space-5x);
+}
+
+.item:last-child {
+  padding-bottom: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Vertical Spine Rail                                                */
+/* ------------------------------------------------------------------ */
+
+.spineRail {
+  position: absolute;
+  left: 9px;
+  top: 20px;
+  bottom: 0;
+  width: 2px;
+  background: var(--semantics-border-default);
+  z-index: 0;
+}
+
+.spineRailDone {
+  background: var(--semantics-interactive-primary);
+}
+
+.item:last-child .spineRail {
+  display: none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Milestone Node Variants                                            */
+/* ------------------------------------------------------------------ */
+
+.nodeWrapper {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  width: 20px;
+  display: flex;
+  justify-content: center;
+  padding-top: 1px;
+}
+
+.node {
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--semantics-surface-primary);
+  border: 1.5px solid var(--semantics-border-default);
+  transition: all var(--duration-fast) var(--easing-standard);
+  box-sizing: border-box;
+}
+
+/* Completed (Solid Purple Circle + White Checkmark) */
+.nodeCompleted {
+  background: var(--semantics-interactive-primary);
+  border-color: var(--semantics-interactive-primary);
+  color: var(--semantics-text-on-brand);
+}
+
+/* Current / Active (Purple Ring + Bullseye Dot + Soft Lavender Halo) */
+.nodeCurrent {
+  background: var(--semantics-surface-primary);
+  border: 2px solid var(--semantics-interactive-primary);
+  box-shadow: 0 0 0 4px var(--primitives-primary-100, #ebe9fe);
+}
+
+.nodeDot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--semantics-interactive-primary);
+}
+
+/* Upcoming (Neutral Outline Ring) */
+.nodeUpcoming {
+  background: var(--semantics-surface-primary);
+  border: 2px solid var(--semantics-border-default);
+}
+
+/* Paused / On-Hold (Amber Ring + Bullseye Dot + Soft Amber Halo) */
+.nodeWarning {
+  background: var(--semantics-surface-primary);
+  border: 2px solid var(--semantics-border-warning);
+  box-shadow: 0 0 0 4px var(--semantics-surface-warning-subtle);
+}
+
+.nodeDotWarning {
+  background: var(--semantics-border-warning);
+}
+
+/* Unsuccessful / Terminal (Red Ring + Bullseye Dot + Soft Red Halo) */
+.nodeDanger {
+  background: var(--semantics-surface-primary);
+  border: 2px solid var(--semantics-border-danger);
+  box-shadow: 0 0 0 4px var(--semantics-surface-danger-subtle);
+}
+
+.nodeDotDanger {
+  background: var(--semantics-border-danger);
+}
+
+/* ------------------------------------------------------------------ */
+/* Milestone Content Layout & Typography                              */
+/* ------------------------------------------------------------------ */
+
+.content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2x);
+  min-height: 20px;
+}
+
+.titleArea {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-1x);
+  min-width: 0;
+}
+
+/* Title Typography Variants */
+.titleCompleted {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+  color: var(--semantics-text-primary);
+}
+
+.titleCurrent {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-heading);
+  color: var(--semantics-text-primary);
+}
+
+.titleUpcoming {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-none);
+  color: var(--semantics-text-placeholder);
+}
+
+.titleWarning {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+  color: var(--semantics-text-warning);
+}
+
+.titleDanger {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-14);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+  color: var(--semantics-text-danger);
+}
+
+.rightArea {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2x);
+  flex-shrink: 0;
+}
+
+/* Time Details / Timestamps: .text-style-label-3 in tertiary */
+.date {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+  color: var(--semantics-text-tertiary);
+  white-space: nowrap;
+}
+
+/* Completed Outcome Text */
+.outcome {
+  margin: var(--space-1x) 0 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: 20px;
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-none);
+  color: var(--semantics-text-secondary);
+}
+
+/* Active Description / Update Body */
+.body {
+  margin-top: var(--space-1x);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2x);
+}
+
+.description {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-14);
+  line-height: 20px;
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-none);
+  color: var(--semantics-text-secondary);
+}

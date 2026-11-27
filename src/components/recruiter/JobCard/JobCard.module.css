@@ -21,17 +21,17 @@
       /* header: 12px pt + 32px kebab button + 8px pb */
       var(--space-3x) + var(--icon-button-size-sm) + var(--space-2x) +
       /* body */
-      var(--space-2x) + (2 * var(--line-height-16)) + var(--space-2x) + var(--line-height-14) + var(--space-6x) + 1px + var(--space-3x) + var(--line-height-14) + var(--space-3x) +
+      var(--space-2x) + (2 * var(--line-height-16)) + var(--space-2x) + var(--line-height-14) + var(--space-6x) + var(--border-width-thin) + var(--space-3x) + var(--line-height-14) + var(--space-3x) +
       /* borders */
-      2px);
+      (2 * var(--border-width-thin)));
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   overflow: clip;
   background: var(--semantics-background-primary);
-  border: 1px solid var(--semantics-border-default);
+  border: var(--border-width-thin) solid var(--semantics-border-default);
   border-radius: var(--radius-md);
-  transition: border-color 120ms ease, box-shadow 120ms ease;
+  transition: border-color var(--duration-fast) var(--easing-standard), box-shadow var(--duration-fast) var(--easing-standard), background-color var(--duration-fast) var(--easing-standard);
 }
 
 /* Interactive card (when onClaim is provided) gets focus-colored border
@@ -44,10 +44,32 @@
   cursor: pointer;
 }
 
-.interactive:hover,
+.interactive:hover {
+  border-color: var(--semantics-border-focus);
+}
+
+.interactive:active {
+  background-color: var(--semantics-surface-secondary);
+}
+
 .interactive:focus-visible {
   border-color: var(--semantics-border-focus);
-  outline: none;
+  outline: var(--border-width-thick) solid var(--semantics-border-focus);
+  outline-offset: var(--space-x-4);
+}
+
+/* Selected state (e.g. active card in split-screen detail view) */
+.selected {
+  border-color: var(--semantics-interactive-primary);
+  box-shadow: 0 0 0 var(--border-width-thin) var(--semantics-interactive-primary);
+}
+
+/* Disabled state */
+.disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+  user-select: none;
 }
 
 .cardMenuOpen {
@@ -150,8 +172,8 @@
 }
 
 .kebabBtn:focus-visible {
-  outline: 2px solid var(--semantics-border-focus);
-  outline-offset: 1px;
+  outline: var(--border-width-thick) solid var(--semantics-border-focus);
+  outline-offset: var(--space-x-4);
 }
 
 .dropdown {
@@ -162,20 +184,20 @@
   box-sizing: border-box;
   width: max-content;
   background: var(--semantics-background-primary);
-  border: 1px solid var(--semantics-border-strong);
+  border: var(--border-width-thin) solid var(--semantics-border-strong);
   border-radius: var(--radius-md);
   box-shadow: var(--elevation-md);
   padding: var(--space-1x);
   display: flex;
   flex-direction: column;
   gap: var(--space-1x);
-  animation: dropdownIn 120ms cubic-bezier(0.16, 1, 0.3, 1);
+  animation: dropdownIn var(--duration-fast) var(--easing-out);
 }
 
 @keyframes dropdownIn {
   from {
     opacity: 0;
-    transform: translateY(-4px) scale(0.98);
+    transform: translateY(calc(-1 * var(--space-1x))) scale(0.98);
   }
 
   to {
@@ -202,7 +224,7 @@
   color: var(--semantics-text-primary);
   text-align: left;
   cursor: pointer;
-  transition: background-color 120ms ease;
+  transition: background-color var(--duration-fast) var(--easing-standard);
   white-space: nowrap;
 }
 
@@ -214,7 +236,7 @@
 .dropdownItem svg {
   flex-shrink: 0;
   color: var(--semantics-text-secondary);
-  transition: color 100ms ease;
+  transition: color var(--duration-fast) var(--easing-standard);
 }
 
 .dropdownItem:hover svg {
@@ -224,7 +246,7 @@
 .dropdownDivider {
   margin: var(--space-1x) 0;
   border: 0;
-  border-top: 1px solid var(--semantics-border-default);
+  border-top: var(--border-width-thin) solid var(--semantics-border-default);
 }
 
 .dropdownItemDanger {
@@ -353,9 +375,9 @@
 /* ---- Divider ---- */
 .divider {
   width: 100%;
-  height: 1px;
+  height: var(--border-width-thin);
   border: 0;
-  border-top: 1px solid var(--semantics-border-default);
+  border-top: var(--border-width-thin) solid var(--semantics-border-default);
   /* Push the divider + footer to the bottom. Combined with .main's 24px
      margin-bottom, the meta→divider gap is 24px at minimum and grows on
      shorter cards so footers align and all cards are equal height. */
@@ -414,14 +436,7 @@
 /* ---- Claim action (revealed on hover / focus of interactive card) ---- */
 .claim {
   display: none;
-  align-items: center;
-  gap: var(--space-1x);
   flex-shrink: 0;
-  background: none;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-  color: var(--semantics-text-link);
 }
 
 .interactive:hover .footer,
@@ -438,18 +453,4 @@
 .interactive:focus-visible .claim,
 .claim:focus-visible {
   display: inline-flex;
-}
-
-.claimLabel {
-  font-family: var(--font-family-sans);
-  font-weight: var(--font-weight-medium);
-  font-size: var(--font-size-14);
-  line-height: var(--line-height-14);
-  color: var(--semantics-text-link);
-  text-align: right;
-  white-space: nowrap;
-}
-
-.claim .icon {
-  color: var(--semantics-text-link);
 }

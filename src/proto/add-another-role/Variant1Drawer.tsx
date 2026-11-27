@@ -25,6 +25,9 @@ export default function Variant1Drawer({
     location: j.location,
     commission: j.commission,
     badge: j.badge,
+    matchScore: j.matchScore,
+    matchReason: j.matchReason,
+    mustHaves: j.mustHaves,
   }));
 
   const mockSubmitCandidateJob = selectedJob

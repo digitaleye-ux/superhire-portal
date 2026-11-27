@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Toaster, toast } from "sonner";
+import { Toaster } from "sonner";
 import { SideNavbar } from "@/components/shared/SideNavbar";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { CandidateCard } from "@/components/recruiter/CandidateCard";
@@ -16,7 +16,7 @@ import { SAMPLE_CANDIDATE } from "./data";
 import s from "./variants.module.css";
 import Variant1Drawer from "./Variant1Drawer";
 import Variant2Sheet from "./Variant2Sheet";
-import Variant3Popover from "./Variant3Popover";
+import Variant3Diff from "./Variant3Diff";
 import Variant4Batch from "./Variant4Batch";
 
 interface VariantMeta {
@@ -30,40 +30,40 @@ interface VariantMeta {
 
 const VARIANTS: VariantMeta[] = [
   {
-    name: "1. Split Drawer (Sequential)",
-    badge: "Approved Baseline",
-    headline: "Two-stage right drawer with zero cognitive overload",
+    name: "1. Standard Split Drawer",
+    badge: "Production Standard",
+    headline: "Two-stage right drawer with candidate context and search",
     description:
-      "Stage 1 presents a clean claimed-roles list. Upon selecting a role, stage 2 slides directly into the full candidate submission form prefilled with the candidate's existing resume and contact info.",
-    pros: ["Zero cognitive load", "Preserves full dealbreaker validation", "Familiar drawer pattern"],
+      "Stage 1 presents candidate identity context alongside a scannable list of claimed roles with live search. Selecting a role slides into the prefilled submission form.",
+    pros: ["Familiar drawer pattern", "Zero cognitive overload", "Retains candidate context"],
     cons: ["Requires 2 sequential steps before submission"],
   },
   {
-    name: "2. Quick-Match Sheet",
-    badge: "Emil Kowalski Sheet",
-    headline: "Centered modal sheet with spring physics & accordion criteria",
+    name: "2. Compact Modal Sheet",
+    badge: "Centered Dialog",
+    headline: "Centered modal sheet with inline dealbreakers",
     description:
-      "A quick-action modal inspired by Emil Kowalski's micro-interaction design: spring scale-up, top smart match score badge, expanding dealbreaker accordions, and 1-click submit without navigating away.",
-    pros: ["Fastest single-role submit", "Accordion dealbreakers keep UI compact", "Satisfying micro-interactions"],
-    cons: ["Less space for editing long candidate notes"],
+      "Quick-action modal dialog with instant search, inline expandable dealbreaker checklist, and 1-click submit without navigating to a second screen.",
+    pros: ["Fastest single-role submit", "Inline dealbreakers keep UI compact", "No page context switch"],
+    cons: ["Less space for editing custom candidate notes"],
   },
   {
-    name: "3. In-Place Card Flyout",
-    badge: "Contextual Popover",
-    headline: "Flyout popover anchored directly to the candidate card",
+    name: "3. Requirement Comparison",
+    badge: "Inline Diff",
+    headline: "Side-by-side qualification comparison and quick pitch",
     description:
-      "Zero layout shift. Clicking 'Add another role' pops out a floating micro-panel directly from the candidate card footer. Recruiter picks the target role and confirms must-haves in a 2-step stepper right on the card.",
-    pros: ["Zero background dimming or context switch", "Extremely lightweight", "Direct spatial relationship"],
-    cons: ["Compact space requires condensed text"],
+      "Compares candidate qualifications against role requirements in-place, allowing recruiters to confirm criteria and attach an optional pitch note in 1 step.",
+    pros: ["1-step submission", "Clear qualification alignment", "Attach recruiter pitch note"],
+    cons: ["Higher information density"],
   },
   {
     name: "4. Multi-Role Batch",
-    badge: "Syndicate Matrix",
-    headline: "Multi-select syndicate submitting 1 candidate to N roles at once",
+    badge: "Batch Syndicate",
+    headline: "Select and submit candidate to multiple roles at once",
     description:
-      "Recruiters can select multiple claimed roles simultaneously. Dynamically aggregates and de-duplicates must-have requirements into one consolidated checklist, with real-time bounty potential accumulation.",
-    pros: ["10x recruiter velocity for versatile talent", "Real-time accumulated bounty calculation", "Consolidated dealbreaker checklist"],
-    cons: ["Higher risk of accidental mismatch if not careful"],
+      "Recruiters can select multiple claimed roles simultaneously. Consolidates must-have requirements into one checklist with real-time bounty total.",
+    pros: ["High recruiter velocity", "Total bounty calculation", "Consolidated dealbreaker checklist"],
+    cons: ["Requires verifying requirements across multiple roles"],
   },
 ];
 
@@ -77,6 +77,7 @@ export default function AddAnotherRolePrototypes() {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [diffOpen, setDiffOpen] = useState(false);
   const [batchOpen, setBatchOpen] = useState(false);
 
   const meta = VARIANTS[currentIdx];
@@ -84,9 +85,8 @@ export default function AddAnotherRolePrototypes() {
   const handleCardAction = () => {
     if (currentIdx === 0) setDrawerOpen(true);
     else if (currentIdx === 1) setSheetOpen(true);
-    else if (currentIdx === 2) {
-      // Handled internally inside Variant3Popover
-    } else if (currentIdx === 3) setBatchOpen(true);
+    else if (currentIdx === 2) setDiffOpen(true);
+    else if (currentIdx === 3) setBatchOpen(true);
   };
 
   return (
@@ -135,8 +135,8 @@ export default function AddAnotherRolePrototypes() {
                     fontWeight: 600,
                     textTransform: "uppercase",
                     letterSpacing: "0.06em",
-                    color: "var(--semantics-text-link)",
-                    background: "#eef2ff",
+                    color: "var(--semantics-text-brand)",
+                    background: "var(--semantics-surface-brand-subtle)",
                     padding: "3px 8px",
                     borderRadius: 6,
                   }}
@@ -148,162 +148,118 @@ export default function AddAnotherRolePrototypes() {
                 </h2>
               </div>
 
-              {currentIdx !== 2 && (
-                <button
-                  type="button"
-                  onClick={handleCardAction}
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 6,
-                    padding: "8px 14px",
-                    borderRadius: 8,
-                    background: "var(--button-primary-background)",
-                    color: "#fff",
-                    fontSize: 13,
-                    fontWeight: 500,
-                    border: 0,
-                    cursor: "pointer",
-                    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                  }}
-                >
-                  <ArrowRightIcon size={14} />
-                  Trigger Flow
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={handleCardAction}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "8px 14px",
+                  borderRadius: 8,
+                  background: "var(--button-primary-background)",
+                  color: "#fff",
+                  fontSize: 13,
+                  fontWeight: 500,
+                  border: 0,
+                  cursor: "pointer",
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                }}
+              >
+                <ArrowRightIcon size="sm" />
+                <span>Trigger Flow</span>
+              </button>
             </div>
 
             <p style={{ margin: "0 0 16px", fontSize: 14, color: "var(--semantics-text-secondary)", lineHeight: 1.5 }}>
               {meta.description}
             </p>
 
-            <div style={{ display: "flex", gap: 32, fontSize: 13, borderTop: "1px solid #f1f5f9", paddingTop: 12 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ fontWeight: 600, color: "#16a34a" }}>Key Pros:</span>
+            <div style={{ display: "flex", gap: 24, fontSize: 13, borderTop: "1px solid var(--semantics-border-default)", paddingTop: 12 }}>
+              <div>
+                <strong style={{ color: "var(--semantics-text-success, #16a34a)" }}>Key Pros:</strong>{" "}
                 <span style={{ color: "var(--semantics-text-secondary)" }}>{meta.pros.join(" · ")}</span>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ fontWeight: 600, color: "#d97706" }}>Trade-off:</span>
+              <div>
+                <strong style={{ color: "var(--semantics-text-warning, #d97706)" }}>Trade-off:</strong>{" "}
                 <span style={{ color: "var(--semantics-text-secondary)" }}>{meta.cons.join(" · ")}</span>
               </div>
             </div>
           </div>
 
-          {/* Interactive Playground Section */}
-          <div style={{ marginBottom: 20 }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-              <span style={{ fontSize: 13, fontWeight: 600, color: "var(--semantics-text-secondary)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                Interactive Track Card Demo
-              </span>
-              <span style={{ fontSize: 12, color: "var(--semantics-text-tertiary)" }}>
-                Hover the card below and click <strong>"Add another role"</strong> to activate
-              </span>
+          {/* Interactive Candidate Card Context */}
+          <div
+            style={{
+              background: "#fff",
+              border: "1px solid var(--semantics-border-default)",
+              borderRadius: 12,
+              padding: 24,
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+              <div>
+                <span style={{ fontSize: 14, fontWeight: 600, color: "var(--semantics-text-primary)" }}>
+                  Interactive Track Card Demo
+                </span>
+                <span style={{ display: "block", fontSize: 12, color: "var(--semantics-text-tertiary)" }}>
+                  Click <strong>"Add another role →"</strong> on the candidate card below to test the current flow.
+                </span>
+              </div>
             </div>
 
-            {/* Variant 1: Split Drawer */}
-            {currentIdx === 0 && (
-              <div>
-                <CandidateCard
-                  candidateName={SAMPLE_CANDIDATE.name}
-                  roleTitle={SAMPLE_CANDIDATE.role}
-                  company={SAMPLE_CANDIDATE.company}
-                  experience={SAMPLE_CANDIDATE.experience}
-                  noticePeriod={SAMPLE_CANDIDATE.noticePeriod}
-                  location={SAMPLE_CANDIDATE.location}
-                  currentCtc={SAMPLE_CANDIDATE.currentCtc}
-                  expectedCtc={SAMPLE_CANDIDATE.expectedCtc}
-                  status={SAMPLE_CANDIDATE.status}
-                  commission={SAMPLE_CANDIDATE.commission}
-                  onAction={() => setDrawerOpen(true)}
-                  actionLabel="Add another role"
-                />
+            {/* Candidate Card Triggering Active Variant */}
+            <CandidateCard
+              candidateName={SAMPLE_CANDIDATE.name}
+              roleTitle={SAMPLE_CANDIDATE.role}
+              company={SAMPLE_CANDIDATE.company}
+              experience={SAMPLE_CANDIDATE.experience}
+              noticePeriod={SAMPLE_CANDIDATE.noticePeriod}
+              location={SAMPLE_CANDIDATE.location}
+              currentCtc={SAMPLE_CANDIDATE.currentCtc}
+              expectedCtc={SAMPLE_CANDIDATE.expectedCtc}
+              status={SAMPLE_CANDIDATE.status}
+              commission={SAMPLE_CANDIDATE.commission}
+              onAction={handleCardAction}
+              actionLabel={currentIdx === 3 ? "Batch add to roles" : "Add another role"}
+            />
 
-                {drawerOpen && (
-                  <div className={s.drawerBackdrop} onClick={() => setDrawerOpen(false)}>
-                    <div className={s.drawerPanel} onClick={(e) => e.stopPropagation()}>
-                      <Variant1Drawer
-                        candidate={SAMPLE_CANDIDATE}
-                        onComplete={(role, company) => {
-                          toast.success(`Candidate submitted for ${role} at ${company}!`);
-                          setDrawerOpen(false);
-                        }}
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Variant 2: Quick-Match Sheet */}
-            {currentIdx === 1 && (
-              <div>
-                <CandidateCard
-                  candidateName={SAMPLE_CANDIDATE.name}
-                  roleTitle={SAMPLE_CANDIDATE.role}
-                  company={SAMPLE_CANDIDATE.company}
-                  experience={SAMPLE_CANDIDATE.experience}
-                  noticePeriod={SAMPLE_CANDIDATE.noticePeriod}
-                  location={SAMPLE_CANDIDATE.location}
-                  currentCtc={SAMPLE_CANDIDATE.currentCtc}
-                  expectedCtc={SAMPLE_CANDIDATE.expectedCtc}
-                  status={SAMPLE_CANDIDATE.status}
-                  commission={SAMPLE_CANDIDATE.commission}
-                  onAction={() => setSheetOpen(true)}
-                  actionLabel="Add another role"
-                />
-
-                {sheetOpen && (
-                  <Variant2Sheet
+            {/* Variant 1: Executive Dossier Drawer */}
+            {currentIdx === 0 && drawerOpen && (
+              <div className={s.drawerBackdrop} onClick={() => setDrawerOpen(false)}>
+                <div className={s.drawerPanel} onClick={(e) => e.stopPropagation()}>
+                  <Variant1Drawer
                     candidate={SAMPLE_CANDIDATE}
-                    onClose={() => setSheetOpen(false)}
-                    onComplete={() => setSheetOpen(false)}
+                    onComplete={() => setDrawerOpen(false)}
                   />
-                )}
+                </div>
               </div>
             )}
 
-            {/* Variant 3: In-Place Card Flyout Popover */}
-            {currentIdx === 2 && (
-              <div>
-                <Variant3Popover
-                  candidate={SAMPLE_CANDIDATE}
-                  onComplete={(role, company) => {
-                    toast.success(`Quick submitted for ${role} at ${company}!`);
-                  }}
-                />
-              </div>
+            {/* Variant 2: Quick-Match Command Sheet */}
+            {currentIdx === 1 && sheetOpen && (
+              <Variant2Sheet
+                candidate={SAMPLE_CANDIDATE}
+                onClose={() => setSheetOpen(false)}
+                onComplete={() => setSheetOpen(false)}
+              />
+            )}
+
+            {/* Variant 3: Requirement Diff & Quick Pitch */}
+            {currentIdx === 2 && diffOpen && (
+              <Variant3Diff
+                candidate={SAMPLE_CANDIDATE}
+                onClose={() => setDiffOpen(false)}
+                onComplete={() => setDiffOpen(false)}
+              />
             )}
 
             {/* Variant 4: Multi-Role Batch Syndicate */}
-            {currentIdx === 3 && (
-              <div>
-                <CandidateCard
-                  candidateName={SAMPLE_CANDIDATE.name}
-                  roleTitle={SAMPLE_CANDIDATE.role}
-                  company={SAMPLE_CANDIDATE.company}
-                  experience={SAMPLE_CANDIDATE.experience}
-                  noticePeriod={SAMPLE_CANDIDATE.noticePeriod}
-                  location={SAMPLE_CANDIDATE.location}
-                  currentCtc={SAMPLE_CANDIDATE.currentCtc}
-                  expectedCtc={SAMPLE_CANDIDATE.expectedCtc}
-                  status={SAMPLE_CANDIDATE.status}
-                  commission={SAMPLE_CANDIDATE.commission}
-                  onAction={() => setBatchOpen(true)}
-                  actionLabel="Batch add to roles"
-                />
-
-                {batchOpen && (
-                  <div className={s.drawerBackdrop} onClick={() => setBatchOpen(false)}>
-                    <div className={s.drawerPanel} onClick={(e) => e.stopPropagation()}>
-                      <Variant4Batch
-                        candidate={SAMPLE_CANDIDATE}
-                        onClose={() => setBatchOpen(false)}
-                        onComplete={() => setBatchOpen(false)}
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
+            {currentIdx === 3 && batchOpen && (
+              <Variant4Batch
+                candidate={SAMPLE_CANDIDATE}
+                onClose={() => setBatchOpen(false)}
+                onComplete={() => setBatchOpen(false)}
+              />
             )}
           </div>
         </div>
@@ -316,6 +272,7 @@ export default function AddAnotherRolePrototypes() {
             setCurrentIdx(idx);
             setDrawerOpen(false);
             setSheetOpen(false);
+            setDiffOpen(false);
             setBatchOpen(false);
           }}
         />

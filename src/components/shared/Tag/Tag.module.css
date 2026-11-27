@@ -1,0 +1,109 @@
+/* ==========================================================================
+   Tag Component — Bolt Design System
+   Non-interactive informational metadata (skills, categories, taxonomies).
+   Borderless with soft neutral surface fill.
+   ========================================================================== */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1x);
+  border: var(--tag-border);
+  border-radius: var(--tag-radius);
+  background-color: var(--tag-background);
+  color: var(--tag-color);
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-none);
+  white-space: nowrap;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+/* Size Variants */
+.sizeSm {
+  height: 20px;
+  padding: var(--space-x-2) var(--space-2x);
+  font-size: var(--font-size-10, 10px);
+  line-height: 1;
+}
+
+.sizeMd {
+  height: 24px;
+  padding: var(--space-x-2) var(--space-2x);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+}
+
+/* Semantic Status Variants (borderless, soft tinted surface + high-contrast text) */
+.variantNeutral {
+  background-color: var(--semantics-surface-secondary);
+  color: var(--semantics-text-secondary);
+}
+
+.variantBrand {
+  background-color: var(--semantics-surface-brand-subtle);
+  color: var(--semantics-text-brand);
+}
+
+.variantSuccess {
+  background-color: var(--semantics-surface-success-subtle);
+  color: var(--semantics-text-success);
+}
+
+.variantWarning {
+  background-color: var(--semantics-surface-warning-subtle);
+  color: var(--semantics-text-warning);
+}
+
+.variantDanger {
+  background-color: var(--semantics-surface-danger-subtle);
+  color: var(--semantics-text-danger);
+}
+
+.variantInfo {
+  background-color: var(--semantics-surface-info-subtle);
+  color: var(--semantics-text-info);
+}
+
+/* Status Dot */
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background-color: currentColor;
+  flex-shrink: 0;
+}
+
+.icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+}
+
+/* Optional Remove button for editable tag lists */
+.removeBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline-start: var(--space-x-2);
+  margin-inline-end: calc(-1 * var(--space-1x));
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--semantics-text-tertiary);
+  cursor: pointer;
+  border-radius: var(--radius-pill);
+  transition: color var(--duration-fast) var(--easing-standard);
+}
+
+.removeBtn:hover {
+  color: var(--semantics-text-primary);
+}
+
+.removeBtn:focus-visible {
+  outline: 2px solid var(--semantics-border-focus);
+  outline-offset: 1px;
+}

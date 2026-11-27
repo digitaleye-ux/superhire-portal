@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/shared/Badge";
+import { Button } from "@/components/shared/Button";
 import { Checkbox } from "@/components/shared/Checkbox";
 import { IconButton } from "@/components/shared/IconButton";
+import { SearchInput } from "@/components/shared/SearchInput";
 import {
   BriefcaseBusinessIcon,
   ChevronDownIcon,
   ChevronUpIcon,
   IndianRupeeIcon,
   MapPinIcon,
-  SparklesIcon,
   XIcon,
 } from "@/components/shared/Icon";
 import type { CandidateItem } from "@/proto/candidate-cards/data";
@@ -26,6 +27,7 @@ export default function Variant2Sheet({
   onClose?: () => void;
   onComplete?: (role: string, company: string) => void;
 }) {
+  const [searchQuery, setSearchQuery] = useState("");
   const [expandedJobId, setExpandedJobId] = useState<number | null>(PROTOTYPE_CLAIMED_JOBS[0].id);
   const [verifiedMap, setVerifiedMap] = useState<Record<number, string[]>>({});
   const [submittingId, setSubmittingId] = useState<number | null>(null);
@@ -37,6 +39,25 @@ export default function Variant2Sheet({
       return { ...prev, [jobId]: next };
     });
   };
+
+  const verifyAllForJob = (job: PrototypeJob) => {
+    setVerifiedMap((prev) => ({
+      ...prev,
+      [job.id]: [...job.mustHaves],
+    }));
+  };
+
+  const filteredJobs = useMemo(() => {
+    return PROTOTYPE_CLAIMED_JOBS.filter((job) => {
+      if (!searchQuery.trim()) return true;
+      const q = searchQuery.toLowerCase();
+      return (
+        job.role.toLowerCase().includes(q) ||
+        job.company.toLowerCase().includes(q) ||
+        job.location.toLowerCase().includes(q)
+      );
+    });
+  }, [searchQuery]);
 
   const handleSubmit = (job: PrototypeJob) => {
     const verified = verifiedMap[job.id] || [];
@@ -64,19 +85,29 @@ export default function Variant2Sheet({
         aria-modal="true"
         aria-label={`Submit ${candidate.name} to another role`}
       >
-        {/* Header */}
-        <div className={s.modalHeader}>
-          <div>
-            <h2 className={s.modalTitle}>Submit to another role</h2>
-            <span style={{ fontSize: 13, color: "var(--semantics-text-tertiary)" }}>
-              Pick a claimed mandate to reuse {candidate.name}'s verified profile.
-            </span>
+        {/* Command Header */}
+        <div className={s.commandHeader}>
+          <div className={s.commandTopRow}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <h2 className={s.commandTitle}>Command Match</h2>
+              <span className={s.kbdBadge}>Esc to close</span>
+            </div>
+            {onClose && (
+              <IconButton
+                icon={<XIcon size="md" />}
+                ariaLabel="Close add role sheet"
+                size="md"
+                onClick={onClose}
+              />
+            )}
           </div>
-          <IconButton
-            icon={<XIcon size="md" />}
-            ariaLabel="Close add role sheet"
-            size="md"
-            onClick={onClose}
+
+          <SearchInput
+            placeholder={`Search claimed roles for ${candidate.name}...`}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onClear={() => setSearchQuery("")}
+            autoFocus
           />
         </div>
 
@@ -105,19 +136,15 @@ export default function Variant2Sheet({
                 </span>
               </div>
             </div>
-            <span className={s.resumeAttachedBadge}>
-              <SparklesIcon size="xs" />
-              <span>Resume attached</span>
-            </span>
           </div>
 
-          {/* Claimed Roles List */}
+          {/* Claimed Roles Accordion List */}
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <span style={{ fontSize: 13, fontWeight: 600, color: "var(--semantics-text-secondary)" }}>
-              Claimed mandates ({PROTOTYPE_CLAIMED_JOBS.filter((j) => j.company !== candidate.company).length})
+              Claimed mandates ({filteredJobs.length})
             </span>
 
-            {PROTOTYPE_CLAIMED_JOBS.map((job) => {
+            {filteredJobs.map((job) => {
               const isCurrent = job.company === candidate.company && job.role === candidate.role;
               const isExpanded = expandedJobId === job.id;
               const verified = verifiedMap[job.id] || [];
@@ -129,10 +156,10 @@ export default function Variant2Sheet({
                     key={job.id}
                     style={{
                       padding: 12,
-                      borderRadius: 8,
+                      borderRadius: 10,
                       border: "1px dashed var(--semantics-border-default)",
                       background: "var(--semantics-surface-secondary)",
-                      opacity: 0.6,
+                      opacity: 0.65,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "space-between",
@@ -154,13 +181,10 @@ export default function Variant2Sheet({
               return (
                 <div
                   key={job.id}
-                  style={{
-                    border: `1px solid ${isExpanded ? "var(--semantics-border-interactive, #4f46e5)" : "var(--semantics-border-default)"}`,
-                    borderRadius: 10,
-                    padding: 14,
-                    background: "var(--semantics-background-primary)",
-                    transition: "all 150ms ease",
-                  }}
+                  className={[
+                    s.commandRoleCard,
+                    isExpanded ? s.commandRoleCardActive : "",
+                  ].join(" ")}
                 >
                   <div
                     style={{
@@ -179,9 +203,9 @@ export default function Variant2Sheet({
                         <span style={{ fontSize: 14, color: "var(--semantics-text-tertiary)" }}>
                           at {job.company}
                         </span>
-                        <span className={s.matchBadge}>{job.matchScore}</span>
+                        {job.badge && <Badge type={job.badge} />}
                       </div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 12, fontSize: 12, color: "var(--semantics-text-tertiary)" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 12, color: "var(--semantics-text-tertiary)" }}>
                         <span>{job.packageLabel}</span>
                         <span>·</span>
                         <span>{job.experience}</span>
@@ -211,44 +235,52 @@ export default function Variant2Sheet({
 
                   {isExpanded && (
                     <div className={s.accordionContent}>
-                      <div>
-                        <div style={{ fontSize: 12, fontWeight: 600, color: "var(--semantics-text-secondary)", marginBottom: 8 }}>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <span style={{ fontSize: 12, fontWeight: 600, color: "var(--semantics-text-secondary)" }}>
                           Must-have dealbreakers ({verified.length}/{job.mustHaves.length} verified):
-                        </div>
-                        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                          {job.mustHaves.map((req) => (
-                            <Checkbox
-                              key={req}
-                              label={req}
-                              checked={verified.includes(req)}
-                              onChange={() => toggleCheck(job.id, req)}
-                            />
-                          ))}
-                        </div>
+                        </span>
+                        {!allVerified && (
+                          <button
+                            type="button"
+                            onClick={() => verifyAllForJob(job)}
+                            style={{
+                              background: "transparent",
+                              border: 0,
+                              color: "var(--semantics-text-brand)",
+                              fontSize: 12,
+                              fontWeight: 500,
+                              cursor: "pointer",
+                              padding: 0,
+                            }}
+                          >
+                            Verify all
+                          </button>
+                        )}
+                      </div>
+
+                      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                        {job.mustHaves.map((req) => (
+                          <Checkbox
+                            key={req}
+                            label={req}
+                            checked={verified.includes(req)}
+                            onChange={() => toggleCheck(job.id, req)}
+                          />
+                        ))}
                       </div>
 
                       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 8 }}>
                         <span style={{ fontSize: 12, color: "var(--semantics-text-tertiary)" }}>
                           Profile, resume, & CTC pre-filled automatically
                         </span>
-                        <button
-                          type="button"
+                        <Button
+                          variant="primary"
+                          size="sm"
                           disabled={!allVerified || submittingId === job.id}
                           onClick={() => handleSubmit(job)}
-                          style={{
-                            padding: "8px 16px",
-                            borderRadius: 6,
-                            background: allVerified ? "var(--button-primary-background)" : "var(--semantics-surface-disabled, #e2e8f0)",
-                            color: allVerified ? "#fff" : "var(--semantics-text-disabled, #94a3b8)",
-                            border: 0,
-                            fontWeight: 600,
-                            fontSize: 13,
-                            cursor: allVerified ? "pointer" : "not-allowed",
-                            transition: "all 150ms ease",
-                          }}
                         >
                           {submittingId === job.id ? "Submitting…" : `Submit to ${job.company}`}
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   )}

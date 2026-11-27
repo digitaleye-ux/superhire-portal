@@ -13,6 +13,9 @@ export interface ClaimedRoleItem {
   commission: string;
   earningModel?: "shortlist" | "closure";
   badge?: "trending" | "priority" | "spotlight" | "just-in" | "closed";
+  matchScore?: string;
+  matchReason?: string;
+  mustHaves?: string[];
 }
 
 export interface SelectRoleForCandidateProps {

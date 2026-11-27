@@ -1,0 +1,245 @@
+/* ==========================================================================
+   KpiCard (Metric / Stat Card) Component — Bolt Design System
+   Dashboard KPI summary card with overline label, arrow indicator,
+   tabular value display, helper notes, and trend indicator.
+   ========================================================================== */
+
+.card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  border: var(--border-width-thin) solid var(--semantics-border-default);
+  background: var(--semantics-surface-primary);
+  text-align: left;
+  user-select: none;
+  font-family: var(--font-family-sans);
+  transition:
+    border-color var(--duration-fast) var(--easing-out),
+    background-color var(--duration-fast) var(--easing-out);
+}
+
+/* ------------------------------------------------------------------ */
+/* Sizes                                                              */
+/* ------------------------------------------------------------------ */
+
+.sizeMd {
+  padding: var(--space-5x);
+  gap: var(--space-3x);
+}
+
+.sizeSm {
+  padding: var(--space-4x);
+  gap: var(--space-2x);
+  border-radius: var(--radius-md);
+}
+
+.sizeLg {
+  padding: var(--space-6x);
+  gap: var(--space-4x);
+}
+
+/* ------------------------------------------------------------------ */
+/* Style Variants                                                     */
+/* ------------------------------------------------------------------ */
+
+.variantDefault {
+  background: var(--semantics-surface-primary);
+}
+
+.variantBrand {
+  background: var(--semantics-surface-brand-subtle);
+  border-color: var(--semantics-border-brand-muted);
+}
+
+.variantSubtle {
+  background: var(--semantics-surface-secondary);
+}
+
+/* ------------------------------------------------------------------ */
+/* Interactive States                                                 */
+/* ------------------------------------------------------------------ */
+
+.interactive {
+  cursor: pointer;
+  touch-action: manipulation;
+  text-decoration: none;
+  color: inherit;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .interactive:hover {
+    border-color: var(--semantics-border-focus);
+  }
+
+  .interactive:hover .arrow {
+    color: var(--semantics-text-link);
+    transform: translateX(var(--space-x-2));
+  }
+}
+
+.interactive:active {
+  border-color: var(--semantics-border-interactive);
+  background-color: var(--semantics-surface-secondary);
+}
+
+.interactive:focus-visible {
+  outline: var(--border-width-thick) solid var(--semantics-border-focus);
+  outline-offset: var(--space-x-2);
+}
+
+/* Selected state */
+.selected {
+  border-color: var(--semantics-interactive-primary);
+  background-color: var(--semantics-surface-brand-subtle);
+}
+
+/* Disabled state */
+.disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Layout Regions                                                     */
+/* ------------------------------------------------------------------ */
+
+.topRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2x);
+}
+
+.labelArea {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2x);
+  min-width: 0;
+  flex: 1;
+}
+
+.label {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-overline);
+  text-transform: uppercase;
+  color: var(--semantics-text-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.topActions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2x);
+  flex-shrink: 0;
+}
+
+.arrow {
+  width: var(--size-icon-sm);
+  height: var(--size-icon-sm);
+  color: var(--semantics-text-tertiary);
+  flex-shrink: 0;
+  transition:
+    transform var(--duration-fast) var(--easing-out),
+    color var(--duration-fast) var(--easing-out);
+}
+
+/* Bottom Value Row */
+.valueRow {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2x);
+}
+
+.value {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-24);
+  line-height: var(--line-height-24);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-heading);
+  color: var(--semantics-text-primary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.sizeSm .value {
+  font-size: var(--font-size-20);
+  line-height: var(--line-height-20);
+}
+
+.sizeLg .value {
+  font-size: var(--font-size-32);
+  line-height: var(--line-height-32);
+}
+
+.subtext {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Trend Pill */
+.trend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1x);
+  padding: var(--space-x-4) var(--space-2x);
+  border-radius: var(--radius-4);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-medium);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.trendUp {
+  background: var(--semantics-surface-success-subtle);
+  color: var(--semantics-text-success);
+}
+
+.trendDown {
+  background: var(--semantics-surface-danger-subtle);
+  color: var(--semantics-text-danger);
+}
+
+.trendNeutral {
+  background: var(--semantics-surface-secondary);
+  color: var(--semantics-text-tertiary);
+}
+
+.trendIcon {
+  width: var(--size-icon-xs);
+  height: var(--size-icon-xs);
+  flex-shrink: 0;
+}
+
+/* Skeleton / Loading */
+.skeletonLabel {
+  width: var(--space-20x);
+  height: var(--font-size-12);
+  border-radius: var(--radius-4);
+  background: var(--semantics-surface-secondary);
+}
+
+.skeletonValue {
+  width: var(--space-16x);
+  height: var(--font-size-24);
+  border-radius: var(--radius-4);
+  background: var(--semantics-surface-secondary);
+}

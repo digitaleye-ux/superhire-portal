@@ -1,7 +1,6 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import type { ComponentType } from "react";
 import {
-  ArrowRightIcon,
   BookmarkXIcon,
   BriefcaseBusinessIcon,
   EyeIcon,
@@ -14,12 +13,17 @@ import {
 } from "@/components/shared/Icon";
 import type { IconBaseProps } from "@/components/shared/Icon";
 import { IconButton } from "@/components/shared/IconButton";
+import { LinkButton } from "@/components/shared/LinkButton";
+import { Tag } from "@/components/shared/Tag";
+import type { TagVariant } from "@/components/shared/Tag";
 import type { CandidateCardProps, CandidateStatus } from "./CandidateCard.types";
 import styles from "./CandidateCard.module.css";
 
 const STATUS_LABEL: Record<CandidateStatus, string> = {
   submitted: "Submitted",
-  "under-review": "Review",
+  "superhire-review": "SuperHire review",
+  "employer-review": "Employer review",
+  "under-review": "Employer review",
   shortlisted: "Shortlisted",
   interview: "Interview",
   offered: "Offer",
@@ -28,15 +32,17 @@ const STATUS_LABEL: Record<CandidateStatus, string> = {
   rejected: "Rejected",
 };
 
-const STATUS_CLASS: Record<CandidateStatus, string> = {
-  submitted: styles.statusNeutral,
-  "under-review": styles.statusInfo,
-  shortlisted: styles.statusBrand,
-  interview: styles.statusWarning,
-  offered: styles.statusSuccess,
-  joined: styles.statusSuccess,
-  "on-hold": styles.statusNeutral,
-  rejected: styles.statusDanger,
+const STATUS_TAG_VARIANT: Record<CandidateStatus, TagVariant> = {
+  submitted: "neutral",
+  "superhire-review": "brand",
+  "employer-review": "info",
+  "under-review": "info",
+  shortlisted: "info",
+  interview: "info",
+  offered: "success",
+  joined: "success",
+  "on-hold": "warning",
+  rejected: "danger",
 };
 
 /**
@@ -70,6 +76,8 @@ export function formatCandidateCtc(
 }
 
 export function CandidateCard({
+  isSelected = false,
+  disabled = false,
   candidateName,
   roleTitle,
   company,
@@ -96,9 +104,9 @@ export function CandidateCard({
 }: CandidateCardProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const hasAction = typeof onAction === "function";
-  const isClickable = typeof onClick === "function";
-  const isInteractive = hasAction || isClickable;
+  const hasAction = !disabled && typeof onAction === "function";
+  const isClickable = !disabled && typeof onClick === "function";
+  const isInteractive = !disabled && (hasAction || isClickable);
 
   // Close kebab dropdown when clicking outside or pressing Escape
   useEffect(() => {
@@ -123,6 +131,8 @@ export function CandidateCard({
     styles.card,
     isInteractive ? styles.interactive : "",
     isClickable ? styles.clickable : "",
+    isSelected ? styles.selected : "",
+    disabled ? styles.disabled : "",
     menuOpen ? styles.cardMenuOpen : "",
     className,
   ]
@@ -184,9 +194,9 @@ export function CandidateCard({
         </div>
 
         <div className={styles.headerRight}>
-          <span className={`${styles.status} ${STATUS_CLASS[status]}`}>
+          <Tag variant={STATUS_TAG_VARIANT[status]}>
             {STATUS_LABEL[status]}
-          </span>
+          </Tag>
 
           <div className={styles.menuContainer} ref={menuRef}>
             <IconButton
@@ -344,17 +354,18 @@ export function CandidateCard({
             </span>
           </span>
           {hasAction && (
-            <button
-              type="button"
+            <LinkButton
+              variant="brand"
+              size="md"
+              arrow
               className={styles.action}
               onClick={(e) => {
                 e.stopPropagation();
                 onAction?.();
               }}
             >
-              <span className={styles.actionLabel}>{actionLabel}</span>
-              <ArrowRightIcon size="sm" className={styles.icon} />
-            </button>
+              {actionLabel}
+            </LinkButton>
           )}
         </div>
       </div>

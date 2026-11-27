@@ -99,6 +99,10 @@ export interface JobDetailProps {
   onClaim?: (id: JobDetailData["id"]) => void;
   /** Unclaim action (rendered as a secondary button to the left of the primary action when provided). */
   onUnclaim?: (id: JobDetailData["id"]) => void;
+  /** Copy job link callback. */
+  onCopyLink?: () => void;
+  /** Download job details callback. */
+  onDownloadJd?: () => void;
   /** Secondary unclaim button label in footer. Defaults to "Unclaim role". */
   unclaimLabel?: string;
   /** Primary button label in footer. Defaults to "Claim role". */

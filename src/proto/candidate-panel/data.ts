@@ -4,12 +4,12 @@ import { DUMMY_CANDIDATE_ITEMS } from "@/proto/candidate-cards/data";
 /* ------------------------------------------------------------------ *
  * Candidate Details Side Panel — Clean, Essential Data Model
  * 6-stage lifecycle:
- *   1. Candidate submitted (Recruiter submitted the candidate)
- *   2. SuperHire approved (SuperHire second-level review & approval)
- *   3. Employer shortlisted (Employer selected the profile)
- *   4. Interview scheduled (Interview rounds: scheduled, ongoing, or completed)
- *   5. Offer extended (Employer extended an offer)
- *   6. Candidate joined (Placement confirmed & verified by SuperHire)
+ *   1. Submitted (Recruiter submitted the candidate profile)
+ *   2. SuperHire review (SuperHire verification & forward)
+ *   3. Employer review (Employer reviewing to decide on shortlist)
+ *   4. Interviews (Interview loop: scheduled, ongoing, or completed)
+ *   5. Offer (Formal offer extended)
+ *   6. Joined (Candidate joined & placement confirmed)
  * ------------------------------------------------------------------ */
 
 export type StageKey =
@@ -40,7 +40,7 @@ export interface MilestoneNextStep {
 export interface TimelineStage {
   step: number; // 1 to 6
   key: StageKey;
-  label: string; // "Candidate submitted" | "SuperHire approved" | "Employer shortlisted" | "Interview scheduled" | "Offer extended" | "Candidate joined"
+  label: string; // "Submitted" | "SuperHire review" | "Employer review" | "Interviews" | "Offer" | "Joined"
   state: StageState;
   date?: string; // e.g. "17 Nov", "25 November · 11:00 AM"
   outcome?: string; // e.g. "Submitted by you", "Approved by SuperHire", "Shortlisted by employer"
@@ -170,38 +170,38 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 1,
         key: "submitted",
-        label: "Candidate submitted",
+        label: "Submitted",
         state: "done",
         date: "14 Nov",
-        outcome: "You submitted Rohan's profile for Senior Frontend Engineer at Google.",
+        outcome: "Profile and verified resume submitted.",
       },
       {
         step: 2,
         key: "approved",
-        label: "SuperHire approved",
+        label: "SuperHire review",
         state: "done",
         date: "14 Nov",
-        outcome: "SuperHire completed its second-level review and approved the candidate for employer consideration.",
+        outcome: "Vetted by SuperHire and forwarded to Google.",
       },
       {
         step: 3,
         key: "shortlisted",
-        label: "Employer shortlisted",
+        label: "Employer review",
         state: "done",
         date: "15 Nov",
-        outcome: "Google reviewed the candidate's profile and selected them to move forward in the hiring process.",
+        outcome: "Shortlisted by Google hiring team.",
       },
       {
         step: 4,
         key: "interview",
-        label: "Interview scheduled",
+        label: "Interviews",
         state: "current",
         badgeLabel: "Round 2 scheduled",
         date: "25 Nov · 11:00 AM",
-        updateText: "Google scheduled Round 2 (System Design) directly with Rohan for 25 Nov at 11:00 AM.",
+        updateText: "Round 2 (System Design) confirmed for 25 Nov, 11:00 AM.",
       },
-      { step: 5, key: "offer", label: "Offer extended", state: "upcoming" },
-      { step: 6, key: "joined", label: "Candidate joined", state: "upcoming" },
+      { step: 5, key: "offer", label: "Offer", state: "upcoming" },
+      { step: 6, key: "joined", label: "Joined", state: "upcoming" },
     ];
 
     latest = {
@@ -283,38 +283,38 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 1,
         key: "submitted",
-        label: "Candidate submitted",
+        label: "Submitted",
         state: "done",
         date: "10 Nov",
-        outcome: "You submitted Aditya's profile for Lead iOS Engineer at Cred.",
+        outcome: "Profile and verified resume submitted.",
       },
       {
         step: 2,
         key: "approved",
-        label: "SuperHire approved",
+        label: "SuperHire review",
         state: "done",
         date: "11 Nov",
-        outcome: "SuperHire completed its second-level review and approved the candidate for employer consideration.",
+        outcome: "Vetted by SuperHire and forwarded to Cred.",
       },
       {
         step: 3,
         key: "shortlisted",
-        label: "Employer shortlisted",
+        label: "Employer review",
         state: "done",
         date: "12 Nov",
-        outcome: "Cred reviewed the candidate's profile and selected them to move forward in the hiring process.",
+        outcome: "Shortlisted by Cred Mobile hiring team.",
       },
       {
         step: 4,
         key: "interview",
-        label: "Interview scheduled",
+        label: "Interviews",
         state: "current",
         badgeLabel: "Feedback in review",
         date: "13 Nov · Employer",
-        updateText: "Round 2 completed directly between Cred and Aditya. Engineering panel scorecard is in review.",
+        updateText: "Round 2 completed. Scorecard in review with hiring panel.",
       },
-      { step: 5, key: "offer", label: "Offer extended", state: "upcoming" },
-      { step: 6, key: "joined", label: "Candidate joined", state: "upcoming" },
+      { step: 5, key: "offer", label: "Offer", state: "upcoming" },
+      { step: 6, key: "joined", label: "Joined", state: "upcoming" },
     ];
 
     latest = {
@@ -383,38 +383,38 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 1,
         key: "submitted",
-        label: "Candidate submitted",
+        label: "Submitted",
         state: "done",
         date: "13 Nov",
-        outcome: "You submitted Priya's profile for Backend Engineer at Razorpay.",
+        outcome: "Profile and verified resume submitted.",
       },
       {
         step: 2,
         key: "approved",
-        label: "SuperHire approved",
+        label: "SuperHire review",
         state: "done",
         date: "15 Nov",
-        outcome: "SuperHire completed its second-level review and approved the candidate for employer consideration.",
+        outcome: "Vetted by SuperHire and forwarded to Razorpay.",
       },
       {
         step: 3,
         key: "shortlisted",
-        label: "Employer shortlisted",
+        label: "Employer review",
         state: "done",
         date: "17 Nov",
-        outcome: "Razorpay reviewed the candidate's profile and selected them to move forward in the hiring process.",
+        outcome: "Shortlisted by Razorpay Payments team.",
       },
       {
         step: 4,
         key: "interview",
-        label: "Interview scheduled",
+        label: "Interviews",
         state: "current",
-        badgeLabel: "Scheduling directly",
+        badgeLabel: "Scheduling availability",
         date: "17 Nov · Employer",
-        updateText: "Razorpay reached out directly to Priya to coordinate time slots for Round 1 technical interview.",
+        updateText: "Shortlisted. Employer coordinating availability for Round 1 technical interview.",
       },
-      { step: 5, key: "offer", label: "Offer extended", state: "upcoming" },
-      { step: 6, key: "joined", label: "Candidate joined", state: "upcoming" },
+      { step: 5, key: "offer", label: "Offer", state: "upcoming" },
+      { step: 6, key: "joined", label: "Joined", state: "upcoming" },
     ];
 
     latest = {
@@ -467,45 +467,45 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
         text: "Shortlisted for Round 1 (Distributed Systems). Requesting 3 time slots this week — will confirm once the candidate's availability is verified.",
       },
     ];
-  } else if (item.status === "under-review") {
-    // Arjun Kapoor — Stripe (SuperHire approved by SuperHire -> waiting for employer shortlist)
+  } else if (item.status === "under-review" || item.status === "employer-review") {
+    // Arjun Kapoor / Priya Sharma — Stripe (SuperHire Review done -> Employer Review in progress)
     progressHeadline = "2 of 6 milestones reached";
     milestonesReached = 2;
     stages = [
       {
         step: 1,
         key: "submitted",
-        label: "Candidate submitted",
+        label: "Submitted",
         state: "done",
         date: "17 Nov",
-        outcome: "You submitted Arjun's profile for Staff Infrastructure Engineer at Stripe.",
+        outcome: "Profile and verified resume submitted.",
       },
       {
         step: 2,
         key: "approved",
-        label: "SuperHire approved",
+        label: "SuperHire review",
         state: "done",
         date: "17 Nov",
-        outcome: "SuperHire completed its second-level review and approved the candidate for employer consideration.",
+        outcome: "Vetted by SuperHire and forwarded to Stripe.",
       },
       {
         step: 3,
         key: "shortlisted",
-        label: "Employer shortlisted",
+        label: "Employer review",
         state: "current",
         date: "17 Nov · 3:30 PM",
-        updateText: "Stripe reviewed the candidate's profile and is evaluating selection to move forward in the hiring process.",
+        updateText: "Under review with Stripe platform team. Shortlist decision expected in 2 business days.",
       },
-      { step: 4, key: "interview", label: "Interview scheduled", state: "upcoming" },
-      { step: 5, key: "offer", label: "Offer extended", state: "upcoming" },
-      { step: 6, key: "joined", label: "Candidate joined", state: "upcoming" },
+      { step: 4, key: "interview", label: "Interviews", state: "upcoming" },
+      { step: 5, key: "offer", label: "Offer", state: "upcoming" },
+      { step: 6, key: "joined", label: "Joined", state: "upcoming" },
     ];
 
     latest = {
-      statusLabel: "SuperHire approved · Sent to employer",
+      statusLabel: "Vetted by SuperHire · Sent to employer",
       waitingDuration: "17 Nov · 3:30 PM",
-      updateText: "Candidate passed SuperHire's review and was forwarded to the employer.",
-      nextAction: "Waiting for the employer's shortlist decision.",
+      updateText: "Candidate passed SuperHire verification and was forwarded to Stripe.",
+      nextAction: "Waiting for employer shortlist decision.",
     };
 
     activities = [
@@ -513,8 +513,8 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
         id: "a1",
         date: "17 Nov",
         time: "3:30 PM",
-        title: "SuperHire approved by SuperHire",
-        detail: "Profile passed completeness check (98% fit) and shared with Stripe Platform hiring team.",
+        title: "Vetted by SuperHire",
+        detail: "Profile passed completeness check and shared with Stripe Platform team.",
       },
       {
         id: "a2",
@@ -552,45 +552,45 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 1,
         key: "submitted",
-        label: "Candidate submitted",
+        label: "Submitted",
         state: "done",
         date: "4 Nov",
-        outcome: "You submitted Sneha's profile for Senior Product Designer at Atlassian.",
+        outcome: "Profile and verified resume submitted.",
       },
       {
         step: 2,
         key: "approved",
-        label: "SuperHire approved",
+        label: "SuperHire review",
         state: "done",
         date: "5 Nov",
-        outcome: "SuperHire completed its second-level review and approved the candidate for employer consideration.",
+        outcome: "Vetted by SuperHire and forwarded to Atlassian.",
       },
       {
         step: 3,
         key: "shortlisted",
-        label: "Employer shortlisted",
+        label: "Employer review",
         state: "done",
         date: "6 Nov",
-        outcome: "Atlassian reviewed the candidate's profile and selected them to move forward in the hiring process.",
+        outcome: "Shortlisted by Atlassian Confluence Design team.",
       },
       {
         step: 4,
         key: "interview",
-        label: "Interview scheduled",
+        label: "Interviews",
         state: "done",
         date: "12 Nov · Employer",
-        outcome: "Candidate progressed through the employer's interview process. 3 interview rounds completed.",
+        outcome: "Cleared 3 interview rounds.",
       },
       {
         step: 5,
         key: "offer",
-        label: "Offer extended",
+        label: "Offer",
         state: "current",
         badgeLabel: "Awaiting acceptance",
         date: "15 Nov · Employer",
-        updateText: "Atlassian extended an offer to Sneha. Awaiting candidate decision.",
+        updateText: "Formal offer extended. Decision expected by 21 Nov.",
       },
-      { step: 6, key: "joined", label: "Candidate joined", state: "upcoming" },
+      { step: 6, key: "joined", label: "Joined", state: "upcoming" },
     ];
 
     latest = {
@@ -659,55 +659,55 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 1,
         key: "submitted",
-        label: "Candidate submitted",
+        label: "Submitted",
         state: "done",
         date: "4 Oct",
-        outcome: "You submitted Karthik's profile for Staff Frontend Engineer at Figma.",
+        outcome: "Profile and verified resume submitted.",
       },
       {
         step: 2,
         key: "approved",
-        label: "SuperHire approved",
+        label: "SuperHire review",
         state: "done",
         date: "5 Oct",
-        outcome: "SuperHire completed its second-level review and approved the candidate for employer consideration.",
+        outcome: "Vetted by SuperHire and forwarded to Figma.",
       },
       {
         step: 3,
         key: "shortlisted",
-        label: "Employer shortlisted",
+        label: "Employer review",
         state: "done",
         date: "7 Oct",
-        outcome: "Figma reviewed the candidate's profile and selected them to move forward in the hiring process.",
+        outcome: "Shortlisted by Figma Core UI team.",
       },
       {
         step: 4,
         key: "interview",
-        label: "Interview scheduled",
+        label: "Interviews",
         state: "done",
         date: "18 Oct · Employer",
-        outcome: "Candidate progressed through the employer's interview process. 3 interview rounds completed.",
+        outcome: "Cleared 3 interview rounds.",
       },
       {
         step: 5,
         key: "offer",
-        label: "Offer extended",
+        label: "Offer",
         state: "done",
         date: "21 Oct · Employer",
-        outcome: "Employer extended an offer to the candidate. Offer accepted by candidate.",
+        outcome: "Offer extended and accepted.",
       },
       {
         step: 6,
         key: "joined",
-        label: "Candidate joined",
+        label: "Joined",
         state: "done",
         date: "4 Nov · Verified by SuperHire",
-        updateText: "Candidate joined Figma and the placement was confirmed by SuperHire.",
+        updateText: "Joined Figma. Placement verified and commission paid.",
       },
     ];
 
     latest = {
-      statusLabel: "Candidate joined · Placement confirmed",
+      statusLabel: "Joined · Placement confirmed",
       waitingDuration: "4 November",
       updateText: "Candidate successfully joined Figma. Placement verified by SuperHire.",
     };
@@ -770,37 +770,37 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 1,
         key: "submitted",
-        label: "Candidate submitted",
+        label: "Submitted",
         state: "done",
         date: "8 Nov",
-        outcome: "You submitted Meera's profile for Senior Data Analyst at Notion.",
+        outcome: "Profile and verified resume submitted.",
       },
       {
         step: 2,
         key: "approved",
-        label: "SuperHire approved",
+        label: "SuperHire review",
         state: "done",
         date: "9 Nov",
-        outcome: "SuperHire completed its second-level review and approved the candidate for employer consideration.",
+        outcome: "Vetted by SuperHire and forwarded to Notion.",
       },
       {
         step: 3,
         key: "shortlisted",
-        label: "Employer shortlisted",
+        label: "Employer review",
         state: "on-hold",
         badgeLabel: "On hold",
         date: "13 Nov · Employer",
-        updateText: "Notion reviewed the candidate's profile and selected them to move forward. Hiring is temporarily paused during Q3 headcount review.",
+        updateText: "Shortlisted. Hiring paused temporarily during Q3 headcount realignment. Update expected by 25 Nov.",
       },
-      { step: 4, key: "interview", label: "Interview scheduled", state: "upcoming" },
-      { step: 5, key: "offer", label: "Offer extended", state: "upcoming" },
-      { step: 6, key: "joined", label: "Candidate joined", state: "upcoming" },
+      { step: 4, key: "interview", label: "Interviews", state: "upcoming" },
+      { step: 5, key: "offer", label: "Offer", state: "upcoming" },
+      { step: 6, key: "joined", label: "Joined", state: "upcoming" },
     ];
 
     latest = {
       statusLabel: "Shortlisted · Role on hold",
       waitingDuration: "13 November",
-      updateText: "Hiring paused temporarily during Q3 headcount review. Candidate remains shortlisted.",
+      updateText: "Hiring paused temporarily during Q3 headcount realignment. Candidate remains shortlisted.",
       nextAction: "Waiting for employer · Updated timeline expected by 25 November.",
     };
 
@@ -817,7 +817,7 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
         date: "11 Nov",
         time: "11:20 AM",
         title: "Shortlisted by Notion",
-        detail: "SuperHire approved by Core Product Analytics lead.",
+        detail: "Approved by Core Product Analytics lead.",
       },
       {
         id: "a3",
@@ -856,38 +856,38 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       {
         step: 1,
         key: "submitted",
-        label: "Candidate submitted",
+        label: "Submitted",
         state: "done",
         date: "6 Nov",
-        outcome: "You submitted Ananya's profile for DevOps Engineer at Zerodha.",
+        outcome: "Profile and verified resume submitted.",
       },
       {
         step: 2,
         key: "approved",
-        label: "SuperHire approved",
+        label: "SuperHire review",
         state: "done",
         date: "8 Nov",
-        outcome: "SuperHire completed its second-level review and approved the candidate for employer consideration.",
+        outcome: "Vetted by SuperHire and forwarded to Zerodha.",
       },
       {
         step: 3,
         key: "shortlisted",
-        label: "Employer shortlisted",
+        label: "Employer review",
         state: "done",
         date: "10 Nov",
-        outcome: "Zerodha reviewed the candidate's profile and selected them to move forward in the hiring process.",
+        outcome: "Shortlisted by Zerodha Infrastructure team.",
       },
       {
         step: 4,
         key: "interview",
-        label: "Interview scheduled",
+        label: "Interviews",
         state: "interview-unsuccessful",
         badgeLabel: "Application closed",
         date: "15 Nov · Employer",
-        updateText: "Interview unsuccessful (Round 1). Employer feedback: More hands-on experience with Kubernetes infrastructure is required.",
+        updateText: "Closed after Round 1. Feedback: Requires deeper hands-on bare-metal Kubernetes experience.",
       },
-      { step: 5, key: "offer", label: "Offer extended", state: "upcoming" },
-      { step: 6, key: "joined", label: "Candidate joined", state: "upcoming" },
+      { step: 5, key: "offer", label: "Offer", state: "upcoming" },
+      { step: 6, key: "joined", label: "Joined", state: "upcoming" },
     ];
 
     latest = {
@@ -948,30 +948,30 @@ export function buildDetail(item: CandidateItem): CandidateDetail {
       },
     ];
   } else {
-    // Vikram Singh — Swiggy (Candidate submitted -> SuperHire approved in review)
+    // Vikram Singh — Swiggy (Submitted -> Vetted by SuperHire in review)
     progressHeadline = "1 of 6 milestones reached";
     milestonesReached = 1;
     stages = [
       {
         step: 1,
         key: "submitted",
-        label: "Candidate submitted",
+        label: "Submitted",
         state: "done",
         date: "Today · 9:15 AM",
-        outcome: "You submitted Vikram's profile for Full-Stack Engineer at Swiggy.",
+        outcome: "Profile and verified resume submitted.",
       },
       {
         step: 2,
         key: "approved",
-        label: "SuperHire approved",
+        label: "SuperHire review",
         state: "current",
         date: "Today · 9:15 AM",
-        updateText: "SuperHire is conducting its second-level review to approve the candidate for employer consideration.",
+        updateText: "Under review by SuperHire. Verification completes within 4 hours.",
       },
-      { step: 3, key: "shortlisted", label: "Employer shortlisted", state: "upcoming" },
-      { step: 4, key: "interview", label: "Interview scheduled", state: "upcoming" },
-      { step: 5, key: "offer", label: "Offer extended", state: "upcoming" },
-      { step: 6, key: "joined", label: "Candidate joined", state: "upcoming" },
+      { step: 3, key: "shortlisted", label: "Employer review", state: "upcoming" },
+      { step: 4, key: "interview", label: "Interviews", state: "upcoming" },
+      { step: 5, key: "offer", label: "Offer", state: "upcoming" },
+      { step: 6, key: "joined", label: "Joined", state: "upcoming" },
     ];
 
     latest = {

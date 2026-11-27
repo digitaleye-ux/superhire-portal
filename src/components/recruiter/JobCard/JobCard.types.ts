@@ -1,8 +1,20 @@
 import type { BadgeType } from "@/components/shared/Badge";
 
 export type EarningModel = "shortlist" | "closure";
+export type JobCardVariant = "explore" | "claimed" | "closed";
 
 export interface JobCardProps {
+  /**
+   * Card workflow variant:
+   * - "explore" (default): Available role, reveals "Claim role" action on hover/focus.
+   * - "claimed": Role is claimed by recruiter, enables kebab menu with "Submit candidate" action.
+   * - "closed": Role is closed / expired, displays "closed" badge with no claim action.
+   */
+  variant?: JobCardVariant;
+  /** Whether the card is selected (active in split pane / details view). */
+  isSelected?: boolean;
+  /** Whether the card is in a disabled state. */
+  disabled?: boolean;
   /** Company name shown in the header. */
   company: string;
   /** URL of the company logo. Falls back to a neutral placeholder when omitted or broken. */

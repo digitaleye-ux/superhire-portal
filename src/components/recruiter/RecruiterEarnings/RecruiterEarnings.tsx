@@ -972,6 +972,8 @@ export function RecruiterEarnings({
                   )}
 
                   <Dropdown
+                    variant="filter"
+                    size="sm"
                     label="Model"
                     options={MODEL_FILTER_OPTIONS}
                     selected={[chartModel]}
@@ -987,6 +989,8 @@ export function RecruiterEarnings({
                   />
 
                   <Dropdown
+                    variant="filter"
+                    size="sm"
                     label="Period"
                     options={DATE_RANGE_OPTIONS}
                     selected={[datePreset]}
@@ -1343,6 +1347,8 @@ export function RecruiterEarnings({
 
                 <div className={s.ledgerRightControls}>
                   <Dropdown
+                    variant="filter"
+                    size="sm"
                     label="Payment status"
                     options={PAYMENT_FILTER_OPTIONS}
                     selected={ledgerPaymentFilter}
@@ -1352,6 +1358,8 @@ export function RecruiterEarnings({
                   />
 
                   <Dropdown
+                    variant="filter"
+                    size="sm"
                     label="Model"
                     options={LEDGER_MODEL_OPTIONS}
                     selected={ledgerModelFilter}

@@ -928,7 +928,11 @@ export function RecruiterShellPreview({
 
     // 2. Status filter
     if (candidateFilters.status.length > 0) {
-      if (!candidateFilters.status.includes(c.status)) return false;
+      const match = candidateFilters.status.some((st) => {
+        if (st === "employer-review" && (c.status === "employer-review" || c.status === "under-review")) return true;
+        return c.status === st;
+      });
+      if (!match) return false;
     }
 
     // 3. Company filter
@@ -1362,6 +1366,13 @@ export function RecruiterShellPreview({
                     setSelectedId(null);
                     setPanelMode("detail");
                   }
+                }}
+                onCopyLink={() => {
+                  navigator.clipboard?.writeText(window.location.href);
+                  toast.success("Job link copied to clipboard");
+                }}
+                onDownloadJd={() => {
+                  toast.success(`Downloaded job details for ${selectedJob.role}`);
                 }}
               />
             )}

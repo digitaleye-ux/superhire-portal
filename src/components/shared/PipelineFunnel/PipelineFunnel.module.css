@@ -1,0 +1,319 @@
+/* ==========================================================================
+   PipelineFunnel Component — Bolt Design System
+   Multi-stage recruitment & candidate pipeline funnel card with segmented
+   stage cells, metric counters, interactive filters, and summary footer.
+   ========================================================================== */
+
+.container {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  border: var(--border-width-thin) solid var(--semantics-border-default);
+  background: var(--semantics-surface-primary);
+  overflow: hidden;
+  user-select: none;
+  font-family: var(--font-family-sans);
+}
+
+/* ------------------------------------------------------------------ */
+/* Variants                                                           */
+/* ------------------------------------------------------------------ */
+
+.variantDefault {
+  background: var(--semantics-surface-primary);
+}
+
+.variantSubtle {
+  background: var(--semantics-surface-secondary);
+}
+
+/* ------------------------------------------------------------------ */
+/* Sizes                                                              */
+/* ------------------------------------------------------------------ */
+
+.sizeSm .stageCell {
+  padding: var(--space-3x) var(--space-3x);
+  gap: var(--space-2x);
+}
+
+.sizeSm .stageCount {
+  font-size: var(--font-size-20);
+  line-height: var(--line-height-20);
+}
+
+.sizeMd .stageCell {
+  padding: var(--space-4x) var(--space-4x);
+  gap: var(--space-3x);
+}
+
+.sizeMd .stageCount {
+  font-size: var(--font-size-24);
+  line-height: var(--line-height-24);
+}
+
+.sizeLg .stageCell {
+  padding: var(--space-5x) var(--space-5x);
+  gap: var(--space-4x);
+}
+
+.sizeLg .stageCount {
+  font-size: var(--font-size-28, 28px);
+  line-height: var(--line-height-28, 32px);
+}
+
+/* ------------------------------------------------------------------ */
+/* Stages Grid                                                        */
+/* ------------------------------------------------------------------ */
+
+.stagesGrid {
+  display: grid;
+  grid-template-columns: repeat(var(--stage-count, 6), minmax(0, 1fr));
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .stagesGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .stagesGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Stage Cell & Interactive States                                    */
+/* ------------------------------------------------------------------ */
+
+.stageCell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  border: 0;
+  border-right: var(--border-width-thin) solid var(--semantics-divider-default);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
+  transition:
+    background-color var(--duration-fast) var(--easing-out),
+    color var(--duration-fast) var(--easing-out);
+}
+
+.stageCell:last-child {
+  border-right: 0;
+}
+
+/* Hover state */
+@media (hover: hover) and (pointer: fine) {
+  .stageCell:not(.disabled):hover {
+    background-color: var(--semantics-surface-secondary);
+  }
+
+  .stageCell:not(.disabled):hover .arrow {
+    color: var(--semantics-text-link);
+    transform: translateX(var(--space-x-2));
+  }
+}
+
+/* Active / Pressed state */
+.stageCell:not(.disabled):active {
+  background-color: var(--semantics-surface-tertiary);
+}
+
+/* Focus visible */
+.stageCell:focus-visible {
+  outline: var(--border-width-thick) solid var(--semantics-border-focus);
+  outline-offset: calc(-1 * var(--border-width-thick));
+  z-index: 1;
+}
+
+/* Selected active filter state */
+.stageCell.selected {
+  background-color: var(--semantics-surface-brand-subtle);
+}
+
+.stageCell.selected .stageCount {
+  color: var(--semantics-interactive-primary);
+}
+
+.stageCell.selected::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--border-width-thick);
+  background-color: var(--semantics-interactive-primary);
+}
+
+/* Disabled state */
+.stageCell.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Non-interactive stage cell (e.g. read-only display) */
+.stageCell.readOnly {
+  cursor: default;
+}
+
+/* ------------------------------------------------------------------ */
+/* Stage Header & Content Elements                                    */
+/* ------------------------------------------------------------------ */
+
+.stageHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2x);
+}
+
+.stageLabel {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-overline);
+  text-transform: uppercase;
+  color: var(--semantics-text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.arrow {
+  width: var(--size-icon-xs);
+  height: var(--size-icon-xs);
+  color: var(--semantics-text-tertiary);
+  flex-shrink: 0;
+  transition:
+    transform var(--duration-fast) var(--easing-out),
+    color var(--duration-fast) var(--easing-out);
+}
+
+.stageCount {
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-heading);
+  color: var(--semantics-text-primary);
+  font-variant-numeric: tabular-nums;
+  margin-top: auto;
+}
+
+/* ------------------------------------------------------------------ */
+/* Footer Meta Row                                                    */
+/* ------------------------------------------------------------------ */
+
+.footerRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2x);
+  padding: var(--space-2x) var(--space-4x);
+  border-top: var(--border-width-thin) solid var(--semantics-divider-default);
+  background: var(--semantics-surface-secondary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  color: var(--semantics-text-tertiary);
+  flex-wrap: wrap;
+}
+
+.footerItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1x);
+}
+
+.footerCount {
+  color: var(--semantics-text-primary);
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+.footerLabel {
+  color: var(--semantics-text-tertiary);
+}
+
+.footerBtn {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
+  color: var(--semantics-text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1x);
+  transition: color var(--duration-fast) var(--easing-out);
+  touch-action: manipulation;
+  text-decoration: none;
+}
+
+.footerBtn:hover {
+  color: var(--semantics-text-link);
+  text-decoration: underline;
+}
+
+.footerBtn:focus-visible {
+  outline: var(--border-width-thin) solid var(--semantics-border-focus);
+  outline-offset: var(--space-x-2);
+}
+
+.footerDot {
+  color: var(--semantics-border-default);
+  user-select: none;
+  margin: 0 var(--space-x-2);
+}
+
+/* ------------------------------------------------------------------ */
+/* Skeleton / Loading States                                          */
+/* ------------------------------------------------------------------ */
+
+.skeletonLabel {
+  width: 60%;
+  height: var(--font-size-12);
+  border-radius: var(--radius-xs);
+  background: var(--semantics-surface-tertiary);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeletonCount {
+  width: 40%;
+  height: var(--font-size-24);
+  border-radius: var(--radius-xs);
+  background: var(--semantics-surface-tertiary);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeletonFooter {
+  width: 45%;
+  height: var(--font-size-12);
+  border-radius: var(--radius-xs);
+  background: var(--semantics-surface-tertiary);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}

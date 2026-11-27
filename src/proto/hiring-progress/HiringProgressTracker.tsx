@@ -1,8 +1,4 @@
-import {
-  CheckIcon,
-  PauseIcon,
-  XIcon,
-} from "@/components/shared/Icon";
+import { Milestone, MilestoneTimeline, type MilestoneVariant } from "@/components/shared/Milestone";
 import type { CandidateDetail, TimelineStage } from "@/proto/candidate-panel/data";
 import s from "./HiringProgressTracker.module.css";
 
@@ -10,15 +6,23 @@ interface HiringProgressTrackerProps {
   detail: CandidateDetail;
 }
 
-export function HiringProgressTracker({ detail }: HiringProgressTrackerProps) {
-  const isTerminalOrHold = (state: TimelineStage["state"]) =>
+function resolveMilestoneVariant(state: TimelineStage["state"]): MilestoneVariant {
+  if (state === "done") return "completed";
+  if (state === "current") return "current";
+  if (state === "on-hold") return "warning";
+  if (
     state === "not-approved" ||
     state === "not-shortlisted" ||
     state === "interview-unsuccessful" ||
     state === "offer-declined" ||
-    state === "withdrawn" ||
-    state === "on-hold";
+    state === "withdrawn"
+  ) {
+    return "danger";
+  }
+  return "upcoming";
+}
 
+export function HiringProgressTracker({ detail }: HiringProgressTrackerProps) {
   return (
     <div className={s.tracker} aria-label="Candidate hiring journey progress">
       {/* Tracker Header */}
@@ -26,13 +30,14 @@ export function HiringProgressTracker({ detail }: HiringProgressTrackerProps) {
         <h3 className={s.title}>Hiring progress</h3>
       </div>
 
-      {/* 6 Milestones Vertical Timeline */}
-      <ol className={s.timeline}>
-        {detail.stages.map((stage) => {
-          const isDone = stage.state === "done";
-          const isCurrent = stage.state === "current";
-          const isAlert = isTerminalOrHold(stage.state);
-          const isUpcoming = stage.state === "upcoming";
+      {/* 6 Milestones Vertical Timeline using Bolt Milestone component */}
+      <MilestoneTimeline>
+        {detail.stages.map((stage, idx) => {
+          const isLast = idx === detail.stages.length - 1;
+          const variant = resolveMilestoneVariant(stage.state);
+          const isDone = variant === "completed";
+          const isCurrent = variant === "current";
+          const isAlert = variant === "danger" || variant === "warning";
 
           // Expand description for current active milestone, terminal alert outcome, or final Joined outcome
           const isExpanded =
@@ -41,76 +46,22 @@ export function HiringProgressTracker({ detail }: HiringProgressTrackerProps) {
             (isDone && stage.step === detail.stages.length && Boolean(stage.updateText));
 
           return (
-            <li key={stage.step} className={s.item}>
-              {/* Vertical spine rail connecting nodes */}
-              <div
-                className={`${s.spineRail} ${isDone ? s.spineRailDone : ""}`}
-                aria-hidden="true"
-              />
-
-              {/* Milestone node icon */}
-              <div className={s.nodeWrapper}>
-                {isDone ? (
-                  <div className={`${s.node} ${s.nodeDone}`} aria-label="Completed">
-                    <CheckIcon size={12} strokeWidth={3} />
-                  </div>
-                ) : isCurrent ? (
-                  <div className={`${s.node} ${s.nodeCurrent}`} aria-label="Current stage">
-                    <span className={s.nodeDot} />
-                  </div>
-                ) : stage.state === "on-hold" ? (
-                  <div className={`${s.node} ${s.nodeWarning}`} aria-label="On hold">
-                    <PauseIcon size={12} strokeWidth={2.5} />
-                  </div>
-                ) : isAlert ? (
-                  <div className={`${s.node} ${s.nodeDanger}`} aria-label="Closed">
-                    <XIcon size={12} strokeWidth={2.5} />
-                  </div>
-                ) : (
-                  <div className={`${s.node} ${s.nodeUpcoming}`} aria-label="Upcoming" />
-                )}
-              </div>
-
-              {/* Milestone content */}
-              <div className={s.content}>
-                {/* 1. Milestone Header (Title + Date) */}
-                <div className={s.milestoneHeader}>
-                  <span
-                    className={
-                      isUpcoming
-                        ? s.stepTitleUpcoming
-                        : isCurrent
-                        ? s.stepTitleCurrent
-                        : s.stepTitle
-                    }
-                  >
-                    {stage.step}. {stage.label}
-                  </span>
-
-                  <div className={s.milestoneRight}>
-                    {/* Date / timestamp when available */}
-                    {stage.date && (
-                      <span className={s.stepDate}>{stage.date}</span>
-                    )}
-                  </div>
-                </div>
-
-                {/* 2. Completed outcome description */}
-                {isDone && !isExpanded && stage.outcome && (
-                  <p className={s.stepOutcome}>{stage.outcome}</p>
-                )}
-
-                {/* 3. Active / Current milestone description (Clean typography, no card box) */}
-                {isExpanded && stage.updateText && (
-                  <div className={s.activeBody}>
-                    <p className={s.stepDescription}>{stage.updateText}</p>
-                  </div>
-                )}
-              </div>
-            </li>
+            <Milestone
+              key={stage.step}
+              step={stage.step}
+              title={stage.label}
+              variant={variant}
+              date={stage.date}
+              outcome={isDone && !isExpanded ? stage.outcome : undefined}
+              description={isExpanded ? stage.updateText : undefined}
+              connectorDone={isDone}
+              isLast={isLast}
+            />
           );
         })}
-      </ol>
+      </MilestoneTimeline>
     </div>
   );
 }
+
+export default HiringProgressTracker;

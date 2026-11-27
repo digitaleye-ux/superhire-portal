@@ -1,5 +1,5 @@
-/* Select Role for Candidate — Side Drawer (Step 1 of Add Another Role flow).
-   Adheres strictly to Bolt Design System design tokens and JobDetail layout. */
+/* Select Role for Candidate — Production Side Drawer.
+   Strictly follows Bolt Design System tokens. Zero visual clutter, zero AI slop. */
 
 .panel {
   box-sizing: border-box;
@@ -16,8 +16,8 @@
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-3x);
-  padding: var(--space-4x) var(--space-6x);
+  gap: var(--space-4x);
+  padding: var(--space-6x) var(--space-6x) var(--space-4x);
   border-bottom: var(--border-width-thin) solid var(--semantics-border-default);
 }
 
@@ -26,26 +26,53 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-3x);
-  width: 100%;
 }
 
-.titleGroup {
+.candidateIdentity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3x);
+  min-width: 0;
+}
+
+.avatar {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-8x);
+  height: var(--space-8x);
+  border-radius: var(--radius-pill);
+  background: var(--semantics-surface-brand-subtle);
+  color: var(--semantics-text-brand);
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-12);
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.titleBlock {
   display: flex;
   flex-direction: column;
   gap: var(--space-1x);
+  min-width: 0;
 }
 
 .title {
   margin: 0;
   font-family: var(--font-family-sans);
-  font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-20);
   line-height: var(--line-height-20);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: var(--letter-spacing-heading);
   color: var(--semantics-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.description {
+.subtitle {
   margin: 0;
   font-family: var(--font-family-sans);
   font-size: var(--font-size-14);
@@ -53,44 +80,39 @@
   color: var(--semantics-text-secondary);
 }
 
-.close {
-  display: inline-flex;
+.candidateMetaStrip {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  width: var(--space-8x);
-  height: var(--space-8x);
-  padding: 0;
-  border: 0;
-  background: transparent;
-  border-radius: var(--radius-4);
+  gap: var(--space-2x);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  line-height: var(--line-height-12);
   color: var(--semantics-text-tertiary);
-  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+
+.metaSeparator {
+  color: var(--semantics-border-default);
+  user-select: none;
+}
+
+.metaHighlight {
+  font-weight: var(--font-weight-medium);
+  color: var(--semantics-text-secondary);
+}
+
+/* ---- Search Section ---- */
+.searchSection {
   flex-shrink: 0;
-  margin-top: calc(-1 * var(--space-x-2));
-  transition:
-    background-color var(--duration-fast) var(--easing-standard),
-    color var(--duration-fast) var(--easing-standard);
+  padding: var(--space-4x) var(--space-6x) 0;
 }
 
-.close:hover {
-  background: var(--semantics-surface-secondary);
-  color: var(--semantics-text-primary);
-}
-
-.close:active {
-  background: var(--semantics-surface-tertiary);
-}
-
-.close:focus-visible {
-  outline: var(--border-width-thick) solid var(--semantics-border-focus);
-  outline-offset: var(--space-x-2);
-}
-
-/* Scroll Area */
+/* ---- Scroll Area ---- */
 .scroll {
   flex: 1;
   overflow-y: auto;
-  padding: var(--space-4x) var(--space-6x);
+  padding: var(--space-4x) var(--space-6x) var(--space-6x);
   display: flex;
   flex-direction: column;
   gap: var(--space-3x);
@@ -100,26 +122,21 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--space-1x);
-}
-
-.sectionTitle {
-  margin: 0;
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-14);
-  line-height: var(--line-height-14);
-  font-weight: var(--font-weight-medium);
-  color: var(--semantics-text-secondary);
+  padding-bottom: var(--space-1x);
 }
 
 .roleCount {
   font-family: var(--font-family-sans);
   font-size: var(--font-size-12);
   line-height: var(--line-height-12);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--semantics-text-tertiary);
+  font-variant-numeric: tabular-nums;
 }
 
-/* Role Cards */
+/* ---- Roles List ---- */
 .rolesList {
   display: flex;
   flex-direction: column;
@@ -129,10 +146,10 @@
 .roleCard {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2x);
-  padding: var(--space-3x);
+  gap: var(--space-3x);
+  padding: var(--space-4x);
   background: var(--semantics-surface-primary);
-  border: var(--border-width-thin) solid var(--semantics-border-strong);
+  border: var(--border-width-thin) solid var(--semantics-border-default);
   border-radius: var(--radius-md);
   cursor: pointer;
   text-align: left;
@@ -144,6 +161,11 @@
 
 .roleCard:hover:not(.roleCardDisabled) {
   border-color: var(--semantics-border-focus);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.roleCard:active:not(.roleCardDisabled) {
+  transform: scale(0.995);
 }
 
 .roleCard:focus-visible:not(.roleCardDisabled) {
@@ -153,13 +175,9 @@
 
 .roleCardDisabled {
   cursor: not-allowed;
-  background: var(--semantics-surface-disabled);
-  border-color: var(--semantics-border-disabled);
-}
-
-.roleCardDisabled .roleTitle,
-.roleCardDisabled .commissionAmount {
-  color: var(--semantics-text-disabled);
+  background: var(--semantics-surface-secondary);
+  border-color: var(--semantics-border-default);
+  opacity: 0.65;
 }
 
 .roleCardHead {
@@ -203,12 +221,19 @@
   white-space: nowrap;
 }
 
+.roleCardBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2x);
+}
+
 .roleTitle {
   margin: 0;
   font-family: var(--font-family-sans);
   font-size: var(--font-size-16);
   line-height: var(--line-height-16);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-none);
   color: var(--semantics-text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -217,22 +242,14 @@
 
 .cardMeta {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2x);
-  overflow: hidden;
   font-family: var(--font-family-sans);
   font-size: var(--font-size-14);
   line-height: var(--line-height-14);
   color: var(--semantics-text-tertiary);
-}
-
-.cardDivider {
-  width: 100%;
-  height: var(--border-width-thin);
-  border: 0;
-  margin: var(--space-1x) 0 0;
-  background: var(--semantics-border-default);
+  font-variant-numeric: tabular-nums;
 }
 
 .cardFooter {
@@ -240,56 +257,36 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-2x);
-  margin-top: var(--space-1x);
+  padding-top: var(--space-2x);
 }
 
 .commission {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1x);
+  font-family: var(--font-family-sans);
+  font-variant-numeric: tabular-nums;
+}
+
+.commission svg {
+  color: var(--semantics-text-tertiary);
 }
 
 .commissionAmount {
-  font-family: var(--font-family-sans);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-14);
   line-height: var(--line-height-14);
   color: var(--semantics-text-primary);
+  font-variant-numeric: tabular-nums;
 }
 
 .commissionUnit {
-  font-family: var(--font-family-sans);
   font-size: var(--font-size-14);
   line-height: var(--line-height-14);
   color: var(--semantics-text-tertiary);
 }
 
-.selectAction {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1x);
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-14);
-  line-height: var(--line-height-14);
-  font-weight: var(--font-weight-medium);
-  color: var(--semantics-text-link);
-}
-
-.alreadyBadge {
-  display: inline-flex;
-  align-items: center;
-  padding: var(--space-x-2) var(--space-2x);
-  border-radius: var(--radius-pill);
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-12);
-  line-height: var(--line-height-12);
-  font-weight: var(--font-weight-medium);
-  background: var(--semantics-badge-neutral-bg);
-  color: var(--semantics-badge-neutral-text);
-  border: var(--border-width-thin) solid var(--semantics-badge-neutral-border);
-}
-
-/* Empty State */
+/* ---- Empty State ---- */
 .emptyState {
   display: flex;
   flex-direction: column;
@@ -305,7 +302,7 @@
   font-family: var(--font-family-sans);
   font-size: var(--font-size-16);
   line-height: var(--line-height-16);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-semibold);
   color: var(--semantics-text-primary);
 }
 
@@ -315,5 +312,5 @@
   font-size: var(--font-size-14);
   line-height: var(--line-height-14);
   color: var(--semantics-text-tertiary);
-  max-width: 34ch;
+  max-width: 36ch;
 }

@@ -213,11 +213,7 @@
   color: var(--semantics-text-placeholder);
 }
 
-/* ---- SelectField (Notice Period) with Dropdown component ---- */
-.selectDropdownWrap {
-  width: 100%;
-}
-
+/* ---- SelectField (Notice Period & Month/Year) ---- */
 .monthYearRow {
   display: flex;
   gap: var(--space-2x);
@@ -228,63 +224,6 @@
 .yearCol {
   flex: 1;
   min-width: 0;
-}
-
-.fullWidthDropdown {
-  width: 100%;
-  display: flex !important;
-}
-
-.selectDropdownTrigger {
-  box-sizing: border-box !important;
-  width: 100% !important;
-  height: var(--control-height-lg) !important;
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  padding: 0 var(--space-3x) !important;
-  border: 1px solid var(--semantics-control-border) !important;
-  border-radius: var(--radius-md) !important;
-  background: var(--semantics-control-bg) !important;
-  font-family: var(--font-family-sans) !important;
-  font-size: var(--font-size-14) !important;
-  line-height: var(--line-height-14) !important;
-  font-weight: var(--font-weight-regular) !important;
-  letter-spacing: var(--letter-spacing-none) !important;
-  color: var(--semantics-text-primary) !important;
-  cursor: pointer;
-  transition: border-color 120ms ease, box-shadow 120ms ease;
-}
-
-.selectDropdownTrigger:hover {
-  border-color: var(--semantics-border-strong) !important;
-}
-
-.selectDropdownTrigger:focus-visible {
-  border-color: var(--semantics-border-focus) !important;
-  box-shadow: var(--semantics-focus-ring) !important;
-  outline: none !important;
-}
-
-.selectDropdownWrap[data-invalid] .selectDropdownTrigger {
-  border-color: var(--semantics-control-border-error) !important;
-}
-
-.selectDropdownWrap[data-invalid] .selectDropdownTrigger:focus-visible {
-  box-shadow: var(--semantics-focus-ring-danger) !important;
-}
-
-.selectDropdownTrigger[data-empty] > span:first-child {
-  color: var(--semantics-text-placeholder) !important;
-}
-
-.selectDropdownMenu {
-  box-sizing: border-box !important;
-  width: 100% !important;
-  min-width: 100% !important;
-  max-height: 260px !important;
-  overflow-y: auto !important;
-  z-index: 100 !important;
 }
 
 /* ---- Segmented Yes/No ---- */

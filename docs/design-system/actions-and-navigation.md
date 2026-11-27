@@ -30,6 +30,63 @@ Which Button variant?
 
 ---
 
+## LinkButton (`@/components/shared/LinkButton`)
+
+Use for lightweight, inline text-link actions that do not warrant a full boxed button frame:
+- Card footer actions (`Claim role →`, `Add another role →`, `View all →`)
+- Table row secondary inline triggers
+- Inline text links with leading or directional trailing icons
+
+Never construct an ad-hoc `<button className={styles.claim}><ArrowRightIcon /></button>` or raw styled `<a>` by hand when a `LinkButton` is required.
+
+Variants (`LinkButtonVariant`):
+- `brand` (default) — primary interactive violet (`var(--semantics-text-link)` -> hover `var(--semantics-text-link-hover)`).
+- `neutral` — understated slate action (`var(--semantics-text-secondary)` -> hover `var(--semantics-text-primary)`).
+- `danger` — destructive inline action (`var(--semantics-text-error)` -> hover `var(--primitives-error-700)`).
+
+Sizes (`LinkButtonSize`):
+- `sm` (`12px`, icon `12px`) — dense table rows, compact secondary callouts.
+- `md` (`14px`, icon `16px`, default) — card footers (`JobCard`, `CandidateCard`), drawer triggers. Matches `.text-style-label-2`.
+- `lg` (`16px`, icon `20px`) — section header triggers, prominent inline navigation.
+
+Underline Options (`LinkButtonUnderline`):
+- `none` (default) — clean text link.
+- `hover` — underlines on `:hover`.
+- `always` — permanently underlined for high-discoverability prose integration.
+
+Micro-Interactions:
+- Smooth color transition on hover (`var(--duration-fast)` `var(--easing-default)`).
+- **Directional glide:** When `arrow` or `trailingIcon` is present, the trailing arrow automatically glides right by `2px` on hover (`transform: translateX(2px)`).
+- **Focus visible:** High-contrast outline ring `var(--link-button-focus-ring)` with `2px` offset and `var(--radius-2)`.
+
+```tsx
+// Correct — card footer action with directional arrow
+<LinkButton
+  variant="brand"
+  size="md"
+  arrow
+  onClick={(e) => {
+    e.stopPropagation();
+    handleClaim();
+  }}
+>
+  Claim role
+</LinkButton>
+
+// Correct — polymorphic anchor link to external page or route
+<LinkButton
+  as="a"
+  href="/jobs/123"
+  variant="neutral"
+  size="sm"
+  underline="hover"
+>
+  View job posting
+</LinkButton>
+```
+
+---
+
 ## IconButton (`@/components/shared/IconButton`)
 
 Use for circular single-icon click actions: modal and drawer close buttons, kebab (`⋮`) overflow action triggers, item dismissals, and inline actions. Never construct a `<button className={styles.closeBtn}><XIcon /></button>` by hand.

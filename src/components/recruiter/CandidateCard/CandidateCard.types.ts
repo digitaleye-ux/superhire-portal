@@ -1,5 +1,7 @@
 export type CandidateStatus =
   | "submitted"
+  | "superhire-review"
+  | "employer-review"
   | "under-review"
   | "shortlisted"
   | "interview"
@@ -51,6 +53,10 @@ export interface CandidateCardProps {
   resumeUrl?: string;
   /** Optional callback fired when clicking the view resume icon. */
   onViewResume?: () => void;
+  /** Whether the card is selected (active in split pane / details view). */
+  isSelected?: boolean;
+  /** Whether the card is in a disabled state. */
+  disabled?: boolean;
   /** Hover action button label. Defaults to "Add another role". */
   actionLabel?: string;
   /** Fired when the footer action button is clicked. */

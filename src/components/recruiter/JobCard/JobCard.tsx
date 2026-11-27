@@ -1,7 +1,6 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import type { ComponentType } from "react";
 import {
-  ArrowRightIcon,
   BookmarkXIcon,
   BriefcaseBusinessIcon,
   CheckIcon,
@@ -16,6 +15,7 @@ import {
 import type { IconBaseProps } from "@/components/shared/Icon";
 import { Badge } from "@/components/shared/Badge";
 import { IconButton } from "@/components/shared/IconButton";
+import { LinkButton } from "@/components/shared/LinkButton";
 import type { JobCardProps } from "./JobCard.types";
 import styles from "./JobCard.module.css";
 
@@ -29,6 +29,9 @@ interface MetaEntry {
 }
 
 export function JobCard({
+  variant,
+  isSelected = false,
+  disabled = false,
   company,
   companyLogoUrl,
   roleTitle,
@@ -43,7 +46,7 @@ export function JobCard({
   showMetaIcons = true,
   locationFull,
   mode,
-  actionLabel = "Claim role",
+  actionLabel,
   onClaim,
   onAction,
   onClick,
@@ -54,12 +57,18 @@ export function JobCard({
   onDownloadJd,
   className,
 }: JobCardProps) {
-  const handleAction = onAction ?? onClaim;
-  const hasAction = typeof handleAction === "function";
-  const handleClaim = onClaim ?? (!isClaimed ? handleAction : undefined);
-  const handleSubmitCandidate = onSubmitCandidate ?? (isClaimed ? handleAction : undefined);
-  const isClickable = typeof onClick === "function";
-  const isInteractive = hasAction || isClickable;
+  const isCardClaimed = isClaimed || variant === "claimed";
+  const isCardClosed = variant === "closed";
+  const effectiveBadge = isCardClosed ? (badge ?? "closed") : badge;
+  const defaultActionLabel = isCardClaimed ? "Submit candidate" : "Claim role";
+  const effectiveActionLabel = actionLabel ?? defaultActionLabel;
+
+  const handleAction = isCardClosed ? undefined : (onAction ?? onClaim);
+  const hasAction = !disabled && typeof handleAction === "function";
+  const handleClaim = onClaim ?? (!isCardClaimed ? handleAction : undefined);
+  const handleSubmitCandidate = onSubmitCandidate ?? (isCardClaimed ? handleAction : undefined);
+  const isClickable = !disabled && typeof onClick === "function";
+  const isInteractive = !disabled && (hasAction || isClickable);
   const [logoFailed, setLogoFailed] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -83,10 +92,10 @@ export function JobCard({
     };
   }, [menuOpen]);
 
-  const hasMenu = Boolean(
-    (!isClaimed && handleClaim) ||
-    (isClaimed && handleSubmitCandidate) ||
-    isClaimed ||
+  const hasMenu = !disabled && Boolean(
+    (!isCardClaimed && handleClaim) ||
+    (isCardClaimed && handleSubmitCandidate) ||
+    isCardClaimed ||
     onUnclaim ||
     onCopyLink ||
     onDownloadJd
@@ -96,6 +105,8 @@ export function JobCard({
     styles.card,
     isInteractive ? styles.interactive : "",
     isClickable ? styles.clickable : "",
+    isSelected ? styles.selected : "",
+    disabled ? styles.disabled : "",
     menuOpen ? styles.cardMenuOpen : "",
     className,
   ]
@@ -172,7 +183,7 @@ export function JobCard({
         </div>
 
         <div className={styles.headerRight}>
-          {badge && <Badge type={badge} className={styles.badge} />}
+          {effectiveBadge && <Badge type={effectiveBadge} className={styles.badge} />}
 
           {hasMenu && (
             <div className={styles.menuContainer} ref={menuRef}>
@@ -338,8 +349,10 @@ export function JobCard({
           )}
 
           {hasAction && (
-            <button
-              type="button"
+            <LinkButton
+              variant="brand"
+              size="md"
+              arrow
               className={styles.claim}
               onClick={(e) => {
                 // Don't let an action click also open the card's detail.
@@ -347,9 +360,8 @@ export function JobCard({
                 handleAction?.();
               }}
             >
-              <span className={styles.claimLabel}>{actionLabel}</span>
-              <ArrowRightIcon size="sm" className={styles.iconSm} />
-            </button>
+              {effectiveActionLabel}
+            </LinkButton>
           )}
         </div>
       </div>

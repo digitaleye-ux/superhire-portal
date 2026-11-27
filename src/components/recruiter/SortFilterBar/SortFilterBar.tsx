@@ -26,6 +26,8 @@ export function SortFilterBar({
             return (
               <Dropdown
                 key={id}
+                variant="filter"
+                size="sm"
                 label={label}
                 options={options}
                 selected={filters.commission}
@@ -42,6 +44,8 @@ export function SortFilterBar({
           return (
             <Dropdown
               key={id}
+              variant="filter"
+              size="sm"
               label={label}
               options={options}
               selected={filters[id]}
@@ -54,6 +58,8 @@ export function SortFilterBar({
 
       <div className={styles.sort}>
         <Dropdown
+          variant="filter"
+          size="sm"
           label="Recommended"
           options={SORT_OPTIONS}
           selected={sort ? [sort] : []}

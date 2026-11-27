@@ -190,6 +190,7 @@
   --duration-slow: 240ms;
   --easing-standard: cubic-bezier(0.2, 0, 0, 1);
   --easing-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --easing-default: var(--easing-standard);
 }
 
 /**
@@ -439,6 +440,30 @@
   --control-height-md: var(--spacing-9x);
   --control-height-lg: var(--spacing-10x);
   --control-size-sm: var(--spacing-4x);
+
+  /* ---- Tag component tokens ---- */
+  --tag-radius: var(--radius-pill);
+  --tag-background: var(--semantics-surface-secondary);
+  --tag-color: var(--semantics-text-secondary);
+  --tag-border: none;
+  --tag-padding-sm: var(--space-x-2) var(--space-2x);
+  --tag-padding-md: var(--space-1x) var(--space-3x);
+
+  /* ---- LinkButton component tokens ---- */
+  --link-button-gap: var(--space-1x);
+  --link-button-radius: var(--radius-2);
+  --link-button-focus-ring: var(--semantics-border-focus);
+
+  /* ---- Dropdown component tokens ---- */
+  --dropdown-height-sm: var(--control-height-sm);
+  --dropdown-height-md: var(--control-height-md);
+  --dropdown-height-lg: var(--control-height-lg);
+  --dropdown-radius: var(--radius-md);
+  --dropdown-item-radius: var(--radius-4);
+  --dropdown-menu-bg: var(--semantics-surface-primary);
+  --dropdown-menu-border: var(--semantics-border-default);
+  --dropdown-menu-shadow: var(--elevation-md);
+  --dropdown-focus-ring: var(--semantics-border-focus);
 
   /* ---- Elevation & Shadows (Figma effectStyles 'elevation-sm/md/lg' + collection 'elevation') ---- */
   --elevation-xs: 0px 1px 2px 0px rgba(15, 23, 42, 0.06), 0px 0px 0px 1px rgba(15, 23, 42, 0.04);

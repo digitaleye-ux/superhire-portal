@@ -9,23 +9,24 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3x);
-  padding: var(--space-3x);
-  background: var(--semantics-surface-secondary, #f8fafc);
-  border: 1px solid var(--semantics-border-default);
-  border-radius: var(--radius-md);
+  padding: var(--space-3x) var(--space-4x);
+  background: var(--semantics-surface-secondary);
+  border: var(--border-width-thin) solid var(--semantics-border-default);
+  border-radius: var(--radius-lg);
 }
 
 .candidateInfo {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
+  min-width: 0;
 }
 
 .candidateName {
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-16);
-  line-height: var(--line-height-16);
-  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-15);
+  line-height: var(--line-height-15);
+  font-weight: var(--font-weight-semibold);
   color: var(--semantics-text-primary);
 }
 
@@ -43,38 +44,35 @@
 .metaItem {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-}
-
-.metaItem svg {
-  color: var(--semantics-text-tertiary);
+  gap: 3px;
 }
 
 .resumeAttachedBadge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px var(--space-2x);
+  gap: 4px;
+  padding: 3px 8px;
   border-radius: var(--radius-pill);
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-12);
+  font-size: 11px;
   line-height: 1;
   font-weight: var(--font-weight-medium);
-  background: var(--semantics-surface-success-subtle, #f0fdf4);
-  color: var(--semantics-text-success, #16a34a);
+  background: var(--semantics-surface-success-subtle);
+  color: var(--semantics-text-success);
   border: 1px solid rgba(22, 163, 74, 0.2);
+  flex-shrink: 0;
 }
 
 /* ==========================================================================
-   Variant 2: Quick-Match Modal Sheet (Emil Center Sheet)
+   Variant 2: Command Match Sheet (Emil Kowalski Center Sheet)
    ========================================================================== */
 .modalBackdrop {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: rgba(15, 23, 42, 0.4);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  background: rgba(15, 23, 42, 0.45);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -89,29 +87,45 @@
   max-height: 85vh;
   display: flex;
   flex-direction: column;
-  background: var(--semantics-background-primary);
-  border: 1px solid var(--semantics-border-strong);
-  border-radius: 16px;
+  background: var(--semantics-surface-primary);
+  border: var(--border-width-thin) solid var(--semantics-border-default);
+  border-radius: var(--radius-xl, 16px);
   box-shadow: 0 24px 48px -12px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(15, 23, 42, 0.05);
   overflow: hidden;
   animation: scaleSlideUp 220ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.modalHeader {
+.commandHeader {
   flex-shrink: 0;
+  padding: var(--space-4x) var(--space-6x) var(--space-3x);
+  border-bottom: var(--border-width-thin) solid var(--semantics-border-default);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3x);
+}
+
+.commandTopRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-4x) var(--space-6x);
-  border-bottom: 1px solid var(--semantics-border-default);
 }
 
-.modalTitle {
+.commandTitle {
   margin: 0;
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-20);
+  font-size: var(--font-size-18);
   font-weight: var(--font-weight-semibold);
   color: var(--semantics-text-primary);
+}
+
+.kbdBadge {
+  font-family: var(--font-family-mono, monospace);
+  font-size: 11px;
+  color: var(--semantics-text-tertiary);
+  background: var(--semantics-surface-secondary);
+  border: 1px solid var(--semantics-border-default);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
 }
 
 .modalBody {
@@ -126,19 +140,34 @@
 .matchBadge {
   display: inline-flex;
   align-items: center;
+  gap: 4px;
   padding: 2px 8px;
   border-radius: var(--radius-pill);
   font-family: var(--font-family-sans);
   font-size: 11px;
   font-weight: var(--font-weight-medium);
-  background: var(--semantics-surface-brand-subtle, #eef2ff);
-  color: var(--semantics-text-brand, #4f46e5);
+  background: var(--semantics-surface-success-subtle);
+  color: var(--semantics-text-success);
+  border: 1px solid rgba(22, 163, 74, 0.2);
+}
+
+.commandRoleCard {
+  border: var(--border-width-thin) solid var(--semantics-border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4x);
+  background: var(--semantics-surface-primary);
+  transition: border-color var(--duration-fast) var(--easing-standard), box-shadow var(--duration-fast) var(--easing-standard);
+}
+
+.commandRoleCardActive {
+  border-color: var(--semantics-border-interactive);
+  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.08);
 }
 
 .accordionContent {
   margin-top: var(--space-3x);
   padding-top: var(--space-3x);
-  border-top: 1px solid var(--semantics-border-default);
+  border-top: var(--border-width-thin) solid var(--semantics-border-default);
   display: flex;
   flex-direction: column;
   gap: var(--space-3x);
@@ -146,75 +175,141 @@
 }
 
 /* ==========================================================================
-   Variant 3: In-Place Flyout Popover
+   Variant 3: Requirement Diff & Quick Pitch (Inline Compare & Submit)
    ========================================================================== */
-.popoverTriggerWrapper {
-  position: relative;
-  display: inline-block;
-}
-
-.popoverOverlay {
-  position: absolute;
-  bottom: calc(100% + 8px);
-  right: 0;
-  width: 380px;
-  z-index: 500;
-  background: var(--semantics-background-primary);
-  border: 1px solid var(--semantics-border-strong);
-  border-radius: var(--radius-md);
-  box-shadow: 0 16px 32px -8px rgba(15, 23, 42, 0.2);
+.diffContainer {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  animation: popoverEnter 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  gap: var(--space-4x);
 }
 
-.popoverHeader {
+.diffRoleSelector {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-3x) var(--space-4x);
-  background: var(--semantics-surface-secondary);
-  border-bottom: 1px solid var(--semantics-border-default);
+  gap: var(--space-2x);
+  overflow-x: auto;
+  padding-bottom: var(--space-2x);
 }
 
-.popoverTitle {
-  margin: 0;
+.diffRolePill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2x);
+  padding: var(--space-2x) var(--space-3x);
+  border-radius: var(--radius-lg);
+  border: var(--border-width-thin) solid var(--semantics-border-default);
+  background: var(--semantics-surface-primary);
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-14);
+  font-size: var(--font-size-13);
+  color: var(--semantics-text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--duration-fast) var(--easing-standard);
+}
+
+.diffRolePillActive {
+  border-color: var(--semantics-border-interactive);
+  background: var(--semantics-surface-brand-subtle);
+  color: var(--semantics-text-brand);
   font-weight: var(--font-weight-medium);
+}
+
+.diffComparisonCard {
+  background: var(--semantics-surface-primary);
+  border: var(--border-width-thin) solid var(--semantics-border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5x);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4x);
+}
+
+.diffGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3x);
+}
+
+.diffCriterion {
+  background: var(--semantics-surface-secondary);
+  border: var(--border-width-thin) solid var(--semantics-border-default);
+  border-radius: var(--radius-md);
+  padding: var(--space-3x);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.diffCriterionLabel {
+  font-family: var(--font-family-sans);
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--semantics-text-tertiary);
+}
+
+.diffCriterionValue {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13);
+  font-weight: var(--font-weight-semibold);
   color: var(--semantics-text-primary);
 }
 
-.popoverList {
-  max-height: 280px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-}
-
-.popoverItem {
-  display: flex;
+.diffCriterionMatch {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  padding: var(--space-3x) var(--space-4x);
-  border-bottom: 1px solid var(--semantics-border-default);
-  cursor: pointer;
-  transition: background-color 100ms ease;
-  text-align: left;
-  border-left: 0;
-  border-right: 0;
-  border-top: 0;
-  background: transparent;
-  width: 100%;
+  gap: 3px;
+  font-size: 11px;
+  color: var(--semantics-text-success);
+  margin-top: 2px;
 }
 
-.popoverItem:hover {
-  background: var(--semantics-surface-secondary, #f8fafc);
+.quickChipsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2x);
+}
+
+.quickChip {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-12);
+  color: var(--semantics-text-secondary);
+  background: var(--semantics-surface-secondary);
+  border: var(--border-width-thin) solid var(--semantics-border-default);
+  border-radius: var(--radius-pill);
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--easing-standard);
+}
+
+.quickChip:hover {
+  border-color: var(--semantics-border-interactive);
+  color: var(--semantics-text-brand);
+}
+
+.pitchTextarea {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-13);
+  color: var(--semantics-text-primary);
+  background: var(--semantics-surface-primary);
+  border: var(--border-width-thin) solid var(--semantics-border-default);
+  border-radius: var(--radius-md);
+  padding: var(--space-3x);
+  resize: vertical;
+  min-height: 64px;
+  outline: none;
+  transition: border-color var(--duration-fast) var(--easing-standard);
+}
+
+.pitchTextarea:focus {
+  border-color: var(--semantics-border-interactive);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
 /* ==========================================================================
-   Variant 4: Multi-Role Batch Matrix
+   Variant 4: Multi-Role Batch Syndicate
    ========================================================================== */
 .batchDrawer {
   box-sizing: border-box;
@@ -222,35 +317,8 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: var(--semantics-background-primary);
+  background: var(--semantics-surface-primary);
   overflow: hidden;
-}
-
-.batchRoleRow {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3x);
-  padding: var(--space-3x) var(--space-4x);
-  border: 1px solid var(--semantics-border-default);
-  border-radius: var(--radius-md);
-  background: var(--semantics-background-primary);
-  cursor: pointer;
-  transition: border-color 120ms ease, background-color 120ms ease;
-}
-
-.batchRoleRow[data-checked="true"] {
-  border-color: var(--semantics-border-interactive, #4f46e5);
-  background: var(--semantics-surface-brand-subtle, #f5f7ff);
-}
-
-.batchFooter {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-4x) var(--space-6x);
-  background: var(--semantics-surface-secondary);
-  border-top: 1px solid var(--semantics-border-default);
 }
 
 .batchHeader {
@@ -259,13 +327,13 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--space-4x) var(--space-6x);
-  border-bottom: 1px solid var(--semantics-border-default);
-  background: var(--semantics-background-primary);
+  border-bottom: var(--border-width-thin) solid var(--semantics-border-default);
+  background: var(--semantics-surface-primary);
 }
 
 .batchTitle {
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-16);
+  font-size: var(--font-size-18);
   font-weight: var(--font-weight-semibold);
   color: var(--semantics-text-primary);
   margin: 0;
@@ -273,18 +341,18 @@
 
 .batchSubtitle {
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-12);
-  color: var(--semantics-text-secondary);
+  font-size: var(--font-size-13);
+  color: var(--semantics-text-tertiary);
   margin: 2px 0 0;
 }
 
 .batchScrollArea {
   flex: 1;
   overflow-y: auto;
-  padding: var(--space-6x);
+  padding: var(--space-5x) var(--space-6x);
   display: flex;
   flex-direction: column;
-  gap: var(--space-5x);
+  gap: var(--space-4x);
 }
 
 .batchSectionHeading {
@@ -293,7 +361,7 @@
   font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--semantics-text-secondary);
+  color: var(--semantics-text-tertiary);
   margin-bottom: var(--space-2x);
   display: flex;
   align-items: center;
@@ -304,7 +372,7 @@
   font-size: var(--font-size-12);
   text-transform: none;
   font-weight: var(--font-weight-medium);
-  color: var(--semantics-text-link);
+  color: var(--semantics-text-brand);
   background: transparent;
   border: 0;
   cursor: pointer;
@@ -321,10 +389,27 @@
   gap: var(--space-3x);
 }
 
+.batchRoleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3x);
+  padding: var(--space-3x) var(--space-4x);
+  border: var(--border-width-thin) solid var(--semantics-border-default);
+  border-radius: var(--radius-lg);
+  background: var(--semantics-surface-primary);
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--easing-standard), background-color var(--duration-fast) var(--easing-standard);
+}
+
+.batchRoleRow[data-checked="true"] {
+  border-color: var(--semantics-border-interactive);
+  background: var(--semantics-surface-brand-subtle);
+}
+
 .batchDealbreakersBox {
-  background: var(--semantics-surface-secondary, #f8fafc);
-  border: 1px solid var(--semantics-border-default);
-  border-radius: var(--radius-md);
+  background: var(--semantics-surface-secondary);
+  border: var(--border-width-thin) solid var(--semantics-border-default);
+  border-radius: var(--radius-lg);
   padding: var(--space-4x);
   display: flex;
   flex-direction: column;
@@ -343,41 +428,51 @@
   align-items: flex-start;
   gap: var(--space-2x);
   font-family: var(--font-family-sans);
-  font-size: var(--font-size-12);
+  font-size: var(--font-size-13);
   color: var(--semantics-text-primary);
   line-height: 1.4;
   cursor: pointer;
 }
 
-.batchReqItem span {
-  user-select: none;
+.batchFooter {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4x) var(--space-6x);
+  background: var(--semantics-surface-secondary);
+  border-top: var(--border-width-thin) solid var(--semantics-border-default);
 }
 
 .batchTotal {
   display: flex;
   flex-direction: column;
+  gap: 2px;
 }
 
 .batchTotalLabel {
   font-family: var(--font-family-sans);
-  font-size: 12px;
+  font-size: 11px;
   color: var(--semantics-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .batchTotalAmount {
   font-family: var(--font-family-sans);
-  font-size: 16px;
+  font-size: var(--font-size-16);
   font-weight: var(--font-weight-semibold);
   color: var(--semantics-text-primary);
 }
 
+/* Drawer Shell */
 .drawerBackdrop {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: rgba(15, 23, 42, 0.4);
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
+  background: rgba(15, 23, 42, 0.45);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   display: flex;
   justify-content: flex-end;
   animation: fadeIn 180ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -387,7 +482,7 @@
   width: 100%;
   max-width: 640px;
   height: 100%;
-  background: var(--semantics-background-primary, #ffffff);
+  background: var(--semantics-surface-primary);
   box-shadow: -8px 0 32px rgba(0, 0, 0, 0.15);
   animation: slideInRight 220ms cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
@@ -414,9 +509,4 @@
 @keyframes expandDown {
   from { opacity: 0; transform: translateY(-4px); }
   to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes popoverEnter {
-  from { opacity: 0; transform: scale(0.96) translateY(4px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
 }

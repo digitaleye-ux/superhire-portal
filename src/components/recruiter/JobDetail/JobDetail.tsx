@@ -1,13 +1,19 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import type { ComponentType } from "react";
+import { toast } from "sonner";
 import { Badge } from "@/components/shared/Badge";
 import { Button } from "@/components/shared/Button";
 import { IconButton } from "@/components/shared/IconButton";
 import { Tab as TabButton } from "@/components/shared/Tab";
+import { Tag } from "@/components/shared/Tag";
 import {
+  BookmarkXIcon,
   BriefcaseBusinessIcon,
+  DownloadIcon,
   IndianRupeeIcon,
+  LinkIcon,
   MapPinIcon,
+  MoreVerticalIcon,
   XIcon,
 } from "@/components/shared/Icon";
 import type { IconBaseProps } from "@/components/shared/Icon";
@@ -33,12 +39,36 @@ export function JobDetail({
   onClose,
   onClaim,
   onUnclaim,
+  onCopyLink,
+  onDownloadJd,
   unclaimLabel = "Unclaim role",
   actionLabel = "Claim role",
   className,
 }: JobDetailProps) {
   const [tab, setTab] = useState<Tab>("job");
   const [logoFailed, setLogoFailed] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Close kebab dropdown when clicking outside or pressing Escape
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handleDown = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    document.addEventListener("mousedown", handleDown);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handleDown);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [menuOpen]);
+
   const c = job.companyInfo;
 
   // Resolve editorial content with backwards-compatible fallbacks
@@ -112,12 +142,85 @@ export function JobDetail({
               </span>
             </div>
             {job.badge && <Badge type={job.badge} className={styles.badge} />}
-            <IconButton
-              icon={<XIcon size="md" />}
-              ariaLabel="Close job details"
-              size="md"
-              onClick={onClose}
-            />
+            <div className={styles.headerActions}>
+              <div className={styles.menuContainer} ref={menuRef}>
+                <IconButton
+                  icon={<MoreVerticalIcon size="md" />}
+                  ariaLabel="Job options"
+                  size="md"
+                  active={menuOpen}
+                  aria-expanded={menuOpen}
+                  onClick={() => setMenuOpen((prev) => !prev)}
+                />
+                {menuOpen && (
+                  <div
+                    className={styles.dropdown}
+                    role="menu"
+                    aria-orientation="vertical"
+                  >
+                    <button
+                      type="button"
+                      role="menuitem"
+                      className={styles.dropdownItem}
+                      onClick={() => {
+                        setMenuOpen(false);
+                        if (onCopyLink) {
+                          onCopyLink();
+                        } else {
+                          navigator.clipboard?.writeText(window.location.href);
+                          toast.success("Job link copied to clipboard");
+                        }
+                      }}
+                    >
+                      <LinkIcon size={16} />
+                      <span>Copy job link</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      role="menuitem"
+                      className={styles.dropdownItem}
+                      onClick={() => {
+                        setMenuOpen(false);
+                        if (onDownloadJd) {
+                          onDownloadJd();
+                        } else {
+                          toast.success(`Downloaded job details for ${job.role}`);
+                        }
+                      }}
+                    >
+                      <DownloadIcon size={16} />
+                      <span>Download job details</span>
+                    </button>
+
+                    {onUnclaim && (
+                      <>
+                        <hr className={styles.dropdownDivider} />
+                        <button
+                          type="button"
+                          role="menuitem"
+                          className={`${styles.dropdownItem} ${styles.dropdownItemDanger}`}
+                          onClick={() => {
+                            setMenuOpen(false);
+                            onUnclaim(job.id);
+                          }}
+                        >
+                          <BookmarkXIcon size={16} />
+                          <span>{unclaimLabel}</span>
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+              <IconButton
+                icon={<XIcon size="md" />}
+                ariaLabel="Close job details"
+                title="Close"
+                size="md"
+                onClick={onClose}
+              />
+            </div>
           </div>
           <div className={styles.headTitle}>
             <h2 className={styles.role} title={job.role}>
@@ -163,70 +266,53 @@ export function JobDetail({
           <>
             {/* Skills */}
             {skills.length > 0 && (
-              <>
-                <Block title="Skills">
-                  <div className={styles.chips}>
-                    {skills.map((skill, i) => (
-                      <span key={i} className={`${styles.chip} text-style-label-3`}>
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </Block>
-                <hr className={styles.divider} />
-              </>
+              <Block title="Skills">
+                <div className={styles.chips}>
+                  {skills.map((skill, i) => (
+                    <Tag key={i}>{skill}</Tag>
+                  ))}
+                </div>
+              </Block>
             )}
 
             {/* 1. About the role */}
             {aboutRole && (
-              <>
-                <Block title="About the role">
-                  <p className={styles.p}>{aboutRole}</p>
-                </Block>
-                <hr className={styles.divider} />
-              </>
+              <Block title="About the role">
+                <p className={styles.p}>{aboutRole}</p>
+              </Block>
             )}
 
             {/* 2. What you'll do */}
             {responsibilities.length > 0 && (
-              <>
-                <Block title="What you'll do">
-                  <ul className={styles.bullets}>
-                    {responsibilities.map((r, i) => (
-                      <li key={i}>{r}</li>
-                    ))}
-                  </ul>
-                </Block>
-                <hr className={styles.divider} />
-              </>
+              <Block title="What you'll do">
+                <ul className={styles.bullets}>
+                  {responsibilities.map((r, i) => (
+                    <li key={i}>{r}</li>
+                  ))}
+                </ul>
+              </Block>
             )}
 
             {/* 3. What we're looking for */}
             {requirements.length > 0 && (
-              <>
-                <Block title="What we're looking for">
-                  <ul className={styles.bullets}>
-                    {requirements.map((req, i) => (
-                      <li key={i}>{req}</li>
-                    ))}
-                  </ul>
-                </Block>
-                <hr className={styles.divider} />
-              </>
+              <Block title="What we're looking for">
+                <ul className={styles.bullets}>
+                  {requirements.map((req, i) => (
+                    <li key={i}>{req}</li>
+                  ))}
+                </ul>
+              </Block>
             )}
 
             {/* 4. Nice to have (optional) */}
             {niceToHave.length > 0 && (
-              <>
-                <Block title="Nice to have">
-                  <ul className={styles.bullets}>
-                    {niceToHave.map((item, i) => (
-                      <li key={i}>{item}</li>
-                    ))}
-                  </ul>
-                </Block>
-                <hr className={styles.divider} />
-              </>
+              <Block title="Nice to have">
+                <ul className={styles.bullets}>
+                  {niceToHave.map((item, i) => (
+                    <li key={i}>{item}</li>
+                  ))}
+                </ul>
+              </Block>
             )}
 
             {/* 5. Role expectations — Spec Sheet layout */}
@@ -237,20 +323,17 @@ export function JobDetail({
 
             {/* 6. Compensation and benefits (optional) */}
             {compAndBenefits && (
-              <>
-                <hr className={styles.divider} />
-                <Block title="Compensation and benefits">
-                  {Array.isArray(compAndBenefits) ? (
-                    <ul className={styles.bullets}>
-                      {compAndBenefits.map((item, i) => (
-                        <li key={i}>{item}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className={styles.p}>{compAndBenefits}</p>
-                  )}
-                </Block>
-              </>
+              <Block title="Compensation and benefits">
+                {Array.isArray(compAndBenefits) ? (
+                  <ul className={styles.bullets}>
+                    {compAndBenefits.map((item, i) => (
+                      <li key={i}>{item}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className={styles.p}>{compAndBenefits}</p>
+                )}
+              </Block>
             )}
           </>
         ) : (
@@ -259,8 +342,6 @@ export function JobDetail({
             <Block title={`About ${job.company}`}>
               <p className={styles.p}>{c.about}</p>
             </Block>
-
-            <hr className={styles.divider} />
 
             {/* 2. Industry, company size, headquarters, website, open jobs, valuation */}
             <SpecSheet
@@ -279,30 +360,24 @@ export function JobDetail({
 
             {/* 3. Company culture */}
             {c.culture && c.culture.length > 0 && (
-              <>
-                <hr className={styles.divider} />
-                <Block title="Company culture">
-                  <ul className={styles.bullets}>
-                    {c.culture.map((x, i) => (
-                      <li key={i}>{x}</li>
-                    ))}
-                  </ul>
-                </Block>
-              </>
+              <Block title="Company culture">
+                <ul className={styles.bullets}>
+                  {c.culture.map((x, i) => (
+                    <li key={i}>{x}</li>
+                  ))}
+                </ul>
+              </Block>
             )}
 
             {/* 4. Company perks & benefits */}
             {c.perks && c.perks.length > 0 && (
-              <>
-                <hr className={styles.divider} />
-                <Block title="Company perks &amp; benefits">
-                  <ul className={styles.bullets}>
-                    {c.perks.map((x, i) => (
-                      <li key={i}>{x}</li>
-                    ))}
-                  </ul>
-                </Block>
-              </>
+              <Block title="Company perks &amp; benefits">
+                <ul className={styles.bullets}>
+                  {c.perks.map((x, i) => (
+                    <li key={i}>{x}</li>
+                  ))}
+                </ul>
+              </Block>
             )}
           </>
         )}

@@ -7,7 +7,7 @@ Bolt is SuperHire's high-density workspace design system (`Inter` typography, re
 ## Non-Negotiable Rules (Read First)
 
 1. **Consume semantic and component tokens only.** All tokens live in [`src/tokens/tokens.css`](src/tokens/tokens.css).
-   - **Allowed in components:** `--semantics-*`, `--space-*`, `--radius-*`, `--size-icon-*`, `--border-width-*`, `--elevation-*`, `--duration-*`, `--easing-*`, `--button-*`, `--icon-button-*`, `--control-*`, `--segmented-*`, and `.text-style-*`.
+   - **Allowed in components:** `--semantics-*`, `--space-*`, `--radius-*`, `--size-icon-*`, `--border-width-*`, `--elevation-*`, `--duration-*`, `--easing-*`, `--button-*`, `--icon-button-*`, `--link-button-*`, `--control-*`, `--dropdown-*`, `--segmented-*`, `--tag-*`, and `.text-style-*`.
    - **Banned in components:** `--primitives-*`, `--spacing-*`, raw hex/RGB/HSL values (`#fff`, `rgba(...)`), CSS fallbacks with hardcoded hexes (`var(--semantics-text-primary, #0f172a)`), and off-scale pixel values (`11px`, `13px`, `15px`, `18px`).
    - *Why:* Primitives and hardcoded fallbacks silently break theme overrides and hide missing token bugs.
 2. **Reuse `@/components/shared` before writing custom controls.** Never build a `<button>`, `<input>`, badge `<span>`, tab strip, or toggle pill by hand when a shared component exists.
@@ -28,5 +28,5 @@ Load only the file needed for your current task:
 | **Typography, Spacing & Motion** | [`docs/design-system/typography-and-spacing.md`](docs/design-system/typography-and-spacing.md) | Typescale (`10px`–`40px`), `.text-style-*` classes, `--space-*` scale, radii, motion |
 | **Actions & Navigation** | [`docs/design-system/actions-and-navigation.md`](docs/design-system/actions-and-navigation.md) | `Button`, `Tab` vs `SegmentedControl`, `NavItem`, `SideNavbar`, `PageHeader` |
 | **Forms & Selection Controls** | [`docs/design-system/forms-and-controls.md`](docs/design-system/forms-and-controls.md) | `Input`, `SearchInput`, `Dropdown`, `Checkbox`, `Radio` |
-| **Status Indicators, Icons & Authoring** | [`docs/design-system/status-and-icons.md`](docs/design-system/status-and-icons.md) | `Badge`, `Icon`, state checklist for new components, Figma sync contract |
+| **Status Indicators, Tags, Icons & Authoring** | [`docs/design-system/status-and-icons.md`](docs/design-system/status-and-icons.md) | `Badge`, `Tag`, `Icon`, state checklist for new components, Figma sync contract |
 | **Figma Node Manifest** | [`docs/DESIGN_SYSTEM_FOUNDATIONS.md`](docs/DESIGN_SYSTEM_FOUNDATIONS.md) | Figma node IDs, variable collection map, and component token attachment matrix |

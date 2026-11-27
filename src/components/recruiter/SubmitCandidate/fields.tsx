@@ -147,23 +147,23 @@ export function SelectField(props: {
   const allOptions = value && !options.includes(value) ? [value, ...options] : options;
   return (
     <Field id={id} label={label} error={error} hint={hint}>
-      <div className={styles.selectDropdownWrap} data-invalid={error ? "" : undefined}>
-        <Dropdown
-          label={value || placeholder}
-          options={allOptions.map((o) => ({ value: o, label: o }))}
-          selected={value ? [value] : []}
-          onChange={(next) => {
-            onChange(next[0] ?? "");
-            onBlur?.();
-          }}
-          multiple={false}
-          singleShowsValue
-          align="left"
-          className={styles.fullWidthDropdown}
-          triggerClassName={styles.selectDropdownTrigger}
-          menuClassName={styles.selectDropdownMenu}
-        />
-      </div>
+      <Dropdown
+        variant="form"
+        size="lg"
+        fullWidth
+        label={label}
+        placeholder={placeholder}
+        options={allOptions.map((o) => ({ value: o, label: o }))}
+        selected={value ? [value] : []}
+        onChange={(next) => {
+          onChange(next[0] ?? "");
+          onBlur?.();
+        }}
+        multiple={false}
+        singleShowsValue
+        invalid={Boolean(error)}
+        align="left"
+      />
     </Field>
   );
 }
@@ -226,28 +226,34 @@ export function MonthYearPicker(props: {
         <div className={styles.monthYearRow}>
           <div className={styles.monthCol}>
             <Dropdown
-              label={parsedMonth || "Month"}
+              variant="form"
+              size="lg"
+              fullWidth
+              label="Month"
+              placeholder="Month"
               options={MONTH_OPTIONS.map((m) => ({ value: m, label: m }))}
               selected={parsedMonth ? [parsedMonth] : []}
               onChange={(next) => handleMonth(next[0] ?? "")}
               multiple={false}
               singleShowsValue
+              invalid={Boolean(error)}
               align="left"
-              className={styles.fullWidthDropdown}
-              triggerClassName={styles.selectDropdownTrigger}
             />
           </div>
           <div className={styles.yearCol}>
             <Dropdown
-              label={parsedYear || "Year"}
+              variant="form"
+              size="lg"
+              fullWidth
+              label="Year"
+              placeholder="Year"
               options={YEAR_OPTIONS.map((y) => ({ value: y, label: y }))}
               selected={parsedYear ? [parsedYear] : []}
               onChange={(next) => handleYear(next[0] ?? "")}
               multiple={false}
               singleShowsValue
+              invalid={Boolean(error)}
               align="left"
-              className={styles.fullWidthDropdown}
-              triggerClassName={styles.selectDropdownTrigger}
             />
           </div>
         </div>

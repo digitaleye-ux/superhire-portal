@@ -170,13 +170,18 @@ export function DesignedDropdownField({
         aria-labelledby={`${id}-lbl`}
       >
         <Dropdown
-          label={placeholder}
+          variant="form"
+          size="lg"
+          fullWidth
+          label={label}
+          placeholder={placeholder}
           multiple={false}
           singleShowsValue
           align={align}
           options={options.map((o) => ({ value: o, label: o }))}
           selected={value ? [value] : []}
           onChange={(next) => onChange(next[0] ?? "")}
+          invalid={Boolean(error)}
         />
       </div>
       <Msg id={`${id}-msg`} error={error} />

@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/shared/Badge";
+import { KpiCard } from "@/components/shared/KpiCard";
+import { LinkButton } from "@/components/shared/LinkButton";
+import { PipelineFunnel } from "@/components/shared/PipelineFunnel";
 import { SegmentedControl } from "@/components/shared/SegmentedControl";
 import {
-  ArrowRightIcon,
   ArrowUpRightIcon,
   XIcon,
 } from "@/components/shared/Icon";
@@ -310,46 +312,31 @@ export function RecruiterDashboard({
 
           <div className={s.kpiGrid}>
             {/* 1. Active roles */}
-            <button
-              type="button"
-              className={s.kpiCard}
+            <KpiCard
+              label="Active roles"
+              value={snapshot.activeRoles.length}
               onClick={() => {
                 const el = document.getElementById("rd-sec-roles");
                 if (el) el.scrollIntoView({ behavior: "smooth" });
               }}
               title="View my active roles"
-            >
-              <div className={s.kpiTopRow}>
-                <span className={s.kpiLabel}>Active roles</span>
-                <ArrowRightIcon size="sm" className={s.kpiArrow} />
-              </div>
-              <span className={s.kpiValue}>
-                {snapshot.activeRoles.length}
-              </span>
-            </button>
+            />
 
             {/* 2. Total submissions */}
-            <button
-              type="button"
-              className={s.kpiCard}
+            <KpiCard
+              label="Total submissions"
+              value={snapshot.totalSubmissionsCount}
               onClick={() =>
                 onNavigateToCandidates(undefined, "All candidate submissions")
               }
               title="View all candidate submissions"
-            >
-              <div className={s.kpiTopRow}>
-                <span className={s.kpiLabel}>Total submissions</span>
-                <ArrowRightIcon size="sm" className={s.kpiArrow} />
-              </div>
-              <span className={s.kpiValue}>
-                {snapshot.totalSubmissionsCount}
-              </span>
-            </button>
+            />
 
             {/* 3. Shortlist rate */}
-            <button
-              type="button"
-              className={s.kpiCard}
+            <KpiCard
+              label="Shortlist rate"
+              value={`${snapshot.shortlistRate}%`}
+              subtext={`${snapshot.employerShortlistedCount} of ${snapshot.reviewedSubmissionsCount} reviewed`}
               onClick={() =>
                 onNavigateToCandidates(
                   ["shortlisted", "interview", "offered", "joined"],
@@ -357,39 +344,18 @@ export function RecruiterDashboard({
                 )
               }
               title={`${snapshot.employerShortlistedCount} shortlisted out of ${snapshot.reviewedSubmissionsCount} reviewed submissions (excluding 2 in initial SuperHire vetting)`}
-            >
-              <div className={s.kpiTopRow}>
-                <span className={s.kpiLabel}>Shortlist rate</span>
-                <ArrowRightIcon size="sm" className={s.kpiArrow} />
-              </div>
-              <div className={s.kpiValueRow}>
-                <span className={s.kpiValue}>{snapshot.shortlistRate}%</span>
-                <span className={s.kpiSubLabel}>
-                  {snapshot.employerShortlistedCount} of {snapshot.reviewedSubmissionsCount} reviewed
-                </span>
-              </div>
-            </button>
+            />
 
             {/* 4. Candidates joined */}
-            <button
-              type="button"
-              className={s.kpiCard}
+            <KpiCard
+              label="Candidates joined"
+              value={snapshot.pipelineCounts.joined ?? 0}
+              subtext="Started at employer"
               onClick={() =>
                 onNavigateToCandidates(["joined"], "Candidates joined")
               }
               title={`Candidates who have started working at the employer (${snapshot.pipelineCounts.joined} joined)`}
-            >
-              <div className={s.kpiTopRow}>
-                <span className={s.kpiLabel}>Candidates joined</span>
-                <ArrowRightIcon size="sm" className={s.kpiArrow} />
-              </div>
-              <div className={s.kpiValueRow}>
-                <span className={s.kpiValue}>
-                  {snapshot.pipelineCounts.joined ?? 0}
-                </span>
-                <span className={s.kpiSubLabel}>Started at employer</span>
-              </div>
-            </button>
+            />
           </div>
         </section>
 
@@ -399,96 +365,66 @@ export function RecruiterDashboard({
             <h2 id="rd-sec-pipeline" className={s.sectionTitle}>
               Candidate pipeline
             </h2>
-            <button
-              type="button"
-              className={s.textLinkBtn}
+            <LinkButton
+              size="sm"
+              arrow
               onClick={() =>
                 onNavigateToCandidates(undefined, "All submissions")
               }
             >
-              <span>View all submissions</span>
-              <ArrowRightIcon size="sm" />
-            </button>
+              View all submissions
+            </LinkButton>
           </div>
 
-          <div className={s.pipelineCard}>
-            <div className={s.pipelineStagesGrid}>
-              {ACTIVE_PIPELINE_STAGES.map((stage) => {
-                const count = snapshot.pipelineCounts[stage.id];
-                return (
-                  <button
-                    key={stage.id}
-                    type="button"
-                    className={s.pipelineStageBtn}
-                    onClick={() =>
-                      onNavigateToCandidates(
-                        mapStageToTrackStatuses(stage.id),
-                        `Stage: ${stage.label}`
-                      )
-                    }
-                    title={stage.description}
-                  >
-                    <div className={s.pipelineStepHeader}>
-                      <span className={s.pipelineStageName}>{stage.label}</span>
-                      <ArrowRightIcon size="xs" className={s.kpiArrow} />
-                    </div>
-                    <span className={s.pipelineStageCount}>{count}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Explainable submissions breakdown footer */}
-            <div className={s.pipelineMetaRow}>
-              <span className={s.pipelineMetaSummary}>
-                <strong>
-                  {snapshot.pipelineCounts.submitted +
-                    snapshot.pipelineCounts["profile-approved"] +
-                    snapshot.pipelineCounts.shortlisted +
-                    snapshot.pipelineCounts.interview +
-                    snapshot.pipelineCounts.offer +
-                    snapshot.pipelineCounts.joined}
-                </strong>{" "}
-                active in pipeline
-              </span>
-              <span className={s.pipelineMetaDot}>·</span>
-              <button
-                type="button"
-                className={s.pipelineSubLink}
-                onClick={() =>
-                  onNavigateToCandidates(["on-hold"], "Submissions on hold")
-                }
-                title="View submissions currently on hold"
-              >
-                {snapshot.onHoldCount} on hold
-              </button>
-              <span className={s.pipelineMetaDot}>·</span>
-              <button
-                type="button"
-                className={s.pipelineSubLink}
-                onClick={() =>
+          <PipelineFunnel
+            stages={ACTIVE_PIPELINE_STAGES.map((stage) => ({
+              id: stage.id,
+              label: stage.label,
+              count: snapshot.pipelineCounts[stage.id],
+              description: stage.description,
+              onClick: () =>
+                onNavigateToCandidates(
+                  mapStageToTrackStatuses(stage.id),
+                  `Stage: ${stage.label}`
+                ),
+            }))}
+            footerItems={[
+              {
+                count:
+                  snapshot.pipelineCounts.submitted +
+                  snapshot.pipelineCounts["profile-approved"] +
+                  snapshot.pipelineCounts.shortlisted +
+                  snapshot.pipelineCounts.interview +
+                  snapshot.pipelineCounts.offer +
+                  snapshot.pipelineCounts.joined,
+                label: "active in pipeline",
+              },
+              {
+                count: snapshot.onHoldCount,
+                label: "on hold",
+                onClick: () =>
+                  onNavigateToCandidates(["on-hold"], "Submissions on hold"),
+                title: "View submissions currently on hold",
+              },
+              {
+                count: snapshot.unsuccessfulCount,
+                label: "rejected",
+                onClick: () =>
                   onNavigateToCandidates(
                     ["rejected"],
                     "Unsuccessful submissions"
-                  )
-                }
-                title="View unsuccessful submissions"
-              >
-                {snapshot.unsuccessfulCount} rejected
-              </button>
-              <span className={s.pipelineMetaDot}>·</span>
-              <button
-                type="button"
-                className={s.pipelineSubLink}
-                onClick={() =>
-                  onNavigateToCandidates(undefined, "All submissions")
-                }
-                title="View all 13 candidate submissions"
-              >
-                {snapshot.totalSubmissionsCount} total submissions
-              </button>
-            </div>
-          </div>
+                  ),
+                title: "View unsuccessful submissions",
+              },
+              {
+                count: snapshot.totalSubmissionsCount,
+                label: "total submissions",
+                onClick: () =>
+                  onNavigateToCandidates(undefined, "All submissions"),
+                title: "View all 13 candidate submissions",
+              },
+            ]}
+          />
         </section>
 
         {/* Section 03 (Earnings) + Section 04 (Recent Candidate Progress) */}
@@ -502,18 +438,17 @@ export function RecruiterDashboard({
               <h2 id="rd-sec-earnings" className={s.sectionTitle}>
                 Earnings
               </h2>
-              <button
-                type="button"
-                className={s.textLinkBtn}
+              <LinkButton
+                size="sm"
+                trailingIcon={<ArrowUpRightIcon size="xs" />}
                 onClick={() =>
                   onNavigateToEarnings
                     ? onNavigateToEarnings({ earningStatus: "all" })
                     : setLedgerCategory("all")
                 }
               >
-                <span>Open ledger</span>
-                <ArrowUpRightIcon size="sm" />
-              </button>
+                Open ledger
+              </LinkButton>
             </div>
 
             {(() => {
@@ -658,18 +593,17 @@ export function RecruiterDashboard({
                             {formatInr(earnings.paymentPending)} pending disbursement)
                           </span>
                         </div>
-                        <button
-                          type="button"
-                          className={s.payoutMetaAction}
+                        <LinkButton
+                          size="sm"
+                          trailingIcon={<ArrowUpRightIcon size="xs" />}
                           onClick={() =>
                             onNavigateToEarnings
                               ? onNavigateToEarnings({ openPayoutId: "po-3" })
                               : setLedgerCategory("payment-pending")
                           }
                         >
-                          <span>View schedule</span>
-                          <ArrowUpRightIcon size="sm" />
-                        </button>
+                          View schedule
+                        </LinkButton>
                       </div>
                     )}
                   </div>
@@ -684,16 +618,15 @@ export function RecruiterDashboard({
               <h2 id="rd-sec-recent" className={s.sectionTitle}>
                 Recent candidate progress
               </h2>
-              <button
-                type="button"
-                className={s.textLinkBtn}
+              <LinkButton
+                size="sm"
+                arrow
                 onClick={() =>
                   onNavigateToCandidates(undefined, "All submissions")
                 }
               >
-                <span>View all submissions</span>
-                <ArrowRightIcon size="sm" />
-              </button>
+                View all submissions
+              </LinkButton>
             </div>
 
             <div className={s.surfaceCard}>
@@ -746,14 +679,13 @@ export function RecruiterDashboard({
             <h2 id="rd-sec-roles" className={s.sectionTitle}>
               My active roles
             </h2>
-            <button
-              type="button"
-              className={s.textLinkBtn}
+            <LinkButton
+              size="sm"
+              arrow
               onClick={onExploreJobs}
             >
-              <span>Explore jobs</span>
-              <ArrowRightIcon size="sm" />
-            </button>
+              Explore jobs
+            </LinkButton>
           </div>
 
           <div className={s.surfaceCard}>
